@@ -6,6 +6,7 @@
   "keywords": [],
   "dependencies": {
     "ejs": "2.5.5",
+    "google-finance": "^0.1.11",
     "grunt": "1.0.1",
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-coffee": "1.0.0",
@@ -20,6 +21,7 @@
     "grunt-sync": "0.5.2",
     "include-all": "^1.0.0",
     "lodash": "^4.17.5",
+    "moment": "^2.21.0",
     "rc": "1.0.1",
     "sails": "~0.12.13",
     "sails-disk": "~0.10.9",

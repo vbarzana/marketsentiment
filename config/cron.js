@@ -10,7 +10,7 @@ module.exports.cron = {
    */
   // example: {
   //   schedule: '3 * * * * *',
-  //   onTick: require('../api/services/YahooFinanceService').loadYahooData,
+  //   onTick: require('../api/services/GoogleFinanceService').loadGoogleData,
   //   start: true
   // }
 };
