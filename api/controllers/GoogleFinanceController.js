@@ -16,7 +16,7 @@ module.exports = {
     }
     res.send({
       success: true,
-      data: JSON.stringify(data, null, 2),
+      data: data,
       error: error
     })
   }
