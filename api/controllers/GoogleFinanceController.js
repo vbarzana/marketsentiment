@@ -8,7 +8,7 @@ module.exports = {
   loadCompanyNews: async function (req, res) {
     var tickers = _.split(req.param('s'), ',');
     // @todo: parse from, to params
-    var data, error;
+    var data = {}, error;
     try{
       data = await GoogleFinanceService.loadCompanyNews(tickers);
     } catch(err){
