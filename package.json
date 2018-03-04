@@ -26,6 +26,10 @@
     "sails-hook-cron": "^2.2.2",
     "yql": "^1.0.2"
   },
+  "engines": {
+    "node": "8.9.0",
+    "yarn": "1.1.0"
+  },
   "scripts": {
     "debug": "node debug app.js",
     "start": "node app.js"
@@ -35,6 +39,6 @@
     "type": "git",
     "url": "git://github.com/anonymous node/sails user/marketsentiment.git"
   },
-  "author": "anonymous node/sails user",
+  "author": "Victor Antonio Barzana Crespo <viticoinf@gmail.com>",
   "license": ""
 }
