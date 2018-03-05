@@ -11,6 +11,39 @@
 
 module.exports.http = {
 
+  customMiddleware: function (app) {
+    var express = require('express');
+    var minify = require('express-minify-html');
+    var compression = require('compression');
+
+    app.use(function(err, req, res, next) {
+      console.error(err.stack);
+      res.status(500).send('Something broke!');
+    });
+
+    if (true === sails.config.views.minify.html) {
+      app.use(minify({
+        override: true,
+        htmlMinifier: {
+          removeComments: true,
+          collapseWhitespace: true,
+          collapseBooleanAttributes: true,
+          removeAttributeQuotes: true,
+          removeEmptyAttributes: true
+        }
+      }));
+    }
+
+    app.use(compression());
+    app.use('/assets/compiled/node_modules', express.static(process.cwd() + '/node_modules'));
+    app.use('/node_modules', express.static(process.cwd() + '/node_modules'));
+    app.use('/assets', require('express').static(process.cwd() + '/assets'));
+    app.use('/assets', require('express').static(process.cwd() + '/www/assets'));
+    app.use('/dist', require('express').static(process.cwd() + '/dist'));
+    app.use('/build', require('express').static(process.cwd() + '/www/build'));
+  },
+
+
   /****************************************************************************
   *                                                                           *
   * Express middleware to use for every Sails request. To add custom          *
@@ -30,23 +63,23 @@ module.exports.http = {
   *                                                                          *
   ***************************************************************************/
 
-    // order: [
-    //   'startRequestTimer',
-    //   'cookieParser',
-    //   'session',
-    //   'myRequestLogger',
-    //   'bodyParser',
-    //   'handleBodyParserError',
-    //   'compress',
-    //   'methodOverride',
-    //   'poweredBy',
-    //   '$custom',
-    //   'router',
-    //   'www',
-    //   'favicon',
-    //   '404',
-    //   '500'
-    // ],
+    order: [
+      'startRequestTimer',
+      'cookieParser',
+      'session',
+      'myRequestLogger',
+      'bodyParser',
+      'handleBodyParserError',
+      'compress',
+      'methodOverride',
+      'poweredBy',
+      '$custom',
+      'router',
+      'www',
+      'favicon',
+      '404',
+      '500'
+    ],
 
   /****************************************************************************
   *                                                                           *

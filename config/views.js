@@ -89,7 +89,11 @@ module.exports.views = {
   *                                                                           *
   ****************************************************************************/
 
-  partials: false
+  partials: false,
 
+  minify: {
+    js: false,
+    html: false
+  }
 
 };
