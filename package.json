@@ -64,7 +64,7 @@
     "build": "ionic-app-scripts build",
     "ionic:build": "ionic-app-scripts build",
     "postinstall": "grunt build && ionic-app-scripts build",
-    "heroku-postbuild": "node scripts/cleanup.js && ionic-app-scripts clean"
+    "heroku-postbuild": "ionic-app-scripts clean"
   },
   "main": "app.js",
   "repository": {
