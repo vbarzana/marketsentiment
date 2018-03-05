@@ -1,8 +1,8 @@
 {
   "name": "marketsentiment",
   "private": true,
-  "version": "0.0.0",
-  "description": "a Sails application",
+  "version": "1.0.0",
+  "description": "This application is intended to help traders find the hottest stocks in the market during a trading day",
   "keywords": [],
   "dependencies": {
     "@angular/common": "5.0.3",
