@@ -121,6 +121,7 @@ nbproject
 .sourcemaps/
 .sass-cache/
 .tmp/
+.tmp_ionic/
 .versions/
 coverage/
 dist/
