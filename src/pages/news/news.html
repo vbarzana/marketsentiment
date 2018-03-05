@@ -1,0 +1,25 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>List</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item-group *ngFor="let group of groupedNews">
+
+    <ion-item-divider light class="group-header">{{group.date}}</ion-item-divider>
+
+    <ion-item *ngFor="let item of group.items">
+      <div class="ticker">
+        <div class="symbol">{{item.symbol}}</div>
+        <div class="date">({{item.date| date: 'MMMM dd yyyy'}})</div>
+      </div>
+      <div class="title">{{item.title}}</div>
+    </ion-item>
+
+  </ion-item-group>
+</ion-content>
