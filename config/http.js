@@ -34,13 +34,12 @@ module.exports.http = {
       }));
     }
 
+    app.use(express.static('www'));
     app.use(compression());
     app.use('/assets/compiled/node_modules', express.static(process.cwd() + '/node_modules'));
     app.use('/node_modules', express.static(process.cwd() + '/node_modules'));
     app.use('/assets', require('express').static(process.cwd() + '/assets'));
-    app.use('/assets', require('express').static(process.cwd() + '/www/assets'));
     app.use('/dist', require('express').static(process.cwd() + '/dist'));
-    app.use('/build', require('express').static(process.cwd() + '/www/build'));
   },
 
 
