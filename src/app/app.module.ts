@@ -10,6 +10,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import {HomePageModule} from "../pages/home/home.module";
 import {TeamPageModule} from "../pages/team/team.module";
 import {NewsPageModule} from "../pages/news/news.module";
+import {SentimentPageModule} from "../pages/sentiment/sentiment.module";
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import {NewsPageModule} from "../pages/news/news.module";
     BrowserModule,
     HomePageModule,
     TeamPageModule,
+    SentimentPageModule,
     NewsPageModule,
     IonicModule.forRoot(MyApp)
   ],

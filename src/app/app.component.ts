@@ -20,6 +20,7 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: 'home'},
       { title: 'Company news', component: 'news'},
+      { title: 'Sentiment', component: 'sentiment'},
       { title: 'Our Team', component: 'team' }
     ];
 

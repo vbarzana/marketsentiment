@@ -4,7 +4,6 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class RestProvider {
-  // private url: string = 'http://localhost:1337/googlefinance/loadCompanyNews';
   private url: string = 'googlefinance/loadCompanyNews';
 
   constructor(public http: HttpClient) {
@@ -17,6 +16,16 @@ export class RestProvider {
     try {
       let loadNewsUrl = `${this.url}?s=${symbols}` + (from ? `&from=${from}` : '') + (to ? `&to=${to}` : '');
       return await this.http.get(loadNewsUrl).toPromise();
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+
+  }
+
+  async loadTrendingSymbolsFromStockTwits(): Promise<Object> {
+    try {
+      return await this.http.get('trendingsymbols/loadTrendingSymbolsFromStockTwits').toPromise();
     } catch (err) {
       console.log(err);
       return {};
