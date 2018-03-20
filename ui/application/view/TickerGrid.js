@@ -4,8 +4,12 @@
 Ext.define('Marketsentiment.view.TickerGrid', {
   extend: 'Ext.grid.Panel',
   alias: 'widget.tickergrid',
-  requires: ['Marketsentiment.view.TickerGridViewModel'],
+  requires: [
+    'Marketsentiment.view.TickerGridViewModel',
+    'Marketsentiment.view.TickerGridViewController'
+  ],
   viewModel: 'tickergrid-viewmodel',
+  controller: 'tickergrid-viewcontroller',
   title: 'Let\'s hack it all!',
   bind: '{tickers}',
 
@@ -21,7 +25,9 @@ Ext.define('Marketsentiment.view.TickerGrid', {
   tbar: {
     items: ['->', {
       iconCls: 'fa fa-refresh',
-      text: 'Sync database with the market'
+      text: 'Sync database with the market',
+      reference: 'refreshData',
+      handler: 'pullTickersFromTradingView'
     }]
   },
 
@@ -34,6 +40,27 @@ Ext.define('Marketsentiment.view.TickerGrid', {
     header: 'Symbol',
     dataIndex: 's',
     width: 100,
+    filter: {
+      type: 'string'
+    }
+  }, {
+    header: 'Close',
+    dataIndex: 'close',
+    width: 100,
+    filter: {
+      type: 'string'
+    }
+  }, {
+    header: 'Volume',
+    dataIndex: 'volume',
+    width: 100,
+    filter: {
+      type: 'string'
+    }
+  }, {
+    header: 'News Today',
+    dataIndex: 'newsToday',
+    flex: 1,
     filter: {
       type: 'string'
     }

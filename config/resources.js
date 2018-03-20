@@ -19,6 +19,7 @@ module.exports.resources = {
 	 */
 	js: [
 		'node_modules/lodash/lodash.js',
+		'node_modules/moment/moment.js',
 		'node_modules/jszip/dist/jszip.js',
 		'node_modules/ext/build/ext-all-debug.js',
 		'assets/js/sails.io.js'
