@@ -19,9 +19,9 @@
  */
 module.exports = function(grunt) {
   grunt.registerTask('build', [
-    'compileAssets',
-    'linkAssetsBuild',
-    'clean:build',
-    'copy:build'
-  ]);
+    'extjs_dependencies:dist',
+    'uglify:dist',
+		'concat',
+		'cssmin'
+	]);
 };

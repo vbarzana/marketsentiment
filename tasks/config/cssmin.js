@@ -17,9 +17,15 @@
 module.exports = function(grunt) {
 
   grunt.config.set('cssmin', {
-    dist: {
-      src: ['.tmp/public/concat/production.css'],
-      dest: '.tmp/public/min/production.min.css'
+    options: {
+      relativeTo: './assets/styles',
+      target: './tmp/public',
+      rebase: true
+    },
+    target: {
+      files: {
+        '.tmp/public/marketsentiment.min.css': require('../../config/resources').resources.css
+      }
     }
   });
 

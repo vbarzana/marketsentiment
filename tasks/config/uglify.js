@@ -12,9 +12,16 @@
 module.exports = function(grunt) {
 
   grunt.config.set('uglify', {
+    options: {
+      sequences: false,
+      if_return: false
+    },
     dist: {
-      src: ['.tmp/public/concat/production.js'],
-      dest: '.tmp/public/min/production.min.js'
+      files: {
+        '.tmp/public/marketsentiment.min.js': require('../../config/resources').resources.js
+          .concat('<%= extjs_dependencies_dist %>')
+          .concat('!assets/js/sails.io.js')
+      }
     }
   });
 
