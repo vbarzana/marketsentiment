@@ -42,5 +42,5 @@
     "url": "git://github.com/anonymous node/sails user/marketsentiment.git"
   },
   "author": "Victor Antonio Barzana Crespo <viticoinf@gmail.com>",
-  "license": "Apache-2.0"
+  "license": "gpl-3.0"
 }
