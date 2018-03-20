@@ -1,13 +1,13 @@
 (function () {
   Ext.Loader.setConfig({
-    disableCaching: !Config.caching,
+    disableCaching: true,
     enabled: true
   });
 
-  Ext.Loader.setPath('Marketsentiment.component', Config.host + '/ui/component/');
-  Ext.Loader.setPath('Marketsentiment.store', Config.host + '/ui/store/');
-  Ext.Loader.setPath('Marketsentiment.model', Config.host + '/ui/model/');
-  Ext.Loader.setPath('Ext.ux', Config.host + '/node_modules/ext/packages/ux/classic/src/');
+  Ext.Loader.setPath('Marketsentiment.component', './ui/component/');
+  Ext.Loader.setPath('Marketsentiment.store', './ui/store/');
+  Ext.Loader.setPath('Marketsentiment.model', './ui/model/');
+  Ext.Loader.setPath('Ext.ux', './node_modules/ext/packages/ux/classic/src/');
 }());
 
 /**

@@ -92,8 +92,9 @@ module.exports.views = {
   partials: false,
 
   minify: {
-    js: false,
-    html: false
+    js: true,
+    css: true,
+    html: true
   }
 
 };

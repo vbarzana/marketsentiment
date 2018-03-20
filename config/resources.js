@@ -30,6 +30,7 @@ module.exports.resources = {
 	 * All css files needed by the application in the correct order.
 	 */
 	css: [
+		'node_modules/ext/build/classic/theme-triton/resources/theme-triton-all.css',
 		'node_modules/ext/build/packages/ux/classic/classic/resources/ux-all.css',
 		'node_modules/fatcow/icons-16px.css',
 		'node_modules/fatcow/icons-32px.css',
