@@ -1,6 +1,5 @@
 /**
- * @class IntrinioApiController
- * @link https://docs.intrinio.com/
+ * @class TradingViewController
  */
 const _ = require('lodash');
 const {Builder, By, Key, until} = require('selenium-webdriver');

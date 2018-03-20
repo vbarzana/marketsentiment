@@ -4,10 +4,10 @@
     enabled: true
   });
 
-  Ext.Loader.setPath('Marketsentiment.component', './ui/component/');
-  Ext.Loader.setPath('Marketsentiment.store', './ui/store/');
-  Ext.Loader.setPath('Marketsentiment.model', './ui/model/');
-  Ext.Loader.setPath('Ext.ux', './node_modules/ext/packages/ux/classic/src/');
+  Ext.Loader.setPath('Marketsentiment.component', 'ui/component');
+  Ext.Loader.setPath('Marketsentiment.store', 'ui/store');
+  Ext.Loader.setPath('Marketsentiment.model', 'ui/model');
+  Ext.Loader.setPath('Ext.ux', 'node_modules/ext/packages/ux/classic/src');
 }());
 
 /**

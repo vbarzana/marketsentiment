@@ -1,0 +1,4 @@
+/**
+ * @class TickerController
+ */
+module.exports = {};
