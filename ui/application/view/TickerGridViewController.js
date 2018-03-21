@@ -5,6 +5,13 @@ Ext.define('Marketsentiment.view.TickerGridViewController', {
   extend: 'Ext.app.ViewController',
   alias: 'controller.tickergrid-viewcontroller',
 
+  onGridItemSelected: function(selModel, record) {
+    var chart = Ext.getCmp('tradingview-chart');
+    if (chart) {
+      chart.setSymbol(record.get('s'));
+    }
+  },
+
   init: function () {
     io.socket.on('refreshnews', this.refreshGrid.bind(this));
   },

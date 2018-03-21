@@ -28,7 +28,7 @@ Ext.define('Marketsentiment.view.TickerGrid', {
       checked: false,
       fieldLabel: 'Auto sync news',
       handler: 'startStopAutoRefresh'
-    },{
+    }, {
       iconCls: 'fa fa-refresh',
       text: 'Sync database with the market',
       reference: 'refreshData',
@@ -69,5 +69,8 @@ Ext.define('Marketsentiment.view.TickerGrid', {
     filter: {
       type: 'string'
     }
-  }]
+  }],
+  listeners: {
+    select: 'onGridItemSelected'
+  }
 });

@@ -4,7 +4,10 @@
 Ext.define('Marketsentiment.view.Viewport', {
   extend: 'Ext.container.Viewport',
   xtype: 'marketsentiment-viewport',
-  requires: ['Marketsentiment.view.TickerGrid'],
+  requires: [
+    'Marketsentiment.view.TickerGrid',
+    'Marketsentiment.view.TradingViewChart'
+  ],
 
   title: 'Market Sentiment',
   layout: 'border',
@@ -24,10 +27,17 @@ Ext.define('Marketsentiment.view.Viewport', {
         }
       ]
     }, {
-      xtype: 'tabpanel',
+      layout: 'border',
       region: 'center',
+      split: true,
       items: [{
+        region: 'center',
         xtype: 'tickergrid'
+      }, {
+        split: true,
+        region: 'north',
+        xtype: 'tradingviewchart',
+        height: 300
       }]
     }
   ]
