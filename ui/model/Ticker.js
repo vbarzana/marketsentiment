@@ -16,6 +16,10 @@ Ext.define('Marketsentiment.model.Ticker', {
     type: 'integer',
     mapping: 'd.volume'
   }, {
+    name: 'float',
+    type: 'integer',
+    mapping: 'd.float_shares_outstanding'
+  }, {
     name: 'newsToday',
     type: 'string',
     convert: function (val, rec) {
@@ -28,7 +32,11 @@ Ext.define('Marketsentiment.model.Ticker', {
 
           var dateParsed = moment(item.date).parseZone();
           if (dateParsed >= yesterday) {
-            result += '<span class="title">' + item.title + '</span><br>' + _.toString(item.description) + '<br><a target="_blank" href="' + item.link + '" style="color: gray;font-size: 11px;"><i class="fa fa-clock-o"></i> ' + dateParsed.fromNow() + '</a><br>';
+            result += '<div class="news-wrapper">' +
+              '<div class="title">' + item.title + '</div>' +
+              '<div class="description">' + _.toString(item.description) + '</div>' +
+              '<a target="_blank" href="' + item.link + '" style="color: gray;font-size: 11px;"><i class="fa fa-clock-o"></i> ' + dateParsed.fromNow() + '</a>' +
+              '</div>';
           }
         });
       }
@@ -41,6 +49,28 @@ Ext.define('Marketsentiment.model.Ticker', {
       _.forEach(['FDA', 'Contract'], function (word) {
         result = result.replace(new RegExp(word, 'i'), '<span class="highlighted-green">' + word + '</span>');
       });
+      return result;
+    }
+  }, {
+    name: 'previousNews',
+    type: 'string',
+    convert: function (val, rec) {
+      var news = rec.get('news');
+      var result = '';
+      if (news) {
+        var yesterday = moment().subtract(0.5, 'days').parseZone();
+        _.forEach(news, function (item) {
+          if (!item) return true;
+
+          var dateParsed = moment(item.date).parseZone();
+          if (dateParsed <= yesterday) {
+            result += '<div class="news-wrapper">' +
+              '<a target="_blank" href="' + item.link + '" style="color: gray;font-size: 11px;"><i class="fa fa-clock-o"></i> ' + dateParsed.format('L') + '</a>' +
+              '<div class="title" data-qtip="' + _.toString(item.description) + '">' + item.title + '</div>' +
+              '</div>';
+          }
+        });
+      }
       return result;
     }
   }],

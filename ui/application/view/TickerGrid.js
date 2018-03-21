@@ -13,6 +13,8 @@ Ext.define('Marketsentiment.view.TickerGrid', {
   title: 'Let\'s hack it all!',
   bind: '{tickers}',
 
+  cls: 'ticker-grid',
+
   plugins: {
     gridfilters: true
   },
@@ -61,10 +63,30 @@ Ext.define('Marketsentiment.view.TickerGrid', {
     width: 100,
     filter: {
       type: 'string'
+    },
+    renderer: function (val) {
+      return Marketsentiment.Util.formatNumber(val);
+    }
+  }, {
+    header: 'Float',
+    dataIndex: 'float',
+    width: 100,
+    filter: {
+      type: 'string'
+    },
+    renderer: function (val) {
+      return Marketsentiment.Util.formatNumber(val);
     }
   }, {
     header: 'News Today',
     dataIndex: 'newsToday',
+    flex: 1,
+    filter: {
+      type: 'string'
+    }
+  }, {
+    header: 'Previous News',
+    dataIndex: 'previousNews',
     flex: 1,
     filter: {
       type: 'string'

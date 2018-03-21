@@ -25,6 +25,7 @@ Ext.application({
 
   requires: [
     'Marketsentiment.data.proxy.Blueprint',
+    'Marketsentiment.util.Util',
     'Marketsentiment.view.Viewport'
   ],
 
