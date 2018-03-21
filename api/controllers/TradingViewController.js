@@ -54,13 +54,8 @@ module.exports = {
       // Some time out so trading view does not think I am stealing their data
       await driver.sleep(3000);
 
-      let data = await driver.executeAsyncScript(loadTickersDataAsync, URL, QUERY_DATA);
-
-      data = _.get(data, 'data') || data;
-
-      await this.addNewsToData(data);
-      await this.saveTickers(data);
-
+      let tickers = _.get(await driver.executeAsyncScript(loadTickersDataAsync, URL, QUERY_DATA), 'data');
+      await TickerService.addNewsToTickers(transform(tickers), true);
     } finally {
       // done with the requests close the browser
       await driver.quit();
@@ -69,57 +64,21 @@ module.exports = {
     res.json({
       success: true
     });
-  },
-
-  saveTickers: async function (data) {
-    let promises = [];
-    _.forEach(data, function (symbol) {
-      promises.push(new Promise(async resolve => {
-        let result;
-        try {
-          // convert the symbols to object data
-          if (_.isArray(symbol.d)) {
-            symbol.d = _.reduce(symbol.d, function (map, item, idx) {
-              map[COLUMNS[idx]] = item;
-              return map;
-            }, {});
-          }
-
-          result = await Ticker.findOne({s: symbol.s});
-          if (!result) {
-            await Ticker.create(symbol);
-          } else {
-            await Ticker.update(result, symbol);
-          }
-        } catch (err) {
-        }
-        resolve(result);
-      }));
-    });
-    return await Promise.all(promises);
-  },
-
-  addNewsToData: async function (data) {
-    let symbols = _.reduce(data, function (array, item) {
-      return _.concat(array, [item.s]);
-    }, []);
-
-    let news;
-    try {
-      // news = await GoogleFinanceService.loadCompanyNews(symbols);
-      news = await YahooFinanceService.loadCompanyNews(symbols);
-    } catch (err) {
-      console.log(err);
-    }
-    _.forEach(data, function (symbol) {
-      if (!_.isEmpty(news[symbol.s])) {
-        symbol.news = news[symbol.s];
-      }
-    });
-    return data;
   }
 };
 
+function transform(tickers) {
+  _.forEach(tickers, function (symbolObj) {
+    // convert the symbols to object data
+    if (_.isArray(symbolObj.d)) {
+      symbolObj.d = _.reduce(symbolObj.d, function (map, item, idx) {
+        map[COLUMNS[idx]] = item;
+        return map;
+      }, {});
+    }
+  });
+  return tickers;
+}
 
 function loadTickersDataAsync(url, queryParams) {
   var callback = arguments[arguments.length - 1];

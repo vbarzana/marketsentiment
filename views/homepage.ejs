@@ -14,7 +14,6 @@
       <% resources.css.forEach(function(file){ %>
       <link rel="stylesheet" href="./<%= file %>?dc=<%=new Date().getTime()%>" type="text/css" media="all"/>
     <% }); %>
-
     <% } %>
   </head>
   <body>
@@ -26,5 +25,8 @@
         <% }); %>
         <script type="text/javascript" src="./ui/application/Marketsentiment.js?dc=<%=new Date().getTime()%>"></script>
       <% } %>
+      <script type="text/javascript">
+        io.sails.url = '//'+location.host;
+      </script>
   </body>
 </html>

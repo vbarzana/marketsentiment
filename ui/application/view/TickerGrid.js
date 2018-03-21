@@ -24,6 +24,11 @@ Ext.define('Marketsentiment.view.TickerGrid', {
 
   tbar: {
     items: ['->', {
+      xtype: 'checkbox',
+      checked: false,
+      fieldLabel: 'Auto sync news',
+      handler: 'startStopAutoRefresh'
+    },{
       iconCls: 'fa fa-refresh',
       text: 'Sync database with the market',
       reference: 'refreshData',

@@ -1,0 +1,4 @@
+/**
+ * @class NewsNotificationStatusController
+ */
+module.exports = {};

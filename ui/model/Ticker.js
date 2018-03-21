@@ -22,21 +22,25 @@ Ext.define('Marketsentiment.model.Ticker', {
       var news = rec.get('news');
       var result = '';
       if (news) {
-        var yesterday = moment().subtract(1, 'days').parseZone();
+        var yesterday = moment().subtract(0.5, 'days').parseZone();
         _.forEach(news, function (item) {
           if (!item) return true;
 
           var dateParsed = moment(item.date).parseZone();
-          var words = ['FDA', 'Contract', 'drug approval', 'blockchain', 'Purchase Agreement', 'Earnings Call', 'Agreement', 'profitable', 'profit', 'fourth quarter', 'results'];
-          var description = _.toString(item.description);
-          _.forEach(words, function (word) {
-            description = description.replace(new RegExp(word, 'i'), '<span class="highlighted">' + word + '</span>');
-          });
           if (dateParsed >= yesterday) {
-            result += description + '<br><i class="fa fa-clock-o"></i> ' + dateParsed.fromNow() + ' -  <a target="_blank" href="' + item.link + '">' + item.link + '</a>' + '<br>';
+            result += '<span class="title">' + item.title + '</span><br>' + _.toString(item.description) + '<br><a target="_blank" href="' + item.link + '" style="color: gray;font-size: 11px;"><i class="fa fa-clock-o"></i> ' + dateParsed.fromNow() + '</a><br>';
           }
         });
       }
+      _.forEach([
+        'drug approval', 'blockchain', 'Purchase Agreement', 'Earnings Call', 'Agreement', 'profitable',
+        'profit', 'fourth quarter', 'results', 'Phase 1', 'Phase 2', 'Phase 3', 'Annual', 'Conference'
+      ], function (word) {
+        result = result.replace(new RegExp(word, 'i'), '<span class="highlighted">' + word + '</span>');
+      });
+      _.forEach(['FDA', 'Contract'], function (word) {
+        result = result.replace(new RegExp(word, 'i'), '<span class="highlighted-green">' + word + '</span>');
+      });
       return result;
     }
   }],
