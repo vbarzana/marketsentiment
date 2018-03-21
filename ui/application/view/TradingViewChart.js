@@ -2,7 +2,6 @@ Ext.define('Marketsentiment.view.TradingViewChart', {
   extend: 'Ext.container.Container',
   alias: 'widget.tradingviewchart',
   id: 'tradingview-chart',
-  header: false,
   config: {
     symbol: null
   },

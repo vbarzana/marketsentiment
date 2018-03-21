@@ -29,15 +29,15 @@ Ext.define('Marketsentiment.view.Viewport', {
     }, {
       layout: 'border',
       region: 'center',
-      split: true,
       items: [{
-        region: 'center',
-        xtype: 'tickergrid'
-      }, {
         split: true,
+        collapsible: true,
         region: 'north',
         xtype: 'tradingviewchart',
-        height: 300
+        height: '30%'
+      }, {
+        region: 'center',
+        xtype: 'tickergrid'
       }]
     }
   ]
