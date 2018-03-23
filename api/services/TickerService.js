@@ -57,9 +57,9 @@ module.exports = {
     _.forEach(tickers, function (symbol) {
       let symbolNews = news[symbol.s];
       if (!_.isEmpty(symbolNews)) {
-        var updatedNews = symbol.news;
-        _.forEach(symbol.news, function (item) {
-          if (_.isEmpty(_.filter(symbolNews, {link: item.link}))) {
+        var updatedNews = _.castArray(symbol.news);
+        _.forEach(symbolNews, function (item) {
+          if (_.isEmpty(_.filter(symbol.news, {link: item.link}))) {
             updatedNews.push(item);
           }
         });
@@ -84,7 +84,8 @@ module.exports = {
           if (!result) {
             await Ticker.create(symbolObj);
           } else {
-            await Ticker.update(result, symbolObj);
+            result = _.merge(result, _.omit(symbolObj, ['id']));
+            await result.save();
           }
         } catch (err) {
         }
@@ -99,6 +100,7 @@ async function notifyNewsFromToday(symbol, news, details) {
   var today = moment().parseZone().format('L');
   let dateParsed;
   _.forEach(news, async (item) => {
+    if (!item) return true;
     dateParsed = moment(item.date).parseZone();
     var notificationAlreadySent;
     if (dateParsed.format('L') === today) {

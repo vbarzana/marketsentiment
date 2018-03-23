@@ -34,7 +34,7 @@ Ext.define('Marketsentiment.model.Ticker', {
           if (dateParsed >= yesterday) {
             result += '<div class="news-wrapper">' +
               '<div class="title">' + item.title + '</div>' +
-              '<div class="description">' + _.toString(item.description) + '</div>' +
+              '<div class="description" data-qtip="' + _.toString(item.description) + '">' + _.toString(item.description) + '</div>' +
               '<a target="_blank" href="' + item.link + '" style="color: gray;font-size: 11px;"><i class="fa fa-clock-o"></i> ' + dateParsed.fromNow() + '</a>' +
               '</div>';
           }
@@ -65,9 +65,9 @@ Ext.define('Marketsentiment.model.Ticker', {
           var dateParsed = moment(item.date).parseZone();
           if (dateParsed <= yesterday) {
             result += '<div class="news-wrapper">' +
-              '<a target="_blank" href="' + item.link + '" style="color: gray;font-size: 11px;"><i class="fa fa-clock-o"></i> ' + dateParsed.format('L') + '</a>' +
-              '<div class="title" data-qtip="' + _.toString(item.description) + '">' + item.title + '</div>' +
-              '</div>';
+              '<a target="_blank" href="' + item.link + '" style="color: gray;font-size: 11px;"><i class="fa fa-clock-o"></i> ' + dateParsed.format('L') + ':</a>' +
+              '<div class="title" style="padding-left: 3px;" data-qtip="' + _.toString(item.description) + '">' + item.title + '</div>' +
+              '</div><br>';
           }
         });
       }
