@@ -62,5 +62,10 @@ sails.lift(rc('sails'), async function () {
   const TradingViewController = require('./api/controllers/TradingViewController');
   await TradingViewController.pullTickersFromTradingView();
   TickerService.startAutomaticNewsUpdate(60000 * 3); // 3 min
+
+  setInterval(async function () {
+    await TradingViewController.pullTickersFromTradingView();
+    TickerService.startAutomaticNewsUpdate(60000 * 3); // 3 min
+  }, 60000 * 60); // update tickers every 1 hours
 });
 
