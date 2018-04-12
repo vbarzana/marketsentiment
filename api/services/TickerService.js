@@ -138,8 +138,8 @@ async function notifyNewsFromToday(symbol, news, details) {
         } catch (err) {
           console.log(err);
         }
-        let magicWords = ['new product', 'investor', 'funding', 'contract', 'fda', 'nda', 'drug approval', 'blockchain',
-          'Purchase Agreement', 'Earnings Call', 'Agreement', 'fourth quarter', 'Phase 2', 'Phase 3', 'letter to shareholders',
+        let magicWords = ['new product', 'new investor', 'funding', 'contract', 'fda', 'nda', 'drug approval', 'blockchain',
+          'Purchase Agreement', 'Earnings Call', 'fourth quarter', 'Phase 2', 'Phase 3', 'letter to shareholders',
           'raised to buy', 'beats on earnings', '8K', 'to report earnings', 'delisted', 'topline results', 'better than expected',
           'downgraded', 'bankrupcy', 'buyout', 'patent', 'merger', 'split'];
         item.description = _.toString(item.description);
