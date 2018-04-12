@@ -118,13 +118,12 @@ module.exports = {
 };
 
 async function notifyNewsFromToday(symbol, news, details) {
-  var yesterday = moment().subtract(1, 'days').format('L');
-  let dateParsed;
+  var yesterday = moment().utc().subtract(1, 'days');
   _.forEach(news, async (item) => {
     if (!item) return true;
-    dateParsed = moment(item.date);
+    var dateParsed = moment(item.date).utc();
     var notificationAlreadySent;
-    if (dateParsed.format('L') >= yesterday) {
+    if (dateParsed >= yesterday) {
       try {
         notificationAlreadySent = await NewsNotificationStatus.findOne({link: item.link, s: symbol || item.symbol});
       } catch (err) {
@@ -153,8 +152,9 @@ async function notifyNewsFromToday(symbol, news, details) {
             return false; // break
           }
         });
+        var cleanSymbol = _.trim(_.last(_.split(symbol || item.symbol, ':')));
         if (matchesGoodNews) {
-          let msgTitle = `<https://finance.yahoo.com/quote/${_.trim(_.last(_.split(symbol || item.symbol, ':')))}|${(symbol || item.symbol)} - ${getDetailsString(details)}>`;
+          let msgTitle = `<https://finance.yahoo.com/quote/${cleanSymbol}|${(cleanSymbol || item.symbol)} - ${getDetailsString(details)}>`;
           let msgBody = `${item.title} \n${item.description}\n<${item.link}|${moment.tz(dateParsed, "America/New_York").format('L HH:mm a')}>\n`;
           SlackService.notify(msgTitle, msgBody);
         }
