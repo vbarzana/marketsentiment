@@ -61,9 +61,11 @@ module.exports = {
       await driver.quit();
     }
 
-    res.json({
-      success: true
-    });
+    if (res) {
+      res.json({
+        success: true
+      });
+    }
   }
 };
 

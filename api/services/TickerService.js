@@ -117,8 +117,23 @@ async function notifyNewsFromToday(symbol, news, details) {
         } catch (err) {
           console.log(err);
         }
-        var title = `<https://finance.yahoo.com/quote/${_.trim(_.last(_.split(symbol || item.symbol, ':')))}|${(symbol || item.symbol)} - ${getDetailsString(details)}>`;
-        SlackService.notify(title, `${item.title} \n${item.description}\n<${item.link}|${dateParsed.format('L HH:mm a')}>\n`);
+        let magicWords = ['new product', 'investor', 'funding', 'contract', 'fda', 'drug approval', 'blockchain',
+          'Purchase Agreement', 'Earnings Call', 'Agreement', 'fourth quarter', 'Phase 2', 'Phase 3', 'robot'];
+        item.description = _.toString(item.description);
+        item.title = _.toString(item.title);
+
+        let matchesGoodNews = false, exp;
+        _.forEach(magicWords, function (word) {
+          exp = new RegExp(word, 'i');
+          if (item.title.match(exp) || item.description.match(exp)) {
+            matchesGoodNews = true;
+            return false; // break
+          }
+        });
+        if (matchesGoodNews) {
+          var title = `<https://finance.yahoo.com/quote/${_.trim(_.last(_.split(symbol || item.symbol, ':')))}|${(symbol || item.symbol)} - ${getDetailsString(details)}>`;
+          SlackService.notify(title, `${item.title} \n${item.description}\n<${item.link}|${dateParsed.format('L HH:mm a')}>\n`);
+        }
       }
     }
   });

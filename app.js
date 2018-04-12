@@ -58,5 +58,9 @@ try {
 }
 
 // Start server
-sails.lift(rc('sails'));
+sails.lift(rc('sails'), async function () {
+  const TradingViewController = require('./api/controllers/TradingViewController');
+  await TradingViewController.pullTickersFromTradingView();
+  TickerService.startAutomaticNewsUpdate(60000 * 3); // 3 min
+});
 
