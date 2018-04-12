@@ -48,8 +48,9 @@ const QUERY_DATA = {
 
 module.exports = {
   pullTickersFromTradingView: async function (req, res) {
-    let driver = await new Builder().forBrowser('chrome').build();
+    let driver;
     try {
+      driver = await new Builder().forBrowser('chrome').build();
       await driver.get('https://www.tradingview.com/screener/');
       // Some time out so trading view does not think I am stealing their data
       await driver.sleep(3000);
@@ -57,8 +58,10 @@ module.exports = {
       let tickers = _.get(await driver.executeAsyncScript(loadTickersDataAsync, URL, QUERY_DATA), 'data');
       await TickerService.addNewsToTickers(transform(tickers), true);
     } finally {
-      // done with the requests close the browser
-      await driver.quit();
+      if (driver) {
+        // done with the requests close the browser
+        await driver.quit();
+      }
     }
 
     if (res) {

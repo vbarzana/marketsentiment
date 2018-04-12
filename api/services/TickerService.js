@@ -1,5 +1,6 @@
-const moment = require('moment');
+const moment = require('moment-timezone');
 const _ = require('lodash');
+
 const NEWS_UPDATE_INTERVAL = 60000 * 3;
 
 /**
@@ -68,10 +69,30 @@ module.exports = {
       }
     });
     if (saveToDb) {
+      try {
+        await this.cleanupTickers();
+      } catch (err) {
+      }
       await this.saveTickers(tickers);
     }
     sails.io.emit('refreshnews');
     return tickers; // with the news
+  },
+
+  /**
+   * Removes any ticker that hasn't had any activity during the last 5 days
+   * @returns {Promise<any[]>}
+   */
+  cleanupTickers: async function () {
+    let tickers = await loadTickersFromDb();
+    let promises = [];
+    _.forEach(tickers, function (ticker) {
+      let fiveDaysAgo = moment().subtract(5, 'days');
+      if (fiveDaysAgo > moment(_.get(ticker, 'updatedAt'))) {
+        promises.push(ticker.remove());
+      }
+    });
+    return await Promise.all(promises);
   },
 
   saveTickers: async function (tickers) {
@@ -97,13 +118,13 @@ module.exports = {
 };
 
 async function notifyNewsFromToday(symbol, news, details) {
-  var today = moment().parseZone().format('L');
+  var yesterday = moment().subtract(1, 'days').format('L');
   let dateParsed;
   _.forEach(news, async (item) => {
     if (!item) return true;
-    dateParsed = moment(item.date).parseZone();
+    dateParsed = moment(item.date);
     var notificationAlreadySent;
-    if (dateParsed.format('L') === today) {
+    if (dateParsed.format('L') >= yesterday) {
       try {
         notificationAlreadySent = await NewsNotificationStatus.findOne({link: item.link, s: symbol || item.symbol});
       } catch (err) {
@@ -117,8 +138,10 @@ async function notifyNewsFromToday(symbol, news, details) {
         } catch (err) {
           console.log(err);
         }
-        let magicWords = ['new product', 'investor', 'funding', 'contract', 'fda', 'drug approval', 'blockchain',
-          'Purchase Agreement', 'Earnings Call', 'Agreement', 'fourth quarter', 'Phase 2', 'Phase 3', 'robot'];
+        let magicWords = ['new product', 'investor', 'funding', 'contract', 'fda', 'nda', 'drug approval', 'blockchain',
+          'Purchase Agreement', 'Earnings Call', 'Agreement', 'fourth quarter', 'Phase 2', 'Phase 3', 'letter to shareholders',
+          'raised to buy', 'beats on earnings', '8K', 'to report earnings', 'delisted', 'topline results', 'better than expected',
+          'downgraded', 'bankrupcy', 'buyout', 'patent', 'merger', 'split'];
         item.description = _.toString(item.description);
         item.title = _.toString(item.title);
 
@@ -131,8 +154,9 @@ async function notifyNewsFromToday(symbol, news, details) {
           }
         });
         if (matchesGoodNews) {
-          var title = `<https://finance.yahoo.com/quote/${_.trim(_.last(_.split(symbol || item.symbol, ':')))}|${(symbol || item.symbol)} - ${getDetailsString(details)}>`;
-          SlackService.notify(title, `${item.title} \n${item.description}\n<${item.link}|${dateParsed.format('L HH:mm a')}>\n`);
+          let msgTitle = `<https://finance.yahoo.com/quote/${_.trim(_.last(_.split(symbol || item.symbol, ':')))}|${(symbol || item.symbol)} - ${getDetailsString(details)}>`;
+          let msgBody = `${item.title} \n${item.description}\n<${item.link}|${moment.tz(dateParsed, "America/New_York").format('L HH:mm a')}>\n`;
+          SlackService.notify(msgTitle, msgBody);
         }
       }
     }
