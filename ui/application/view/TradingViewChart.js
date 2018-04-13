@@ -6,8 +6,7 @@ Ext.define('Marketsentiment.view.TradingViewChart', {
     symbol: null
   },
 
-  html: '<div><div id="trading-view-widget-container"></div></div><div class="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener" target="_blank"><span class="blue-text">chart</span> by TradingView</a></div></div>',
-
+  html: '<div><div id="trading-view-widget-container">Please select an item from the list to show it\'s chart here</div></div>',
   listeners: {
     render: function () {
       var symbol = this.getSymbol();

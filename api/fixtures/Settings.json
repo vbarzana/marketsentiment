@@ -1,0 +1,57 @@
+{
+  "id": 1,
+
+  "tradingViewColumns": ["name", "close", "volume", "change", "float_shares_outstanding", "exchange", "description", "name", "subtype", "pricescale", "minmov", "fractional", "minmove2"],
+  "tradingViewScreenerUrl": "https://www.tradingview.com/screener/",
+  "tradingViewScreenerCriteria": [
+    {
+      "left": "change",
+      "operation": "nempty"
+    },
+    {
+      "left": "exchange",
+      "operation": "equal",
+      "right": "NASDAQ"
+    },
+    {
+      "left": "volume",
+      "operation": "in_range",
+      "right": [
+        50000,
+        10000000
+      ]
+    },
+    {
+      "left": "average_volume_10d_calc",
+      "operation": "egreater",
+      "right": 200000
+    },
+    {
+      "left": "close",
+      "operation": "in_range",
+      "right": [
+        0.25,
+        7
+      ]
+    },
+    {
+      "left": "Volatility.D",
+      "operation": "in_range",
+      "right": [
+        5,
+        1e+100
+      ]
+    },
+    {
+      "left": "float_shares_outstanding",
+      "operation": "in_range",
+      "right": [
+        500000,
+        30000000
+      ]
+    }
+  ],
+  "tradingViewScreenerSortBy": {"sortBy": "change", "sortOrder": "desc"},
+  "autoSyncOnStartup": true,
+  "autoSyncInterval": 180000
+}

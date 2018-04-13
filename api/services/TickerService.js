@@ -140,7 +140,7 @@ async function notifyNewsFromToday(symbol, news, details) {
         let magicWords = ['new product', 'new investor', 'funding', 'contract', 'fda', 'nda', 'drug approval', 'blockchain',
           'Purchase Agreement', 'Earnings Call', 'fourth quarter', 'Phase 2', 'Phase 3', 'letter to shareholders',
           'raised to buy', 'beats on earnings', '8K', 'to report earnings', 'delisted', 'topline results', 'better than expected',
-          'downgraded', 'bankrupcy', 'buyout', 'patent', 'merger', 'split'];
+          'downgraded', 'bankrupcy', 'buyout', 'patent', 'merger', 'split', 'gold award'];
         item.description = _.toString(item.description);
         item.title = _.toString(item.title);
 

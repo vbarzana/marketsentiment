@@ -37,15 +37,6 @@ const FILTER = [
     "right": [500000, 30000000] // Latest float less than 30 Millions and bigger than 500K
   }];
 
-const QUERY_DATA = {
-  "filter": FILTER,
-  "symbols": {"query": {"types": []}},
-  "columns": COLUMNS,
-  "sort": SORT,
-  "options": {"lang": "en"},
-  "range": [0, 150]
-};
-
 module.exports = {
   pullTickersFromTradingView: async function (req, res) {
     let driver;
@@ -56,7 +47,14 @@ module.exports = {
       // Some time out so trading view does not think I am stealing their data
       await driver.sleep(3000);
 
-      let tickers = _.get(await driver.executeAsyncScript(loadTickersDataAsync, URL, QUERY_DATA), 'data');
+      let tickers = _.get(await driver.executeAsyncScript(loadTickersDataAsync, URL, {
+        "filter": FILTER,
+        "symbols": {"query": {"types": []}},
+        "columns": COLUMNS,
+        "sort": SORT,
+        "options": {"lang": "en"},
+        "range": [0, 150]
+      }), 'data');
       await TickerService.addNewsToTickers(transform(tickers), true);
     } finally {
       if (driver) {
