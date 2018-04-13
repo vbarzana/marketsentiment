@@ -13,6 +13,7 @@
     "express-minify-html": "^0.12.0",
     "ext": "https://github.com/tremez/extjs-gpl",
     "fatcow": "simonmilz/fatcow",
+    "glob": "^7.1.2",
     "google-finance": "^0.1.11",
     "grunt-contrib-jshint": "^1.1.0",
     "grunt-extjs-dependencies": "https://github.com/simonmilz/grunt-extjs-dependencies.git",

@@ -1,6 +1,5 @@
-{
+[{
   "id": 1,
-
   "tradingViewColumns": ["name", "close", "volume", "change", "float_shares_outstanding", "exchange", "description", "name", "subtype", "pricescale", "minmov", "fractional", "minmove2"],
   "tradingViewScreenerUrl": "https://www.tradingview.com/screener/",
   "tradingViewScreenerCriteria": [
@@ -54,4 +53,4 @@
   "tradingViewScreenerSortBy": {"sortBy": "change", "sortOrder": "desc"},
   "autoSyncOnStartup": true,
   "autoSyncInterval": 180000
-}
+}]

@@ -129,34 +129,35 @@ async function notifyNewsFromToday(symbol, news, details) {
       } catch (err) {
         console.log(err);
       }
-      if (!notificationAlreadySent) {
+
+      let magicWords = ['new product', 'new investor', 'funding', 'contract', 'fda', 'nda', 'drug approval', 'blockchain',
+        'Purchase Agreement', 'Earnings Call', 'fourth quarter', 'Phase 2', 'Phase 3', 'letter to shareholders',
+        'raised to buy', 'beats on earnings', '8K', 'to report earnings', 'delisted', 'topline results', 'better than expected',
+        'downgraded', 'bankrupcy', 'buyout', 'patent', 'merger', 'split', 'gold award'];
+      item.description = _.toString(item.description);
+      item.title = _.toString(item.title);
+
+      let matchesGoodNews = false, exp;
+      _.forEach(magicWords, function (word) {
+        exp = new RegExp(word, 'i');
+        if (item.title.match(exp) || item.description.match(exp)) {
+          matchesGoodNews = true;
+          return false; // break
+        }
+      });
+
+      if (!notificationAlreadySent && matchesGoodNews) {
+        var cleanSymbol = _.trim(_.last(_.split(symbol || item.symbol, ':')));
+        let msgTitle = `<https://finance.yahoo.com/quote/${cleanSymbol}|${(cleanSymbol || item.symbol)} - ${getDetailsString(details)}>`;
+        let msgBody = `${item.title} \n${item.description}\n<${item.link}|${moment.tz(dateParsed, "America/New_York").format('L HH:mm a')}>\n`;
         try {
+          SlackService.notify(msgTitle, msgBody);
+          // Notification sent, put it in the DB
           await NewsNotificationStatus.create({link: item.link, s: symbol || item.symbol}, function (err, response) {
             if (err) console.log(err);
           });
         } catch (err) {
           console.log(err);
-        }
-        let magicWords = ['new product', 'new investor', 'funding', 'contract', 'fda', 'nda', 'drug approval', 'blockchain',
-          'Purchase Agreement', 'Earnings Call', 'fourth quarter', 'Phase 2', 'Phase 3', 'letter to shareholders',
-          'raised to buy', 'beats on earnings', '8K', 'to report earnings', 'delisted', 'topline results', 'better than expected',
-          'downgraded', 'bankrupcy', 'buyout', 'patent', 'merger', 'split', 'gold award'];
-        item.description = _.toString(item.description);
-        item.title = _.toString(item.title);
-
-        let matchesGoodNews = false, exp;
-        _.forEach(magicWords, function (word) {
-          exp = new RegExp(word, 'i');
-          if (item.title.match(exp) || item.description.match(exp)) {
-            matchesGoodNews = true;
-            return false; // break
-          }
-        });
-        var cleanSymbol = _.trim(_.last(_.split(symbol || item.symbol, ':')));
-        if (matchesGoodNews) {
-          let msgTitle = `<https://finance.yahoo.com/quote/${cleanSymbol}|${(cleanSymbol || item.symbol)} - ${getDetailsString(details)}>`;
-          let msgBody = `${item.title} \n${item.description}\n<${item.link}|${moment.tz(dateParsed, "America/New_York").format('L HH:mm a')}>\n`;
-          SlackService.notify(msgTitle, msgBody);
         }
       }
     }
