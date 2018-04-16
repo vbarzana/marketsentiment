@@ -42,11 +42,6 @@ module.exports = {
     let driver;
     try {
       driver = await new Builder().forBrowser('chrome').build();
-      try {
-        driver.manage().window().minimize();
-      } catch (err) {
-        // ignore
-      }
       await driver.get('https://www.tradingview.com/screener/');
       // Some time out so trading view does not think I am stealing their data
       await driver.sleep(3000);
