@@ -26,7 +26,7 @@ const FILTER = [
   }, {
     "left": "close",
     "operation": "in_range",
-    "right": [0.25, 7]          // And a price in between what you see here
+    "right": [0.25, 15]          // And a price in between what you see here
   }, {
     "left": "Volatility.D",
     "operation": "in_range",
