@@ -4,57 +4,37 @@
 const _ = require('lodash');
 const {Builder} = require('selenium-webdriver');
 
-//@todo: move to a configuration in the db
-const COLUMNS = ["name", "close", "volume", "change", "float_shares_outstanding", "exchange", "description", "name", "subtype", "pricescale", "minmov", "fractional", "minmove2"];
-const URL = 'https://scanner.tradingview.com/america/scan';
-const SORT = {"sortBy": "change", "sortOrder": "desc"};
-const FILTER = [
-  {
-    "left": "change", "operation": "nempty"
-  }, {
-    "left": "exchange",
-    "operation": "equal",
-    "right": "NASDAQ"           // Only NASDAQ symbols
-  }, {
-    "left": "volume",
-    "operation": "in_range",
-    "right": [50000, 10000000]  // With this volume
-  }, {
-    "left": "average_volume_10d_calc",
-    "operation": "egreater",
-    "right": 200000             // With AVG volume in 10 days bigger than this
-  }, {
-    "left": "close",
-    "operation": "in_range",
-    "right": [0.25, 15]          // And a price in between what you see here
-  }, {
-    "left": "Volatility.D",
-    "operation": "in_range",
-    "right": [5, 1e+100]        // Volatile
-  }, {
-    "left": "float_shares_outstanding",
-    "operation": "in_range",
-    "right": [500000, 30000000] // Latest float less than 30 Millions and bigger than 500K
-  }];
-
 module.exports = {
   pullTickersFromTradingView: async function (req, res) {
     let driver;
+    let config = await loadSettings();
+    let {
+      tradingViewScreenerUrl,
+      tradingViewScreenerCriteria,
+      tradingViewAjaxUrl,
+      tradingViewScreenerSortBy,
+      tradingViewColumns,
+      tradingViewScreenerOptions,
+      tradingViewScreenerRange,
+      tradingViewScreenerSymbols,
+      tradingViewScreenerSleep
+    } = config;
+
     try {
       driver = await new Builder().forBrowser('chrome').build();
-      await driver.get('https://www.tradingview.com/screener/');
+      await driver.get(tradingViewScreenerUrl);
       // Some time out so trading view does not think I am stealing their data
-      await driver.sleep(3000);
+      await driver.sleep(tradingViewScreenerSleep);
 
-      let tickers = _.get(await driver.executeAsyncScript(loadTickersDataAsync, URL, {
-        "filter": FILTER,
-        "symbols": {"query": {"types": []}},
-        "columns": COLUMNS,
-        "sort": SORT,
-        "options": {"lang": "en"},
-        "range": [0, 150]
+      let tickers = _.get(await driver.executeAsyncScript(loadTickersDataAsync, tradingViewAjaxUrl, {
+        "filter": tradingViewScreenerCriteria,
+        "symbols": tradingViewScreenerSymbols,
+        "columns": tradingViewColumns,
+        "sort": tradingViewScreenerSortBy,
+        "options": tradingViewScreenerOptions,
+        "range": tradingViewScreenerRange
       }), 'data');
-      await TickerService.addNewsToTickers(transform(tickers), true);
+      await TickerService.addNewsToTickers(transform(tickers, tradingViewColumns), true);
     } finally {
       if (driver) {
         // done with the requests close the browser
@@ -70,12 +50,17 @@ module.exports = {
   }
 };
 
-function transform(tickers) {
+async function loadSettings() {
+  return await Settings.findOne({id: 1});
+}
+
+function transform(tickers, columns) {
+  columns = _.castArray(columns);
   _.forEach(tickers, function (symbolObj) {
     // convert the symbols to object data
     if (_.isArray(symbolObj.d)) {
       symbolObj.d = _.reduce(symbolObj.d, function (map, item, idx) {
-        map[COLUMNS[idx]] = item;
+        map[columns[idx]] = item;
         return map;
       }, {});
     }
