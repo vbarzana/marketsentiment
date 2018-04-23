@@ -118,7 +118,9 @@ module.exports = {
 };
 
 async function notifyNewsFromToday(symbol, news, details) {
-  var yesterday = moment().utc().subtract(1, 'days');
+  // On Monday take the news of the whole weekend
+  let daysToSubtract = (new Date()).getDay() === 1 ? 3 : 1;
+  var yesterday = moment().utc().subtract(daysToSubtract, 'days');
   _.forEach(news, async (item) => {
     if (!item) return true;
     var dateParsed = moment(item.date).utc();
