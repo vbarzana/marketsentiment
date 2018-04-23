@@ -7,7 +7,6 @@ const {Builder} = require('selenium-webdriver');
 module.exports = {
   pullTickersFromTradingView: async function (req, res) {
     let driver;
-    let config = await loadSettings();
     let {
       tradingViewScreenerUrl,
       tradingViewScreenerCriteria,
@@ -18,7 +17,7 @@ module.exports = {
       tradingViewScreenerRange,
       tradingViewScreenerSymbols,
       tradingViewScreenerSleep
-    } = config;
+    } = await SettingsService.getSettings();
 
     try {
       driver = await new Builder().forBrowser('chrome').build();
@@ -49,10 +48,6 @@ module.exports = {
     }
   }
 };
-
-async function loadSettings() {
-  return await Settings.findOne({id: 1});
-}
 
 function transform(tickers, columns) {
   columns = _.castArray(columns);

@@ -28,12 +28,16 @@ module.exports = {
     }
     return formattedNumber;
   },
-  startAutomaticNewsUpdate: function (interval) {
+
+  startAutomaticNewsUpdate: async function (interval) {
     this.addNewsToTickers(null, true);
     clearInterval(this.newsUpdateInterval);
+    let {autoSyncInterval} = await SettingsService.getSettings();
+
+
     this.newsUpdateInterval = setInterval(() => {
       this.addNewsToTickers(null, true); // true to save to db
-    }, interval || NEWS_UPDATE_INTERVAL);
+    }, interval || autoSyncInterval);
   },
 
   stopAutomaticNewsUpdate: function () {
@@ -132,10 +136,8 @@ async function notifyNewsFromToday(symbol, news, details) {
         console.log(err);
       }
 
-      let magicWords = ['new product', 'new investor', 'funding', 'contract', 'fda', 'nda', 'drug approval', 'blockchain',
-        'Purchase Agreement', 'Earnings Call', 'fourth quarter', 'Phase 2', 'Phase 3', 'letter to shareholders',
-        'raised to buy', 'beats on earnings', '8K', 'to report earnings', 'delisted', 'topline results', 'better than expected',
-        'downgraded', 'bankrupcy', 'buyout', 'patent', 'merger', 'split', 'gold award'];
+      let {magicWords, timezone} = await SettingsService.getSettings() || [];
+
       item.description = _.toString(item.description);
       item.title = _.toString(item.title);
 
@@ -151,7 +153,7 @@ async function notifyNewsFromToday(symbol, news, details) {
       if (!notificationAlreadySent && matchesGoodNews) {
         var cleanSymbol = _.trim(_.last(_.split(symbol || item.symbol, ':')));
         let msgTitle = `<https://finance.yahoo.com/quote/${cleanSymbol}|${(cleanSymbol || item.symbol)} - ${getDetailsString(details)}>`;
-        let msgBody = `${item.title} \n${item.description}\n<${item.link}|${moment.tz(dateParsed, "America/New_York").format('L HH:mm a')}>\n`;
+        let msgBody = `${item.title} \n${item.description}\n<${item.link}|${moment.tz(dateParsed, timezone).format('L HH:mm a')}>\n`;
         try {
           SlackService.notify(msgTitle, msgBody);
           // Notification sent, put it in the DB
