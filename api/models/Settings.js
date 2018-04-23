@@ -11,7 +11,7 @@ module.exports = {
       primaryKey: true
     },
 
-    screenerCriteria: {
+    tradingViewScreenerCriteria: {
       type: 'array'
     },
 
@@ -21,6 +21,39 @@ module.exports = {
 
     autoSyncInterval: {
       type: 'integer'
+    },
+    updateTickersInterval: {
+      type: 'integer'
+    },
+    tradingViewColumns: {
+      type: 'array'
+    },
+    tradingViewScreenerUrl: {
+      type: 'string'
+    },
+    tradingViewAjaxUrl: {
+      type: 'string'
+    },
+    tradingViewScreenerSortBy: {
+      type: 'json'
+    },
+    tradingViewScreenerSymbols: {
+      type: 'json'
+    },
+    tradingViewScreenerOptions: {
+      type: 'json'
+    },
+    tradingViewScreenerRange: {
+      type: 'array'
+    },
+    tradingViewScreenerSleep: {
+      type: 'integer'
+    },
+    magicWords: {
+      type: 'array'
+    },
+    timezone: {
+      type: 'string'
     }
   }
 };
