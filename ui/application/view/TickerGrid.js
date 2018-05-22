@@ -15,9 +15,7 @@ Ext.define('Marketsentiment.view.TickerGrid', {
 
   cls: 'ticker-grid',
 
-  plugins: {
-    gridfilters: true
-  },
+  plugins: ['gridfilters'],
 
   bbar: {
     xtype: 'pagingtoolbar',
