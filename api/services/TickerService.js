@@ -152,7 +152,7 @@ async function notifyNewsFromToday(symbol, news, details) {
 
       if (!notificationAlreadySent && matchesGoodNews) {
         var cleanSymbol = _.trim(_.last(_.split(symbol || item.symbol, ':')));
-        let msgTitle = `<https://finance.yahoo.com/quote/${cleanSymbol}|${(cleanSymbol || item.symbol)} - ${getDetailsString(details)}>`;
+        let msgTitle = `<https://finance.yahoo.com/quote/${cleanSymbol}|${(item.symbol)} - ${getDetailsString(details)}>`;
         let msgBody = `${item.title} \n${item.description}\n<${item.link}|${moment.tz(dateParsed, timezone).format('L HH:mm a')}>\n`;
         try {
           SlackService.notify(msgTitle, msgBody);
