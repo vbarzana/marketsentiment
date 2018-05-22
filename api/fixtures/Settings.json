@@ -117,5 +117,115 @@
     "autoSyncOnStartup": true,
     "autoSyncInterval": 180000,
     "updateTickersInterval": 3600000
-  }
+  },{
+  "id": 2,
+  "tradingViewColumns": [
+    "name",
+    "close",
+    "volume",
+    "change",
+    "float_shares_outstanding",
+    "exchange",
+    "description",
+    "name",
+    "subtype",
+    "pricescale",
+    "minmov",
+    "fractional",
+    "minmove2"
+  ],
+  "tradingViewScreenerUrl": "https://www.tradingview.com/screener/",
+  "tradingViewAjaxUrl": "https://scanner.tradingview.com/america/scan",
+  "tradingViewScreenerCriteria": [
+    {
+      "left": "change",
+      "operation": "nempty"
+    },
+    {
+      "left": "exchange",
+      "operation": "equal",
+      "right": "OTC"
+    },
+    {
+      "left": "volume",
+      "operation": "egreater",
+      "right": 50000
+    },
+    {
+      "left": "close",
+      "operation": "in_range",
+      "right": [
+        0.0001,
+        20
+      ]
+    },
+    {
+      "left": "Volatility.D",
+      "operation": "in_range",
+      "right": [
+        5,
+        1e+100
+      ]
+    },
+    {
+      "left": "float_shares_outstanding",
+      "operation": "in_range",
+      "right": [
+        50000,
+        30000000
+      ]
+    }
+  ],
+  "tradingViewScreenerSortBy": {
+    "sortBy": "change",
+    "sortOrder": "desc"
+  },
+  "tradingViewScreenerRange": [
+    0,
+    150
+  ],
+  "tradingViewScreenerSleep": 3000,
+  "tradingViewScreenerSymbols": {
+    "query": {
+      "types": []
+    }
+  },
+  "tradingViewScreenerOptions": {
+    "lang": "en"
+  },
+  "magicWords": [
+    "new product",
+    "new investor",
+    "funding",
+    "contract",
+    "fda",
+    "nda",
+    "drug approval",
+    "blockchain",
+    "Purchase Agreement",
+    "Earnings Call",
+    "fourth quarter",
+    "Phase 2",
+    "Phase 3",
+    "letter to shareholders",
+    "raised to buy",
+    "beats on earnings",
+    "8K",
+    "to report earnings",
+    "delisted",
+    "topline results",
+    "better than expected",
+    "downgraded",
+    "bankrupcy",
+    "buyout",
+    "patent",
+    "merger",
+    "split",
+    "gold award"
+  ],
+  "timezone": "America/New_York",
+  "autoSyncOnStartup": true,
+  "autoSyncInterval": 180000,
+  "updateTickersInterval": 3600000
+}
 ]
