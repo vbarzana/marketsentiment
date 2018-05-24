@@ -141,7 +141,7 @@ async function notifyNewsFromToday(symbol, news, details) {
       item.description = _.toString(item.description);
       item.title = _.toString(item.title);
 
-      let matchesGoodNews = false, exp;
+      let matchesGoodNews = _.isEmpty(magicWords), exp;
       _.forEach(magicWords, function (word) {
         exp = new RegExp(word, 'i');
         if (item.title.match(exp) || item.description.match(exp)) {
