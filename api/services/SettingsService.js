@@ -1,3 +1,3 @@
 exports.getSettings = async function () {
-  return await Settings.findOne({id: 2});
+  return await Settings.findOne({id: 1});
 };

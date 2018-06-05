@@ -152,10 +152,12 @@ async function notifyNewsFromToday(symbol, news, details) {
 
       if (!notificationAlreadySent && matchesGoodNews) {
         var cleanSymbol = _.trim(_.last(_.split(symbol || item.symbol, ':')));
-        let msgTitle = `<https://finance.yahoo.com/quote/${cleanSymbol}|${(item.symbol)} - ${getDetailsString(details)}>`;
-        let msgBody = `${item.title} \n${item.description}\n<${item.link}|${moment.tz(dateParsed, timezone).format('L HH:mm a')}>\n`;
+        let msgTitle = `**${cleanSymbol} ${getDetailsString(details)}**`;
+        let msgBody = `\n${msgTitle}\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\nSource: [Yahoo Finance](${item.link})\`\`\`\nhttps://finviz.com/chart.ashx?t=${cleanSymbol}&ty=c&ta=1&p=d&s=l`;
         try {
-          SlackService.notify(msgTitle, msgBody);
+          // SlackService.notify(msgTitle, msgBody);
+          DiscordService.notify(msgBody);
+          // DiscordService.notify(`!chart2 ${cleanSymbol}`);
           // Notification sent, put it in the DB
           await NewsNotificationStatus.create({link: item.link, s: symbol || item.symbol}, function (err, response) {
             if (err) console.log(err);
