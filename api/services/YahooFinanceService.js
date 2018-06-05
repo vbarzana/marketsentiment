@@ -16,35 +16,37 @@ module.exports = {
     _.forEach(symbols, function (symbol) {
       promises.push(
         new Promise((resolve) => {
-          parser.parseURL(URL + _.last(_.split(symbol, ':'))).then(function (data) {
-            let items = _.reduce(_.get(data, 'items'), function (result, item) {
-              let newsDate = moment(_.get(item, 'pubDate'));
-              if (newsDate.isAfter(startDate) && newsDate.isBefore(endDate)) {
-                result.push({
-                  guid: item.guid,
-                  symbol: symbol,
-                  title: item.title,
-                  description: item.content,
-                  summary: item.contentSnippet,
-                  date: item.pubDate,
-                  link: item.link
-                })
-              }
-              return result;
-            }, []);
+          parser.parseURL(URL + _.last(_.split(symbol, ':')))
+            .then(function (data) {
+              let items = _.reduce(_.get(data, 'items'), function (result, item) {
+                let newsDate = moment(_.get(item, 'pubDate'));
+                if (newsDate.isAfter(startDate) && newsDate.isBefore(endDate)) {
+                  result.push({
+                    guid: item.guid,
+                    symbol: symbol,
+                    title: item.title,
+                    description: item.content,
+                    summary: item.contentSnippet,
+                    date: item.pubDate,
+                    link: item.link
+                  })
+                }
+                return result;
+              }, []);
 
-            items.sort(function (a, b) {
-              return moment(_.get(a, 'date')) > moment(_.get(b, 'date')) ? -1 : 1;
-            });
+              items.sort(function (a, b) {
+                return moment(_.get(a, 'date')) > moment(_.get(b, 'date')) ? -1 : 1;
+              });
 
-            resolve({
-              s: symbol,
-              news: items
+              resolve({
+                s: symbol,
+                news: items
+              });
+            })
+            .catch(function (err) {
+              console.log('Could not load URL: ', URL + _.last(_.split(symbol, ':')), err.message);
+              resolve();
             });
-          }).catch(function (err) {
-            console.log(err);
-            resolve();
-          });
         }));
     });
     let data = await Promise.all(promises);

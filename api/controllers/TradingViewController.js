@@ -5,7 +5,59 @@ const _ = require('lodash');
 const {Builder} = require('selenium-webdriver');
 
 module.exports = {
+  startAutoSync: async function () {
+    this.autoSyncNasdaq();
+    this.autoSyncOtc();
+  },
+
+  autoSyncNasdaq: async function () {
+    let {
+      autoSyncOnStartup,
+      autoSyncInterval,
+      updateTickersInterval
+    } = await SettingsService.getSettings();
+
+    if (autoSyncOnStartup) {
+      await this.pullTickersFromTradingView();
+      TickerService.startAutomaticNewsUpdate(autoSyncInterval); // 3 min
+
+      setInterval(async () => {
+        await this.pullTickersFromTradingView();
+        this.startAutomaticNewsUpdate(autoSyncInterval); // 3 min
+      }, updateTickersInterval); // update tickers every 1 hour
+    }
+  },
+
+  autoSyncOtc: async function () {
+    let otcSettings = await SettingsService.getOtcSettings();
+    let {
+      autoSyncOnStartup,
+      autoSyncInterval,
+      updateTickersInterval
+    } = otcSettings;
+
+    if (autoSyncOnStartup) {
+      await this.doPullTickersFromTradingView(otcSettings);
+      TickerService.startAutomaticNewsUpdate(autoSyncInterval); // 3 min
+
+      setInterval(async () => {
+        await this.doPullTickersFromTradingView(otcSettings);
+        this.startAutomaticNewsUpdate(autoSyncInterval); // 3 min
+      }, updateTickersInterval); // update tickers every 1 hour
+    }
+  },
+
   pullTickersFromTradingView: async function (req, res) {
+    this.doPullTickersFromTradingView();
+
+    if (res) {
+      res.json({
+        success: true
+      });
+    }
+  },
+
+  doPullTickersFromTradingView: async function (settings) {
     let driver;
     let {
       tradingViewScreenerUrl,
@@ -17,7 +69,7 @@ module.exports = {
       tradingViewScreenerRange,
       tradingViewScreenerSymbols,
       tradingViewScreenerSleep
-    } = await SettingsService.getSettings();
+    } = settings || await SettingsService.getSettings();
 
     try {
       driver = await new Builder().forBrowser('chrome').build();
@@ -39,12 +91,6 @@ module.exports = {
         // done with the requests close the browser
         await driver.quit();
       }
-    }
-
-    if (res) {
-      res.json({
-        success: true
-      });
     }
   }
 };

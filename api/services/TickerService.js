@@ -151,12 +151,20 @@ async function notifyNewsFromToday(symbol, news, details) {
       });
 
       if (!notificationAlreadySent && matchesGoodNews) {
-        var cleanSymbol = _.trim(_.last(_.split(symbol || item.symbol, ':')));
+        var symbolAndExchange = _.split(symbol || item.symbol, ':');
+        var exchange = _.toLower(_.first(symbolAndExchange));
+        var cleanSymbol = _.trim(_.last(symbolAndExchange));
         let msgTitle = `**${cleanSymbol} ${getDetailsString(details)}**`;
-        let msgBody = `\n${msgTitle}\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\nSource: [Yahoo Finance](${item.link})\`\`\`\nhttps://finviz.com/chart.ashx?t=${cleanSymbol}&ty=c&ta=1&p=d&s=l`;
+        let msgBody = `\n${msgTitle}\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\nSource: [Yahoo Finance](${item.link})\`\`\``;
+        let chart = `\nhttps://finviz.com/chart.ashx?t=${cleanSymbol}&ty=c&ta=1&p=d&s=l`;
+
         try {
-          // SlackService.notify(msgTitle, msgBody);
-          DiscordService.notify(msgBody);
+          if (exchange === 'otc') {
+            DiscordService.notifyOtc(msgBody);
+          } else {
+            DiscordService.notify(msgBody + chart);
+          }
+
           // DiscordService.notify(`!chart2 ${cleanSymbol}`);
           // Notification sent, put it in the DB
           await NewsNotificationStatus.create({link: item.link, s: symbol || item.symbol}, function (err, response) {
