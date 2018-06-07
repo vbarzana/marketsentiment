@@ -10,7 +10,7 @@
     "ejs": "2.5.5",
     "express": "^4.16.2",
     "express-minify-html": "^0.12.0",
-    "ext": "https://github.com/tremez/extjs-gpl#6.2.0",
+    "ext": "https://github.com/vbarzana/extjs-gpl",
     "fatcow": "simonmilz/fatcow",
     "glob": "^7.1.2",
     "google-finance": "^0.1.11",
