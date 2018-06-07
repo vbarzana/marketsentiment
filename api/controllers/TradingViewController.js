@@ -75,6 +75,23 @@ module.exports = {
 
     let tickers = await loadTickersCrossSiteScripting(tradingViewAjaxUrl, filters);
     return await TickerService.addNewsToTickers(tickers, true);
+  },
+
+  iextradingData: async function () {
+    var url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5";
+
+    return new Promise(function (resolve, reject) {
+      request.get({
+        url: url,
+
+      }, function (error, response, body) {
+        if (error) {
+          return reject(error);
+        }
+
+        resolve(body);
+      });
+    });
   }
 };
 

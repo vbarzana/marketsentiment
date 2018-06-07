@@ -4,5 +4,8 @@ module.exports = {
   },
   getOtcSettings: async function () {
     return await Settings.findOne({id: 2});
+  },
+  getPremarketSettings: async function () {
+    return await Settings.findOne({id: 3});
   }
 }

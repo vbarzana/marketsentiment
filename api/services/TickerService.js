@@ -7,6 +7,12 @@ const NEWS_UPDATE_INTERVAL = 60000 * 3;
  * @class TickerService
  */
 module.exports = {
+  findBiggestGainers: async function () {
+    return _.reduce(await Ticker.find(), function(collection, value){
+      collection.push(value.s);
+      return collection;
+    }, []);
+  },
   formatNumber(num) {
     num = parseInt(num, 10);
     var isNegative = false, formattedNumber;
