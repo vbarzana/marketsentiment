@@ -1,5 +1,6 @@
+const _ = require('lodash');
+
 module.exports = function(grunt) {
-	var _ = require('lodash');
 	var modules = require(process.cwd() + '/config/modules').modules.available;
 
 	grunt.config.set('extjs_dependencies', {
