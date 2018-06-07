@@ -1,33 +1,43 @@
 .ticker-grid .news-wrapper {
   width: 100%;
-  float: left; }
-  .ticker-grid .news-wrapper .highlighted {
-    background: yellow !important; }
-  .ticker-grid .news-wrapper .highlighted-green {
-    background: #96ff96 !important; }
-  .ticker-grid .news-wrapper .description, .ticker-grid .news-wrapper a, .ticker-grid .news-wrapper .title {
-    float: left; }
-  .ticker-grid .news-wrapper .description {
-    width: 100%; }
-  .ticker-grid .news-wrapper .title {
-    font-size: 11px;
-    font-weight: bold; }
+  float: left;
+}
+.ticker-grid .news-wrapper .highlighted {
+  background: yellow !important;
+}
+.ticker-grid .news-wrapper .highlighted-green {
+  background: #96ff96 !important;
+}
+.ticker-grid .news-wrapper .description, .ticker-grid .news-wrapper a, .ticker-grid .news-wrapper .title {
+  float: left;
+}
+.ticker-grid .news-wrapper .description {
+  width: 100%;
+}
+.ticker-grid .news-wrapper .title {
+  font-size: 11px;
+  font-weight: bold;
+}
 
 .main-toolbar {
   padding: 0;
-  background-color: #35baf6; }
+  background-color: #35baf6;
+}
 
 .main-logo {
   padding: 10px 0 0 20px;
   height: 60px;
   font-size: 16px;
   color: #fff;
-  margin: 0; }
-  .main-logo i {
-    font-size: 20px;
-    float: left; }
-  .main-logo span {
-    float: left;
-    padding-left: 10px; }
+  margin: 0;
+}
+.main-logo i {
+  font-size: 20px;
+  float: left;
+}
+.main-logo span {
+  float: left;
+  padding-left: 10px;
+}
 
 /*# sourceMappingURL=app.css.map */
