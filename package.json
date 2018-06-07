@@ -5,8 +5,6 @@
   "description": "This application is intended to help traders find the hottest stocks in the market during a trading day",
   "keywords": [],
   "dependencies": {
-    "@slack/client": "^4.0.1",
-    "chromedriver": "^2.36.0",
     "compression": "^1.7.2",
     "discord.js": "^11.3.2",
     "ejs": "2.5.5",
