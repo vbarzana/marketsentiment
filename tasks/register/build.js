@@ -24,4 +24,6 @@ module.exports = function(grunt) {
 		'concat',
 		'cssmin'
 	]);
+
+  grunt.registerTask('prod', ['build']);
 };
