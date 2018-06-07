@@ -125,8 +125,6 @@ nbproject
 .versions/
 coverage/
 dist/
-assets/styles/*.css
-assets/styles/*.map
 node_modules/
 tmp/
 temp/
