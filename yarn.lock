@@ -1300,7 +1300,7 @@ express@^4.16.2:
 
 "ext@https://github.com/tremez/extjs-gpl":
   version "6.2.0.981"
-  resolved "https://github.com/tremez/extjs-gpl#9b78e27fae30fd805608300430645b10d3362059"
+  resolved "https://github.com/tremez/extjs-gpl#08dbbd0ec0b8bc0e014d725fdb7d9650d510b343"
 
 extend@~3.0.0, extend@~3.0.1:
   version "3.0.1"
