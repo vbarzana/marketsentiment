@@ -472,6 +472,10 @@ bson@~0.4.23:
   version "0.4.23"
   resolved "https://registry.yarnpkg.com/bson/-/bson-0.4.23.tgz#e65a2e3c7507ffade4109bc7575a76e50f8da915"
 
+bson@~1.0.4:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-1.0.8.tgz#bcb37b62c7c09c33972377497401e4e63d6ad2ca"
+
 builtin-modules@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-1.1.1.tgz#270f076c5a72c02f5b65a47df94c5fe3a278892f"
@@ -2737,6 +2741,13 @@ mongodb-core@1.3.20:
     bson "~0.4.23"
     require_optional "~1.0.0"
 
+mongodb-core@^3.0.9:
+  version "3.0.9"
+  resolved "https://registry.yarnpkg.com/mongodb-core/-/mongodb-core-3.0.9.tgz#8327410c88811013fb3e4ac7c4c670f324349be1"
+  dependencies:
+    bson "~1.0.4"
+    require_optional "^1.0.1"
+
 mongodb@2.1.20:
   version "2.1.20"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-2.1.20.tgz#3a6ca32f8150bcc6d0b962bd804d61032bfb8787"
@@ -3379,7 +3390,7 @@ request@^2.85.0:
     tunnel-agent "^0.6.0"
     uuid "^3.1.0"
 
-require_optional@~1.0.0:
+require_optional@^1.0.1, require_optional@~1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/require_optional/-/require_optional-1.0.1.tgz#4cf35a4247f64ca3df8c2ef208cc494b1ca8fc2e"
   dependencies:

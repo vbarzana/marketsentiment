@@ -83,7 +83,7 @@
     "tradingViewScreenerOptions": {
       "lang": "en"
     },
-    "magicWords": [],
+    "magicWords": [{"name": "FDA", "rank": "5", "highlight": 3447003}],
     "timezone": "America/New_York",
     "autoSyncOnStartup": true,
     "autoSyncInterval": 180000,
@@ -159,7 +159,7 @@
     "tradingViewScreenerOptions": {
       "lang": "en"
     },
-    "magicWords": [],
+    "magicWords": [{"name": "FDA", "rank": "5", "highlight": 3447003}],
     "timezone": "America/New_York",
     "autoSyncOnStartup": true,
     "autoSyncInterval": 180000,
@@ -227,7 +227,7 @@
     "tradingViewScreenerOptions": {
       "lang": "en"
     },
-    "magicWords": [],
+    "magicWords": [{"name": "FDA", "rank": "5", "highlight": 3447003}],
     "timezone": "America/New_York",
     "autoSyncOnStartup": true,
     "autoSyncInterval": 180000,

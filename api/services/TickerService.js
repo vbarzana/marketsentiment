@@ -141,10 +141,11 @@ async function notifyNewsFromToday(symbol, news, details) {
       item.description = _.toString(item.description);
       item.title = _.toString(item.title);
 
-      let matchesGoodNews = _.isEmpty(magicWords), exp;
-      _.forEach(magicWords, function (word) {
-        exp = new RegExp(word, 'i');
+      let matchesGoodNews = _.isEmpty(magicWords), exp, highlight;
+      _.forEach(magicWords, function (wordObj) {
+        exp = new RegExp(wordObj.name, 'i');
         if (item.title.match(exp) || item.description.match(exp)) {
+          highlight = wordObj.highlight;
           matchesGoodNews = true;
           return false; // break
         }
@@ -154,15 +155,15 @@ async function notifyNewsFromToday(symbol, news, details) {
         var symbolAndExchange = _.split(symbol || item.symbol, ':');
         var exchange = _.toLower(_.first(symbolAndExchange));
         var cleanSymbol = _.trim(_.last(symbolAndExchange));
-        let msgTitle = `**${cleanSymbol} ${getDetailsString(details)}**`;
-        let msgBody = `\n${msgTitle}\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\nSource: [Yahoo Finance](${item.link})\`\`\``;
+        let msgTitle = `${cleanSymbol} ${getDetailsString(details)}`;
+        let msgBody = `\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\nSource: [Yahoo Finance](${item.link})\`\`\``;
         let chart = `\nhttps://finviz.com/chart.ashx?t=${cleanSymbol}&ty=c&ta=1&p=d&s=l`;
 
         try {
           if (exchange === 'otc') {
-            DiscordService.notifyOtc(msgBody);
+            DiscordService.notifyOtc(msgTitle, msgBody, highlight);
           } else {
-            DiscordService.notify(msgBody + chart);
+            DiscordService.notify(msgTitle, msgBody + chart, highlight);
           }
 
           // DiscordService.notify(`!chart2 ${cleanSymbol}`);

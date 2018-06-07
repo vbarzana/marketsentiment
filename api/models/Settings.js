@@ -1,5 +1,5 @@
 /**
- * @class Ticker
+ * @class Settings
  */
 module.exports = {
 

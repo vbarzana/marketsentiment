@@ -10,18 +10,31 @@ client.login(sails.config.discord.token);
 module.exports = {
   getChannel: getChannel,
   getOtcChannel: getOtcChannel,
-  notify: async function (msg) {
+  notify: async function (title, msg, highlight) {
+    // @todo: add the embed to personalize it
     try {
       channel = await this.getChannel();
-      channel.send(msg);
+      channel.send({
+        embed: {
+          title: title,
+          color: highlight || 3447003,
+          description: msg
+        }
+      });
     } catch (err) {
       console.error(err);
     }
   },
-  notifyOtc: async function (msg) {
+  notifyOtc: async function (title, msg, highlight) {
     try {
       otcChannel = await this.getOtcChannel();
-      otcChannel.send(msg);
+      otcChannel.send({
+        embed: {
+          title: title,
+          color: highlight || 3447003,
+          description: msg
+        }
+      });
     } catch (err) {
       console.error(err);
     }
