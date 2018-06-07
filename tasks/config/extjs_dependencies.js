@@ -1,8 +1,5 @@
-const _ = require('lodash');
-
 module.exports = function(grunt) {
-	var modules = require(process.cwd() + '/config/modules').modules.available;
-
+  const _ = require('lodash');
 	grunt.config.set('extjs_dependencies', {
 		dist: {
 			options: {
@@ -13,10 +10,11 @@ module.exports = function(grunt) {
 					'Ext.*'
 				],
 				src: [
-					'application/',
-					'component/',
-					'model/',
-					'store/'
+          'application/',
+          'component/',
+          'model/',
+          'store/',
+          'modules/'
 				],
 				resolveFrom: ['Marketsentiment']
 			}
