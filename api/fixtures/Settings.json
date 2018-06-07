@@ -88,33 +88,149 @@
     "autoSyncOnStartup": true,
     "autoSyncInterval": 180000,
     "updateTickersInterval": 3600000
-  },{
-  "id": 2,
-  "tradingViewColumns": ["name","close","change","volume","market_cap_basic","float_shares_outstanding","exchange","description","name","type","subtype","pricescale","minmov","fractional","minmove2"],
-  "tradingViewScreenerUrl": "https://www.tradingview.com/screener/",
-  "tradingViewAjaxUrl": "https://scanner.tradingview.com/america/scan",
-  "tradingViewScreenerCriteria": [{"left":"change","operation":"nempty"},{"left":"exchange","operation":"equal","right":"OTC"},{"left":"average_volume_10d_calc","operation":"egreater","right":200000},{"left":"close","operation":"in_range","right":[0,1]},{"left":"Volatility.D","operation":"in_range","right":[5,1e+100]}],
-  "tradingViewScreenerSortBy": {
-    "sortBy": "change",
-    "sortOrder": "desc"
   },
-  "tradingViewScreenerRange": [
-    0,
-    300
-  ],
-  "tradingViewScreenerSleep": 3000,
-  "tradingViewScreenerSymbols": {
-    "query": {
-      "types": []
-    }
+  {
+    "id": 2,
+    "tradingViewColumns": [
+      "name",
+      "close",
+      "change",
+      "volume",
+      "market_cap_basic",
+      "float_shares_outstanding",
+      "exchange",
+      "description",
+      "name",
+      "type",
+      "subtype",
+      "pricescale",
+      "minmov",
+      "fractional",
+      "minmove2"
+    ],
+    "tradingViewScreenerUrl": "https://www.tradingview.com/screener/",
+    "tradingViewAjaxUrl": "https://scanner.tradingview.com/america/scan",
+    "tradingViewScreenerCriteria": [
+      {
+        "left": "change",
+        "operation": "nempty"
+      },
+      {
+        "left": "exchange",
+        "operation": "equal",
+        "right": "OTC"
+      },
+      {
+        "left": "average_volume_10d_calc",
+        "operation": "egreater",
+        "right": 200000
+      },
+      {
+        "left": "close",
+        "operation": "in_range",
+        "right": [
+          0,
+          1
+        ]
+      },
+      {
+        "left": "Volatility.D",
+        "operation": "in_range",
+        "right": [
+          5,
+          1e+100
+        ]
+      }
+    ],
+    "tradingViewScreenerSortBy": {
+      "sortBy": "change",
+      "sortOrder": "desc"
+    },
+    "tradingViewScreenerRange": [
+      0,
+      300
+    ],
+    "tradingViewScreenerSleep": 3000,
+    "tradingViewScreenerSymbols": {
+      "query": {
+        "types": []
+      }
+    },
+    "tradingViewScreenerOptions": {
+      "lang": "en"
+    },
+    "magicWords": [],
+    "timezone": "America/New_York",
+    "autoSyncOnStartup": true,
+    "autoSyncInterval": 180000,
+    "updateTickersInterval": 3600000
   },
-  "tradingViewScreenerOptions": {
-    "lang": "en"
-  },
-  "magicWords": [],
-  "timezone": "America/New_York",
-  "autoSyncOnStartup": true,
-  "autoSyncInterval": 180000,
-  "updateTickersInterval": 3600000
-}
+  {
+    "id": 3,
+    "tradingViewColumns": [
+      "name",
+      "close",
+      "change",
+      "change_abs",
+      "volume",
+      "pre_change",
+      "rtc",
+      "name",
+      "type",
+      "subtype",
+      "pricescale",
+      "minmov",
+      "fractional",
+      "minmove2",
+      "current_session"
+    ],
+    "tradingViewScreenerUrl": "https://www.tradingview.com/screener/",
+    "tradingViewAjaxUrl": "https://scanner.tradingview.com/america/scan",
+    "tradingViewScreenerCriteria": [
+      {
+        "left": "change",
+        "operation": "nempty"
+      },
+      {
+        "left": "pre_change",
+        "operation": "egreater",
+        "right": 5
+      },
+      {
+        "left": "close",
+        "operation": "in_range",
+        "right": [
+          1,
+          15
+        ]
+      },
+      {
+        "left": "float_shares_outstanding",
+        "operation": "eless",
+        "right": 50000000
+      }
+    ],
+    "tradingViewScreenerSortBy": {
+      "sortBy": "change",
+      "sortOrder": "desc"
+    },
+    "tradingViewScreenerRange": [
+      0,
+      300
+    ],
+    "tradingViewScreenerSleep": 3000,
+    "tradingViewScreenerSymbols": {
+      "query": {
+        "types": []
+      }
+    },
+    "tradingViewScreenerOptions": {
+      "lang": "en"
+    },
+    "magicWords": [],
+    "timezone": "America/New_York",
+    "autoSyncOnStartup": true,
+    "autoSyncInterval": 180000,
+    "updateTickersInterval": 3600000
+  }
 ]

@@ -2,7 +2,7 @@
  * @class TradingViewController
  */
 const _ = require('lodash');
-const {Builder} = require('selenium-webdriver');
+const request = require('request');
 
 module.exports = {
   startAutoSync: async function () {
@@ -58,40 +58,23 @@ module.exports = {
   },
 
   doPullTickersFromTradingView: async function (settings) {
-    let driver;
-    let {
-      tradingViewScreenerUrl,
-      tradingViewScreenerCriteria,
-      tradingViewAjaxUrl,
-      tradingViewScreenerSortBy,
-      tradingViewColumns,
-      tradingViewScreenerOptions,
-      tradingViewScreenerRange,
-      tradingViewScreenerSymbols,
-      tradingViewScreenerSleep
-    } = settings || await SettingsService.getSettings();
-
-    try {
-      driver = await new Builder().forBrowser('chrome').build();
-      await driver.get(tradingViewScreenerUrl);
-      // Some time out so trading view does not think I am stealing their data
-      await driver.sleep(tradingViewScreenerSleep);
-
-      let tickers = _.get(await driver.executeAsyncScript(loadTickersDataAsync, tradingViewAjaxUrl, {
-        "filter": tradingViewScreenerCriteria,
-        "symbols": tradingViewScreenerSymbols,
-        "columns": tradingViewColumns,
-        "sort": tradingViewScreenerSortBy,
-        "options": tradingViewScreenerOptions,
-        "range": tradingViewScreenerRange
-      }), 'data');
-      await TickerService.addNewsToTickers(transform(tickers, tradingViewColumns), true);
-    } finally {
-      if (driver) {
-        // done with the requests close the browser
-        await driver.quit();
-      }
+    settings = settings || await SettingsService.getSettings();
+    if (!settings) {
+      console.error('Settings not provided or it could not read the settings from the database.');
+      return null;
     }
+    let filters = {
+      "filter": _.get(settings, 'tradingViewScreenerCriteria'),
+      "symbols": _.get(settings, 'tradingViewScreenerSymbols'),
+      "columns": _.get(settings, 'tradingViewColumns'),
+      "sort": _.get(settings, 'tradingViewScreenerSortBy'),
+      "options": _.get(settings, 'tradingViewScreenerOptions'),
+      "range": _.get(settings, 'tradingViewScreenerRange')
+    };
+    let {tradingViewAjaxUrl} = settings;
+
+    let tickers = await loadTickersCrossSiteScripting(tradingViewAjaxUrl, filters);
+    return await TickerService.addNewsToTickers(tickers, true);
   }
 };
 
@@ -109,17 +92,25 @@ function transform(tickers, columns) {
   return tickers;
 }
 
-function loadTickersDataAsync(url, queryParams) {
-  var callback = arguments[arguments.length - 1];
-  $.ajax({
-    type: 'POST',
-    url: url,
-    data: JSON.stringify(queryParams),
-    success: function (data) {
-      typeof callback === 'function' && callback(data);
-    },
-    failure: function () {
-      typeof callback === 'function' && callback(null);
-    }
+async function loadTickersCrossSiteScripting(url, queryParams) {
+  return new Promise(function (resolve, reject) {
+    request.post({
+      url: url,
+      form: JSON.stringify(queryParams)
+    }, function (error, response, body) {
+      if (error) {
+        return reject(error);
+      }
+      let tickers;
+      if (_.isString(body)) {
+        try {
+          tickers = _.get(JSON.parse(body || '{}'), 'data');
+          tickers = transform(tickers, _.get(queryParams, 'columns'));
+        } catch (err) {
+          console.log('Could not parse tickers from trading view', body);
+        }
+      }
+      resolve(tickers);
+    });
   });
-}
+};
