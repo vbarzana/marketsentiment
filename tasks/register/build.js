@@ -21,7 +21,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', [
     'extjs_dependencies:dist',
     'uglify:dist',
-		'sass',
+		'sass:dist',
 		'concat',
 		'cssmin'
 	]);

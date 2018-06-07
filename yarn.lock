@@ -1295,7 +1295,7 @@ express@^4.16.2:
     utils-merge "1.0.1"
     vary "~1.1.2"
 
-"ext@https://github.com/tremez/extjs-gpl":
+"ext@https://github.com/tremez/extjs-gpl#6.2.0":
   version "6.2.0.981"
   resolved "https://github.com/tremez/extjs-gpl#9b78e27fae30fd805608300430645b10d3362059"
 

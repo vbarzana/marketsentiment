@@ -14,21 +14,19 @@
  *   https://github.com/gruntjs/grunt-contrib-cssmin
  *
  */
-module.exports = function(grunt) {
-  grunt.initConfig({
-    sass: {                              // Task
-      dist: {                            // Target
-        options: {                       // Target options
-          style: 'expanded'
-        },
-        files: [{
-          expand: true,
-          cwd: './assets/styles',
-          src: ['*.scss'],
-          dest: './assets/styles',
-          ext: '.css'
-        }]
-      }
+module.exports = function (grunt) {
+  grunt.config.set('sass', {
+    dist: {                            // Target
+      options: {                       // Target options
+        style: 'expanded'
+      },
+      files: [{
+        expand: true,
+        cwd: './assets/styles',
+        src: ['*.scss'],
+        dest: './assets/styles',
+        ext: '.css'
+      }]
     }
   });
 
