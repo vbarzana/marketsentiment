@@ -2,14 +2,8 @@ const googleFinance = require('google-finance');
 const _ = require('lodash');
 const moment = require('moment');
 
-const START_DATE = moment().subtract(3, 'days').toDate();
-const END_DATE = moment().toDate();
-
 module.exports = {
-  loadCompanyNews: function (symbols, startDate, endDate) {
-    startDate = startDate || START_DATE;
-    endDate = endDate || END_DATE;
-
+  loadTickerNews: function (symbols, startDate, endDate) {
     return new Promise((resolve, reject) => {
       googleFinance.companyNews({
         symbols: symbols

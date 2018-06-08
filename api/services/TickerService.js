@@ -1,5 +1,6 @@
 const moment = require('moment-timezone');
 const _ = require('lodash');
+const NewsController = require('../controllers/NewsController');
 
 const NEWS_UPDATE_INTERVAL = 60000 * 3;
 
@@ -8,41 +9,26 @@ const NEWS_UPDATE_INTERVAL = 60000 * 3;
  */
 module.exports = {
   findBiggestGainers: async function () {
-    return _.reduce(await Ticker.find(), function(collection, value){
+    return _.reduce(await Ticker.find(), function (collection, value) {
       collection.push(value.s);
       return collection;
     }, []);
   },
-  formatNumber(num) {
-    num = parseInt(num, 10);
-    var isNegative = false, formattedNumber;
-    if (num < 0) {
-      isNegative = true
-    }
-    num = Math.abs(num);
-    if (num >= 1000000000) {
-      formattedNumber = (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'G';
-    } else if (num >= 1000000) {
-      formattedNumber = (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
-    } else if (num >= 1000) {
-      formattedNumber = (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
-    } else {
-      formattedNumber = num;
-    }
-    if (isNegative) {
-      formattedNumber = '-' + formattedNumber
-    }
-    return formattedNumber;
+
+  doUpdate: async function () {
+    let tickers = await this.addNewsToTickers(await loadTickersFromDb());
+    await this.doNotifyNews(tickers);
+    this.cleanupAndSaveTickersToDb(tickers);
   },
 
   startAutomaticNewsUpdate: async function (interval) {
-    this.addNewsToTickers(null, true);
+    await this.doUpdate();
     clearInterval(this.newsUpdateInterval);
     let {autoSyncInterval} = await SettingsService.getSettings();
 
 
     this.newsUpdateInterval = setInterval(() => {
-      this.addNewsToTickers(null, true); // true to save to db
+      this.doUpdate();
     }, interval || autoSyncInterval);
   },
 
@@ -50,18 +36,14 @@ module.exports = {
     clearInterval(this.newsUpdateInterval);
   },
 
-  addNewsToTickers: async function (tickers, saveToDb) {
-    if (!tickers || _.isEmpty(tickers)) {
-      tickers = await loadTickersFromDb();
-    }
+  addNewsToTickers: async function (tickers) {
     let symbols = _.reduce(tickers, function (array, item) {
       return _.concat(array, [item.s]);
     }, []);
 
     let news;
     try {
-      // news = await GoogleFinanceService.loadCompanyNews(symbols);
-      news = await YahooFinanceService.loadCompanyNews(symbols);
+      news = await NewsController.loadCompanyNews(symbols);
     } catch (err) {
       console.log(err);
     }
@@ -74,19 +56,17 @@ module.exports = {
             updatedNews.push(item);
           }
         });
-        notifyNewsFromToday(symbol.s, updatedNews, symbol.d);
         symbol.news = updatedNews;
       }
     });
-    if (saveToDb) {
-      try {
-        await this.cleanupTickers();
-      } catch (err) {
-      }
-      await this.saveTickers(tickers);
-    }
     sails.io.emit('refreshnews');
     return tickers; // with the news
+  },
+
+  doNotifyNews: async function (tickers) {
+    _.forEach(tickers, function (symbol) {
+      notifyNewsFromToday(symbol.s, symbol.news, symbol.d);
+    });
   },
 
   /**
@@ -103,6 +83,16 @@ module.exports = {
       }
     });
     return await Promise.all(promises);
+  },
+
+  cleanupAndSaveTickersToDb: async function (tickers) {
+    try {
+      await this.cleanupTickers();
+    } catch (err) {
+    }
+    await this.saveTickers(tickers);
+
+    return tickers;
   },
 
   saveTickers: async function (tickers) {
@@ -124,6 +114,28 @@ module.exports = {
       }));
     });
     return await Promise.all(promises);
+  },
+
+  formatNumber(num) {
+    num = parseInt(num, 10);
+    var isNegative = false, formattedNumber;
+    if (num < 0) {
+      isNegative = true
+    }
+    num = Math.abs(num);
+    if (num >= 1000000000) {
+      formattedNumber = (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'G';
+    } else if (num >= 1000000) {
+      formattedNumber = (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    } else if (num >= 1000) {
+      formattedNumber = (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+    } else {
+      formattedNumber = num;
+    }
+    if (isNegative) {
+      formattedNumber = '-' + formattedNumber
+    }
+    return formattedNumber;
   }
 };
 
