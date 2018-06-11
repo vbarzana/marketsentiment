@@ -7,43 +7,33 @@ const client = new Discord.Client();
 let channel;
 let otcChannel;
 let onBotReadyPromise = new Deferred();
-client.on('ready', exports.onBotReady);
-client.on('message', exports.onMessage);
-client.login(sails.config.discord.token);
 
 module.exports = {
-  notify: async function (title, msg, highlight, image, url) {
-    return doNotify(channel || await this.getChannel(), title, msg, highlight, image, url);
-  },
-  notifyOtc: async function (title, msg, highlight, image, url) {
-    return doNotify(await this.getOtcChannel(), title, msg, highlight, image, url);
-  },
+  notify: async (title, msg, highlight, image, url) => doNotify(channel || await this.getChannel(), title, msg, highlight, image, url),
+  notifyOtc: async (title, msg, highlight, image, url) => doNotify(await this.getOtcChannel(), title, msg, highlight, image, url),
+  notifyPremarket: async (title, msg, highlight, image, url) => doNotify(await this.getPremarketChannel(), title, msg, highlight, image, url),
 
-  notifyPremarket: async function (title, msg, highlight, image, url) {
-    return doNotify(await this.getPremarketChannel(), title, msg, highlight, image, url);
-  },
-
-  getChannel: async function () {
+  getChannel: async () => {
     await onBotReadyPromise.promise;
     return channel || await client.channels.get(sails.config.discord.nasdaqNewsChannelId);
   },
 
-  getOtcChannel: async function () {
+  getOtcChannel: async () => {
     await onBotReadyPromise.promise;
     return otcChannel || await client.channels.get(sails.config.discord.otcNewsChannelId);
   },
 
-  getPremarketChannel: async function () {
+  getPremarketChannel: async () => {
     await onBotReadyPromise.promise;
     return otcChannel || await client.channels.get(sails.config.discord.premarketNewsChannelId);
   },
 
-  onBotReady: async function () {
+  onBotReady: async () => {
     onBotReadyPromise.resolve('ready');
     console.info('Discord bot online: ', client.user.username + ' - (' + client.user.id + ')');
   },
 
-  onMessage: async function (client) {
+  onMessage: async (client) => {
     let {content} = client;
     if (_.toString(content).indexOf(prefix) < 0) {
       return;
@@ -95,7 +85,7 @@ async function doNotify(channel, title, msg, highlight, image, url) {
   } catch (err) {
     console.error(err);
   }
-}
+};
 
 function Deferred() {
   var self = this;
@@ -103,4 +93,12 @@ function Deferred() {
     self.reject = reject
     self.resolve = resolve
   });
+};
+
+function initBot() {
+  client.on('ready', module.exports.onBotReady);
+  client.on('message', module.exports.onMessage);
+  client.login(sails.config.discord.token);
 }
+
+initBot();
