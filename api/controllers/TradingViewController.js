@@ -181,24 +181,6 @@ module.exports = {
       body: body,
       chart: `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`
     };
-  },
-
-
-  iextradingData: async function () {
-    var url = "https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb&types=quote,news,chart&range=1m&last=5";
-
-    return new Promise(function (resolve, reject) {
-      request.get({
-        url: url,
-
-      }, function (error, response, body) {
-        if (error) {
-          return reject(error);
-        }
-
-        resolve(body);
-      });
-    });
   }
 };
 

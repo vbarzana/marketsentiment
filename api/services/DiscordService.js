@@ -66,25 +66,7 @@ module.exports = {
         response = _.toString((await TickerService.findBiggestGainers() || []).join('\n')).substring(0, 500);
         break;
       }
-      case "premarket": {
-        let premarketSettings = await SettingsService.getPremarketSettings();
-        var tickers = await TradingViewController.doPullTickersFromTradingView(premarketSettings);
 
-        tickers = _.reduce(tickers, function (collection, value) {
-          collection.push(value.s);
-          return collection;
-        }, []);
-
-        response = tickers.join('\n').substring(0, 500);
-        break;
-      }
-
-      case "iextradingData": {
-        var data = await TradingViewController.iextradingData();
-
-        response = data;
-        break;
-      }
       default:
         break;
     }
