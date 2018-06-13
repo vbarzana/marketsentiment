@@ -8,9 +8,9 @@ module.exports = {
   isCrappyNews: function (text) {
     text = _.toString(text);
     return text.indexOf('Midday Gainers') >= 0
-      && text.indexOf('Premarket Gainers') >= 0
-      && text.indexOf('Premarket Losers') >= 0
-      && text.indexOf('Midday Losers') >= 0;
+      || text.indexOf('Premarket Gainers') >= 0
+      || text.indexOf('Premarket Losers') >= 0
+      || text.indexOf('Midday Losers') >= 0;
   },
 
   getFires: function (numberOfFires) {
