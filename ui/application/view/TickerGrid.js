@@ -44,7 +44,7 @@ Ext.define('Marketsentiment.view.TickerGrid', {
   columns: [{
     header: 'Symbol',
     dataIndex: 's',
-    width: 100,
+    width: 150,
     filter: {
       type: 'string'
     }
