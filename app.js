@@ -59,7 +59,10 @@ try {
 
 // Start server
 sails.lift(rc('sails'), async function () {
-  const TradingViewController = require('./api/controllers/TradingViewController');
-  TradingViewController.startAutoSync();
+  // A few seconds after the server started, start the autosync process
+  setTimeout(function () {
+    const TradingViewController = require('./api/controllers/TradingViewController');
+    TradingViewController.startAutoSync();
+  }, 3000);
 });
 
