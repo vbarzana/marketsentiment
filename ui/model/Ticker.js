@@ -3,10 +3,7 @@ Ext.define('Marketsentiment.model.Ticker', {
 
   fields: [{
     name: 's',
-    type: 'string',
-    convert: function (val) {
-      return _.toString(val).replace('NASDAQ:', '');
-    }
+    type: 'string'
   }, {
     name: 'close',
     type: 'string',
