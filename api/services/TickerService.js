@@ -175,8 +175,8 @@ async function notifyNewsFromToday(symbol, news, details) {
         var exchange = _.toLower(_.first(symbolAndExchange));
         var cleanSymbol = _.trim(_.last(symbolAndExchange));
         let msgTitle = `${cleanSymbol} ${getDetailsString(details)}`;
-        let msgBody = `\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\nSource: ${item.link}\`\`\``;
-        let chart = `\nhttps://finviz.com/chart.ashx?t=${cleanSymbol}&ty=c&ta=1&p=d&s=l`;
+        let msgBody = `\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\`\`\`Source: ${item.link}`;
+        let chart = `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`;
 
         try {
           if (exchange === 'otc') {

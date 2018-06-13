@@ -143,7 +143,7 @@ module.exports = {
     await DiscordService.clearPremarketChannel();
 
     _.forEach(toNotify, async function (item) {
-      await DiscordService.notifyPremarket(item.title, item.body, 65280);
+      await DiscordService.notifyPremarket(item.title, item.body, 65280, item.chart);
     });
   },
 
@@ -160,7 +160,7 @@ module.exports = {
         item.description = _.toString(item.description);
         item.title = _.toString(item.title);
 
-        newsArray.push(`\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(newsDate, timezone).format('L HH:mm a')}\nSource: ${item.link}\`\`\``);
+        newsArray.push(`\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(newsDate, timezone).format('L HH:mm a')}\`\`\`Source: ${item.link}`);
       }
     });
 
@@ -178,7 +178,8 @@ module.exports = {
     }
     return {
       title: `${cleanSymbol} ${TickerService.getDetailsString(details)} - UP Premarket: **${Math.round(_.get(details, 'pre_change'))}% **`,
-      body: body
+      body: body,
+      chart: `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`
     };
   },
 
