@@ -23,7 +23,20 @@ Ext.define('Marketsentiment.view.TickerGrid', {
   },
 
   tbar: {
-    items: ['->', {
+    items: [{
+      xtype: 'segmentedbutton',
+      allowMultiple: true,
+      items: [{
+        reference: 'nasdaqButton',
+        text: 'NASDAQ'
+      },{
+        reference: 'otcButton',
+        text: 'OTC'
+      }],
+      listeners: {
+        toggle: 'filterByExchange'
+      }
+    }, '->', {
       xtype: 'checkbox',
       checked: false,
       fieldLabel: 'Auto sync news',

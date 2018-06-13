@@ -5,7 +5,7 @@ Ext.define('Marketsentiment.view.TickerGridViewController', {
   extend: 'Ext.app.ViewController',
   alias: 'controller.tickergrid-viewcontroller',
 
-  onGridItemSelected: function(selModel, record) {
+  onGridItemSelected: function (selModel, record) {
     var chart = Ext.getCmp('tradingview-chart');
     if (chart) {
       chart.setSymbol(record.get('s'));
@@ -32,5 +32,25 @@ Ext.define('Marketsentiment.view.TickerGridViewController', {
       this.getView().setLoading(false);
       this.refreshGrid();
     }.bind(this));
+  },
+
+  filterByExchange: function (container, button, pressed) {
+    var filters = [];
+    var nasdaqButton = this.lookupReference('nasdaqButton');
+    var otcButton = this.lookupReference('otcButton');
+    if (nasdaqButton.checked) {
+      filters.push({
+        property: 's',
+        value: 'NASDAQ'
+      });
+    }
+    if (otcButton.checked) {
+      filters.push({
+        property: 's',
+        value: 'OTC'
+      });
+    }
+    this.getView().getStore().clearFilter();
+    this.getView().getStore().filter(filters);
   }
 });
