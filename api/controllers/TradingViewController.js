@@ -49,7 +49,16 @@ module.exports = {
     }
   },
 
+  isPremarketTime: function () {
+    let currentTime = moment.tz(new Date(), "America/New_York");
+    let marketOpenTime = moment.tz(new Date(), "America/New_York").set('hours', '9').set('minutes', 30);
+    return currentTime.isBefore(marketOpenTime);
+  },
+
   autoSyncPremarket: async function () {
+    if (!this.isPremarketTime()) {
+      return;
+    }
     let premarketSettings = await SettingsService.getPremarketSettings();
     let {
       autoSyncOnStartup,
@@ -57,10 +66,16 @@ module.exports = {
     } = premarketSettings;
 
     if (autoSyncOnStartup) {
+      // reload the settings in case that they change which is weird use case
+      await SettingsService.getPremarketSettings();
+
       await this.loadPremarketTickers(premarketSettings);
 
-      // @todo: kill interval
-      setInterval(async () => {
+      this.updatePremarketInterval = setInterval(async () => {
+        if (!this.isPremarketTime()) {
+          clearInterval(this.updatePremarketInterval);
+          return;
+        }
         await this.loadPremarketTickers(premarketSettings);
       }, updateTickersInterval); // update tickers every 1 hour
     }

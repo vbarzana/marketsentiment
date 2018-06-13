@@ -175,14 +175,14 @@ async function notifyNewsFromToday(symbol, news, details) {
         var exchange = _.toLower(_.first(symbolAndExchange));
         var cleanSymbol = _.trim(_.last(symbolAndExchange));
         let msgTitle = `${cleanSymbol} ${getDetailsString(details)}`;
-        let msgBody = `\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\nSource: [Yahoo Finance](${item.link})\`\`\``;
+        let msgBody = `\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\nSource: ${item.link}\`\`\``;
         let chart = `\nhttps://finviz.com/chart.ashx?t=${cleanSymbol}&ty=c&ta=1&p=d&s=l`;
 
         try {
           if (exchange === 'otc') {
             DiscordService.notifyOtc(msgTitle, msgBody, highlight);
           } else {
-            DiscordService.notify(msgTitle, msgBody + chart, highlight);
+            DiscordService.notify(msgTitle, msgBody, highlight, chart);
           }
 
           // DiscordService.notify(`!chart2 ${cleanSymbol}`);
