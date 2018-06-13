@@ -35,22 +35,29 @@ Ext.define('Marketsentiment.view.TickerGridViewController', {
   },
 
   filterByExchange: function (container, button, pressed) {
-    var filters = [];
+    var values = [];
     var nasdaqButton = this.lookupReference('nasdaqButton');
     var otcButton = this.lookupReference('otcButton');
-    if (nasdaqButton.checked) {
-      filters.push({
-        property: 's',
-        value: 'NASDAQ'
-      });
+
+    if (nasdaqButton.pressed) {
+      values.push('NASDAQ');
     }
-    if (otcButton.checked) {
-      filters.push({
-        property: 's',
-        value: 'OTC'
-      });
+    if (otcButton.pressed) {
+      values.push('OTC');
     }
     this.getView().getStore().clearFilter();
-    this.getView().getStore().filter(filters);
+    if (_.isEmpty(values)) {
+      return;
+    }
+    this.getView().getStore().filterBy(function (rec) {
+      var s = _.toString(rec.get('s'));
+      var found = false;
+      _.forEach(values, function (value) {
+        if (s.indexOf(value) >= 0) {
+          found = true;
+        }
+      });
+      return found;
+    });
   }
 });
