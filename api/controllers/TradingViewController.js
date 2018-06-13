@@ -125,6 +125,8 @@ module.exports = {
       promises.push(this.getPremarketData(symbol.s, symbol.news, symbol.d));
     });
     let toNotify = await Promise.all(promises);
+    await DiscordService.clearPremarketChannel();
+
     _.forEach(toNotify, async function (item) {
       await DiscordService.notifyPremarket(item.title, item.body, 65280);
     });
@@ -150,22 +152,9 @@ module.exports = {
 
     var symbolAndExchange = _.split(symbol || item.symbol, ':');
     var cleanSymbol = _.trim(_.last(symbolAndExchange));
-    let lastTrades = await IextradingService.getTickerTrades(cleanSymbol);
-
-    let trades = _.reduce(lastTrades[cleanSymbol], function (string, item) {
-      if (item.isOutsideRegularHours) {
-        string += `${moment.tz(item.timestamp, timezone).format('L HH:mm a')} -> ${item.size} shares \n`;
-      }
-      return string;
-    }, "");
 
     let body = '';
     try {
-      if (trades) {
-        body += `**Trades from IEX:**\nNote: Trade report messages are sent when an order on the IEX Order Book 
-        is executed in whole or in part. DEEP sends a Trade report message for every individual fill.\n ${trades}\n`;
-      }
-
       if (!_.isEmpty(newsArray)) {
         body += '**NEWS in the last 4 days:** \n' + newsArray.join('\n\n');
       }

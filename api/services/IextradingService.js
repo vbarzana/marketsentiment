@@ -37,27 +37,6 @@ module.exports = {
     };
   },
 
-  /**
-   * @param tickers
-   * @returns {Promise<void>}
-   * @example response:
-   *  {
-   *     "SNAP":[{
-   *        "price":13.425,"size":100,"tradeId":564868777,"isISO":false,"isOddLot":false,"isOutsideRegularHours":false,"isSinglePriceCross":false,"isTradeThroughExempt":false,"timestamp":1528833597117},
-   *        {"price":13.425,"size":10,"tradeId":564790407,"isISO":false,"isOddLot":true,"isOutsideRegularHours":false,"isSinglePriceCross":false,"isTradeThroughExempt":false,"timestamp":1528833596957},
-   *        {"price":13.425,"size":50,"tradeId":564726905,"isISO":false,"isOddLot":true,"isOutsideRegularHours":false,"isSinglePriceCross":false,"isTradeThroughExempt":false,"timestamp":1528833596635},
-   *        {"price":13.425,"size":6,"tradeId":563800440,"isISO":false,"isOddLot":true,"isOutsideRegularHours":false,"isSinglePriceCross":false,"isTradeThroughExempt":false,"timestamp":1528833592258},
-   *        {"price":13.425,"size":100,"tradeId":563800013,"isISO":false,"isOddLot":false,"isOutsideRegularHours":false,"isSinglePriceCross":false,"isTradeThroughExempt":false,"timestamp":1528833592256},
-   *        {"price":13.435,"size":100,"tradeId":563545753,"isISO":false,"isOddLot":false,"isOutsideRegularHours":false,"isSinglePriceCross":false,"isTradeThroughExempt":false,"timestamp":1528833590551},
-   *        {"price":13.435,"size":100,"tradeId":563545393,"isISO":false,"isOddLot":false,"isOutsideRegularHours":false,"isSinglePriceCross":false,"isTradeThroughExempt":false,"timestamp":1528833590549},
-   *        ...
-   *        ]
-   *   }
-   */
-  getTickerTrades: async function (tickers) {
-    return this.query(IEXTRADING_API_URL + 'deep/trades?symbols=' + (_.isArray(tickers) ? tickers.join(',') : tickers));
-  },
-
   getLargestTrades: async function (tickers) {
     return this.query(IEXTRADING_API_URL + 'stock/' + (_.isArray(tickers) ? tickers.join(',') : tickers)) + '/largest-trades';
   },

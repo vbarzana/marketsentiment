@@ -192,6 +192,7 @@
         "left": "change",
         "operation": "nempty"
       },
+      {"left":"volume","operation":"egreater","right":100000},
       {
         "left": "pre_change",
         "operation": "egreater",
@@ -230,6 +231,6 @@
     },
     "timezone": "America/New_York",
     "autoSyncOnStartup": true,
-    "updateTickersInterval": 120000
+    "updateTickersInterval": 300000
   }
 ]

@@ -15,7 +15,8 @@ module.exports = {
   notifyOtc: async function (title, msg, highlight, image, url) {
     return doNotify(await this.getOtcChannel(), title, msg, highlight, image, url)
   },
-  notifyPremarket: async function (title, msg, highlight, image, url) {
+
+  clearPremarketChannel: async function(){
     let channel = await this.getPremarketChannel();
     // Try to remove all messages in the channel
     try {
@@ -26,7 +27,10 @@ module.exports = {
     } catch (err) {
       console.log('Could not clear messages of the premarket channel', err.message);
     }
+  },
 
+  notifyPremarket: async function (title, msg, highlight, image, url) {
+    let channel = await this.getPremarketChannel();
     return doNotify(channel, title, msg, highlight, image, url)
   },
 
