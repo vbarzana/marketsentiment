@@ -9,9 +9,26 @@ let otcChannel;
 let onBotReadyPromise = new Deferred();
 
 module.exports = {
-  notify: async (title, msg, highlight, image, url) => doNotify(channel || await this.getChannel(), title, msg, highlight, image, url),
-  notifyOtc: async (title, msg, highlight, image, url) => doNotify(await this.getOtcChannel(), title, msg, highlight, image, url),
-  notifyPremarket: async (title, msg, highlight, image, url) => doNotify(await this.getPremarketChannel(), title, msg, highlight, image, url),
+  notify: async function (title, msg, highlight, image, url) {
+    return doNotify(channel || await this.getChannel(), title, msg, highlight, image, url)
+  },
+  notifyOtc: async function (title, msg, highlight, image, url) {
+    return doNotify(await this.getOtcChannel(), title, msg, highlight, image, url)
+  },
+  notifyPremarket: async function (title, msg, highlight, image, url) {
+    let channel = await this.getPremarketChannel();
+    // Try to remove all messages in the channel
+    try {
+      let messages = await channel.fetchMessages();
+      if (messages) {
+        await channel.bulkDelete(messages);
+      }
+    } catch (err) {
+      console.log('Could not clear messages of the premarket channel', err.message);
+    }
+
+    return doNotify(channel, title, msg, highlight, image, url)
+  },
 
   getChannel: async () => {
     await onBotReadyPromise.promise;
@@ -71,16 +88,23 @@ module.exports = {
   }
 };
 
-async function doNotify(channel, title, msg, highlight, image, url) {
+async function doNotify(channel, title, msg, highlight, imageUrl, url) {
   try {
-    channel.send({
-      embed: {
-        title: title,
-        color: highlight || 3447003,
-        image: image,
-        url: url,
-        description: msg
+    let toEmbed = {
+      title: title,
+      color: highlight || 3447003,
+      description: msg
+    };
+    if (imageUrl) {
+      toEmbed.image = {
+        url: imageUrl
       }
+    }
+    if (url) {
+      toEmbed.url = url;
+    }
+    channel.send({
+      embed: toEmbed
     });
   } catch (err) {
     console.error(err);

@@ -8,6 +8,7 @@ const NEWS_UPDATE_INTERVAL = 60000 * 3;
  * @class TickerService
  */
 module.exports = {
+  getDetailsString: getDetailsString,
   findBiggestGainers: async function () {
     return _.reduce(await Ticker.find(), function (collection, value) {
       collection.push(value.s);

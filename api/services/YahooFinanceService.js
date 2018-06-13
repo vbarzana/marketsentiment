@@ -27,9 +27,9 @@ module.exports = {
       return moment(_.get(a, 'date')) > moment(_.get(b, 'date')) ? -1 : 1;
     });
 
-    resolve({
+    return {
       s: symbol,
       news: items
-    });
+    };
   }
 };

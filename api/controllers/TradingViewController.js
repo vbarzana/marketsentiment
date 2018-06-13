@@ -3,6 +3,7 @@
  */
 const _ = require('lodash');
 const request = require('request');
+const moment = require('moment');
 
 module.exports = {
   startAutoSync: async function () {
@@ -112,58 +113,69 @@ module.exports = {
       "options": _.get(settings, 'tradingViewScreenerOptions'),
       "range": _.get(settings, 'tradingViewScreenerRange')
     };
-    let {tradingViewAjaxUrl} = settings;
 
     let tickers = await loadTickersCrossSiteScripting(_.get(settings, 'tradingViewAjaxUrl'), filters);
     tickers = await TickerService.addNewsToTickers(tickers);
+    tickers.sort(function (a, b) {
+      return _.get(a, 'd.pre_change') >= _.get(b, 'd.pre_change') ? -1 : 1;
+    });
+
+    var promises = [];
     _.forEach(tickers, (symbol) => {
-      this.notifyPremarketNews(symbol.s, symbol.news, symbol.d);
+      promises.push(this.getPremarketData(symbol.s, symbol.news, symbol.d));
+    });
+    let toNotify = await Promise.all(promises);
+    _.forEach(toNotify, async function (item) {
+      await DiscordService.notifyPremarket(item.title, item.body, 65280);
     });
   },
 
-  notifyPremarketNews: async function (symbol, news, details) {
-    // On Monday take the news of the whole weekend
-    let daysToSubtract = (new Date()).getDay() === 1 ? 3 : 1;
-    var yesterday = moment().utc().subtract(daysToSubtract, 'days');
+  getPremarketData: async function (symbol, news, details) {
+    var yesterday = moment().utc().subtract(4, 'days');
+    let newsArray = [];
+    let {timezone} = await SettingsService.getPremarketSettings() || [];
+
     _.forEach(news, async (item) => {
       if (!item) return true;
-      var dateParsed = moment(item.date).utc();
-      var notificationAlreadySent;
-      if (dateParsed >= yesterday) {
-        try {
-          notificationAlreadySent = await NewsNotificationStatus.findOne({link: item.link, s: symbol || item.symbol});
-        } catch (err) {
-          console.log(err);
-        }
+      var newsDate = moment(item.date).utc();
 
-        let {timezone} = await SettingsService.getPremarketSettings() || [];
-
+      if (newsDate >= yesterday) {
         item.description = _.toString(item.description);
         item.title = _.toString(item.title);
 
-        let highlight = "0xff0000";
-
-        if (!notificationAlreadySent) {
-          var symbolAndExchange = _.split(symbol || item.symbol, ':');
-          var exchange = _.toLower(_.first(symbolAndExchange));
-          var cleanSymbol = _.trim(_.last(symbolAndExchange));
-          let msgTitle = `Premarket HOT ${cleanSymbol} ${getDetailsString(details)}`;
-          let msgBody = `\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\nSource: [Yahoo Finance](${item.link})\`\`\``;
-          let chart = `https://finviz.com/chart.ashx?t=${cleanSymbol}&ty=c&ta=1&p=d&s=l`;
-
-          try {
-            DiscordService.notifyPremarket(msgTitle, msgBody, highlight, chart);
-
-            // Notification sent, put it in the DB
-            await NewsNotificationStatus.create({link: item.link, s: symbol || item.symbol}, function (err, response) {
-              if (err) console.log(err);
-            });
-          } catch (err) {
-            console.log(err);
-          }
-        }
+        newsArray.push(`\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(newsDate, timezone).format('L HH:mm a')}\nSource: ${item.link}\`\`\``);
       }
     });
+
+
+    var symbolAndExchange = _.split(symbol || item.symbol, ':');
+    var cleanSymbol = _.trim(_.last(symbolAndExchange));
+    let lastTrades = await IextradingService.getTickerTrades(cleanSymbol);
+
+    let trades = _.reduce(lastTrades[cleanSymbol], function (string, item) {
+      if (item.isOutsideRegularHours) {
+        string += `${moment.tz(item.timestamp, timezone).format('L HH:mm a')} -> ${item.size} shares \n`;
+      }
+      return string;
+    }, "");
+
+    let body = '';
+    try {
+      if (trades) {
+        body += `**Trades from IEX:**\nNote: Trade report messages are sent when an order on the IEX Order Book 
+        is executed in whole or in part. DEEP sends a Trade report message for every individual fill.\n ${trades}\n`;
+      }
+
+      if (!_.isEmpty(newsArray)) {
+        body += '**NEWS in the last 4 days:** \n' + newsArray.join('\n\n');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    return {
+      title: `${cleanSymbol} ${TickerService.getDetailsString(details)} - UP Premarket: **${Math.round(_.get(details, 'pre_change'))}% **`,
+      body: body
+    };
   },
 
 
