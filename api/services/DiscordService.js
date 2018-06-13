@@ -9,11 +9,11 @@ let otcChannel;
 let onBotReadyPromise = new Deferred();
 
 module.exports = {
-  notify: async function (title, msg, highlight, image, url) {
-    return doNotify(channel || await this.getChannel(), title, msg, highlight, image, url)
+  notify: async function (title, msg, highlight, image, url, fields) {
+    return doNotify(channel || await this.getChannel(), title, msg, highlight, image, url, fields);
   },
-  notifyOtc: async function (title, msg, highlight, image, url) {
-    return doNotify(await this.getOtcChannel(), title, msg, highlight, image, url)
+  notifyOtc: async function (title, msg, highlight, image, url, fields) {
+    return doNotify(await this.getOtcChannel(), title, msg, highlight, image, url, fields);
   },
 
   clearPremarketChannel: async function(){
@@ -29,9 +29,9 @@ module.exports = {
     }
   },
 
-  notifyPremarket: async function (title, msg, highlight, image, url) {
+  notifyPremarket: async function (title, msg, highlight, image, url, fields) {
     let channel = await this.getPremarketChannel();
-    return doNotify(channel, title, msg, highlight, image, url)
+    return doNotify(channel, title, msg, highlight, image, url, fields)
   },
 
   getChannel: async () => {
@@ -74,7 +74,7 @@ module.exports = {
   }
 };
 
-async function doNotify(channel, title, msg, highlight, imageUrl, url) {
+async function doNotify(channel, title, msg, highlight, imageUrl, url, fields) {
   try {
     let toEmbed = {
       title: title,
@@ -88,6 +88,9 @@ async function doNotify(channel, title, msg, highlight, imageUrl, url) {
     }
     if (url) {
       toEmbed.url = url;
+    }
+    if (fields) {
+      toEmbed.fields = fields;
     }
     channel.send({
       embed: toEmbed

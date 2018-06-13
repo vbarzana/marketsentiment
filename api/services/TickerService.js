@@ -51,7 +51,7 @@ module.exports = {
     _.forEach(tickers, function (symbol) {
       let symbolNews = news[symbol.s];
       if (!_.isEmpty(symbolNews)) {
-        var updatedNews = _.castArray(symbol.news);
+        var updatedNews = symbol.news ? _.castArray(symbol.news) : [];
         _.forEach(symbolNews, function (item) {
           if (_.isEmpty(_.filter(symbol.news, {link: item.link}))) {
             updatedNews.push(item);
@@ -65,9 +65,24 @@ module.exports = {
   },
 
   doNotifyNews: async function (tickers) {
+    var promises = [];
     _.forEach(tickers, function (symbol) {
-      notifyNewsFromToday(symbol.s, symbol.news, symbol.d);
+      promises.push(getNewsFromToday(symbol.s, symbol.news, symbol.d));
     });
+    var responses = await Promise.all(promises);
+    _.forEach(responses, function (response) {
+      if (!response || _.isEmpty(response.fields)) {
+        return true; // continue
+      }
+      let size = _.size(response.fields);
+      let emoji = size > 1 ? UtilService.getFires(size) : '';
+
+      if (response.exchange === 'otc') {
+        DiscordService.notifyOtc(response.title + emoji, response.body || '', response.highlight, null, null, response.fields);
+      } else {
+        DiscordService.notify(response.title + emoji, response.body || '', response.highlight, response.chart, null, response.fields);
+      }
+    })
   },
 
   /**
@@ -140,62 +155,68 @@ module.exports = {
   }
 };
 
-async function notifyNewsFromToday(symbol, news, details) {
+async function getNewsFromToday(symbol, news, details) {
   // On Monday take the news of the whole weekend
   let daysToSubtract = (new Date()).getDay() === 1 ? 3 : 1;
   var yesterday = moment().utc().subtract(daysToSubtract, 'days');
+  var symbolAndExchange = _.split(symbol || item.symbol, ':');
+  var cleanSymbol = _.trim(_.last(symbolAndExchange));
+
+  let result = {
+    exchange: _.toLower(_.first(symbolAndExchange)),
+    highlight: '',
+    title: `${cleanSymbol} ${getDetailsString(details)}`,
+    chart: `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`
+  };
+  let promises = [];
   _.forEach(news, async (item) => {
     if (!item) return true;
-    var dateParsed = moment(item.date).utc();
-    var notificationAlreadySent;
-    if (dateParsed >= yesterday) {
-      try {
-        notificationAlreadySent = await NewsNotificationStatus.findOne({link: item.link, s: symbol || item.symbol});
-      } catch (err) {
-        console.log(err);
-      }
-
-      let {magicWords, timezone} = await SettingsService.getSettings() || [];
-
-      item.description = _.toString(item.description);
-      item.title = _.toString(item.title);
-
-      let matchesGoodNews = _.isEmpty(magicWords), exp, highlight;
-      _.forEach(magicWords, function (wordObj) {
-        exp = new RegExp(wordObj.name, 'i');
-        if (item.title.match(exp) || item.description.match(exp)) {
-          highlight = wordObj.highlight;
-          matchesGoodNews = true;
-          return false; // break
-        }
-      });
-
-      if (!notificationAlreadySent && matchesGoodNews) {
-        var symbolAndExchange = _.split(symbol || item.symbol, ':');
-        var exchange = _.toLower(_.first(symbolAndExchange));
-        var cleanSymbol = _.trim(_.last(symbolAndExchange));
-        let msgTitle = `${cleanSymbol} ${getDetailsString(details)}`;
-        let msgBody = `\n\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(dateParsed, timezone).format('L HH:mm a')}\`\`\`Source: ${item.link}`;
-        let chart = `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`;
-
+    promises.push(new Promise(async function (resolve) {
+      var dateParsed = moment(item.date).utc();
+      var notificationAlreadySent;
+      if (dateParsed >= yesterday) {
         try {
-          if (exchange === 'otc') {
-            DiscordService.notifyOtc(msgTitle, msgBody, highlight);
-          } else {
-            DiscordService.notify(msgTitle, msgBody, highlight, chart);
-          }
-
-          // DiscordService.notify(`!chart2 ${cleanSymbol}`);
-          // Notification sent, put it in the DB
-          await NewsNotificationStatus.create({link: item.link, s: symbol || item.symbol}, function (err, response) {
-            if (err) console.log(err);
-          });
+          notificationAlreadySent = await NewsNotificationStatus.findOne({link: item.link, s: symbol || item.symbol});
         } catch (err) {
           console.log(err);
         }
+
+        let {magicWords, timezone} = await SettingsService.getSettings() || [];
+
+        item.description = _.toString(item.description);
+        item.title = _.toString(item.title);
+
+        let matchesGoodNews = _.isEmpty(magicWords), exp;
+        _.forEach(magicWords, function (wordObj) {
+          exp = new RegExp(wordObj.name, 'i');
+          if (item.title.match(exp) || item.description.match(exp)) {
+            result.highlight = wordObj.highlight;
+            matchesGoodNews = true;
+            return false; // break
+          }
+        });
+
+        if (!notificationAlreadySent && matchesGoodNews && !UtilService.isCrappyNews(item.title)) {
+          resolve({
+            name: item.title,
+            value: `\`\`\`${item.description}\`\`\` Date: [${moment.tz(dateParsed, timezone).format('L HH:mm a')}](${item.link})`
+          });
+
+          try {
+            // Notification sent, put it in the DB
+            await NewsNotificationStatus.create({link: item.link, s: symbol || item.symbol}, function (err, response) {
+              if (err) console.log(err);
+            });
+          } catch (err) {
+            console.log(err);
+          }
+        }
       }
-    }
+      resolve();
+    }));
   });
+  result.fields = _.compact(await Promise.all(promises));
+  return result;
 }
 
 function getDetailsString(details) {
