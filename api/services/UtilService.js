@@ -26,6 +26,7 @@ module.exports = {
       let searchResults = await StockTwitsService.search(ticker);
       let mentioned = await StockTwitsService.getSymbolData(ticker);
       let trending = await StockTwitsService.getTrendingSymbols();
+      let sentiment = await StockTwitsService.getBullishBearishSentiment(ticker);
       let foundInTrendingList = _.size(_.filter(_.get(trending, 'symbols'), function (item) {
         return _.get(item, 'symbol') === ticker;
       })) > 0;
@@ -33,7 +34,8 @@ module.exports = {
       return {
         searches: _.size(_.get(searchResults, 'results')),
         watchlistCount: _.get(mentioned, 'symbol.watchlist_count') || 0,
-        trending: foundInTrendingList
+        trending: foundInTrendingList,
+        sentiment: _.first(_.get(sentiment, 'data'))
       };
     } catch (err) {
       console.log(err);
@@ -47,6 +49,8 @@ module.exports = {
        | ------------------------- | ----------------|\n
        | Found in                   | ${details.searches} search results  |\n
        | Watchlists   | ${details.watchlistCount} matches  |\n
+       | Bullish   | ${_.get(details, 'sentiment.bullish')}%  |\n
+       | Bearish   | ${_.get(details, 'sentiment.bearish')}%  |\n
        | Trending among the top 30?| ${details.trending ? 'Yes' : 'No'} |\n`);
 
     return `\`\`\`${markdownTable}\`\`\``;

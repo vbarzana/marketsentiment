@@ -70,15 +70,16 @@ module.exports = {
       promises.push(getNewsFromToday(symbol.s, symbol.news, symbol.d));
     });
     var responses = _.compact(await Promise.all(promises));
-    _.forEach(responses, async function (response) {
-      try {
-        response.body = response.body || '';
-        response.sentiment = await UtilService.getMoreStockDetails(response.symbol);
-        response.body += UtilService.stockDetailsToTable(response.sentiment);
-      } catch (err) {
-        console.log('Could not pull more details for ticker ' + response.symbol, err.message);
-      }
-    });
+    //@todo: disable this from here once we have less amount of requests
+    // _.forEach(responses, async function (response) {
+    //   try {
+    //     response.body = response.body || '';
+    // response.sentiment = await UtilService.getMoreStockDetails(response.symbol);
+    // response.body += UtilService.stockDetailsToTable(response.sentiment);
+    //   } catch (err) {
+    //     console.log('Could not pull more details for ticker ' + response.symbol, err.message);
+    //   }
+    // });
 
     responses.sort(UtilService.sortBySentiment);
     _.forEach(responses, (response, idx) => {
