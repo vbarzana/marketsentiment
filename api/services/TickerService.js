@@ -81,18 +81,17 @@ module.exports = {
     });
 
     responses.sort(UtilService.sortBySentiment);
-
-    _.forEach(responses, async function (response) {
-      if (!response || _.isEmpty(response.fields)) {
+    _.forEach(responses, (response, idx) => {
+      if (!response || _.isEmpty(response.news)) {
         return true; // continue
       }
-      let size = _.size(response.fields);
-      let emoji = size > 1 ? UtilService.getFires(size) : '';
+      var fires = idx <= 3 ? 5 : idx < 7 ? 3 : idx < 10 ? 2 : 0;
+      var emoji = fires > 0 ? UtilService.getFires(fires) : '';
 
       if (response.exchange === 'otc') {
-        DiscordService.notifyOtc(response.title + emoji, response.body || '', response.highlight, null, null, response.fields);
+        DiscordService.notifyOtc(response.title + emoji, response.body || '', response.highlight, null, null, response.news);
       } else {
-        DiscordService.notify(response.title + emoji, response.body || '', response.highlight, response.chart, null, response.fields);
+        DiscordService.notify(response.title + emoji, response.body || '', response.highlight, response.chart, null, response.news);
       }
     })
   },
@@ -228,7 +227,7 @@ async function getNewsFromToday(symbol, news, details) {
       resolve();
     }));
   });
-  result.fields = _.compact(await Promise.all(promises));
+  result.news = _.compact(await Promise.all(promises));
   return result;
 }
 

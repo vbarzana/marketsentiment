@@ -53,15 +53,22 @@ module.exports = {
   },
 
   sortBySentiment: function (ticker1, ticker2) {
-    return this.calculateSentimentIndex(ticker1) > this.calculateSentimentIndex(ticker2) ? 1 : -1;
+    return this.calculateSentimentIndex(ticker1) > this.calculateSentimentIndex(ticker2) ? -1 : 1;
+  },
+
+  sortBySentimentPremarket: function (ticker1, ticker2) {
+    return this.calculateSentimentIndexPremarket(ticker1) > this.calculateSentimentIndexPremarket(ticker2) ? -1 : 1;
+  },
+
+  calculateSentimentIndexPremarket: function (ticker) {
+    return this.calculateSentimentIndex(ticker) + ((_.get(ticker, 'd.pre_change') || 0) + 11);
   },
 
   calculateSentimentIndex: function (ticker) {
     return _.get(ticker, 'sentiment.searches') || 0
     + _.get(ticker, 'sentiment.watchlistCount') || 0
     + _.get(ticker, 'sentiment.trending') ? 10000 : 0
-      + _.size(_.get(ticker, 'news')) * 100
-
+      + _.size(_.get(ticker, 'news')) + 10
       + this.getGuruIndex(_.get(ticker, 'sentiment.tweets'));
   },
 

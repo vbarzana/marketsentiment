@@ -140,12 +140,15 @@ module.exports = {
       promises.push(this.getPremarketData(symbol.s, symbol.news, symbol.d));
     });
     let toNotify = await Promise.all(promises);
-    toNotify.sort(UtilService.sortBySentiment);
+    toNotify.sort(UtilService.calculateSentimentIndexPremarket);
 
     await DiscordService.clearPremarketChannel();
 
-    _.forEach(toNotify, async function (item) {
-      await DiscordService.notifyPremarket(item.title, item.body, 65280, item.chart);
+    _.forEach(toNotify, async function (item, idx) {
+      var fires = idx <= 3 ? 5 : idx < 7 ? 3 : idx < 10 ? 2 : 0;
+      var emoji = fires > 0 ? UtilService.getFires(fires) : '';
+
+      await DiscordService.notifyPremarket(item.title + emoji, item.body, 65280, item.chart, null, item.news);
     });
   },
 
@@ -162,7 +165,10 @@ module.exports = {
         item.description = _.toString(item.description);
         item.title = _.toString(item.title);
 
-        newsArray.push(`\`\`\`${item.title}\n${item.description}\nDate: ${moment.tz(newsDate, timezone).format('L HH:mm a')}\`\`\`Source: ${item.link}`);
+        newsArray.push({
+          name: item.title,
+          value: `\`\`\`${item.description}\`\`\` Date: [${moment.tz(newsDate, timezone).format('L HH:mm a')}](${item.link})`
+        });
       }
     });
 
@@ -179,21 +185,12 @@ module.exports = {
       console.log('Could not pull more details for ticker ' + cleanSymbol, err.message);
     }
 
-    try {
-      if (!_.isEmpty(newsArray)) {
-        body += '**NEWS in the last 4 days:** \n' + newsArray.join('\n\n');
-      }
-    } catch (err) {
-      console.log(err);
-    }
-
-    let size = _.size(newsArray);
-    let emoji = size > 1 ? UtilService.getFires(size) : '';
-
     return {
       symbol: cleanSymbol,
       sentiment: sentiment,
-      title: `${cleanSymbol} ${TickerService.getDetailsString(details)} - UP Premarket: **${Math.round(_.get(details, 'pre_change'))}% ** ${emoji}`,
+      news: newsArray,
+      d: details,
+      title: `${cleanSymbol} ${TickerService.getDetailsString(details)} - UP Premarket: **${Math.round(_.get(details, 'pre_change'))}% **`,
       body: body,
       chart: `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`
     };

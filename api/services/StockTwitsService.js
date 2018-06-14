@@ -8,7 +8,8 @@ var request = require('request')
 
 cachedRequest.setCacheDirectory(cacheDirectory);
 
-const TIME_TO_RESET_CACHE = 60000 * 10; // reset the cache only after 10 minutes, so we avoid having 400 calls per hour
+// reset the cache only after 20 minutes, so we avoid having 400 calls per hour
+cachedRequest.setValue('ttl', 60000 * 20);
 
 module.exports = {
   search: async function (symbol) {
@@ -25,7 +26,7 @@ module.exports = {
 
   query: async function (url) {
     return new Promise(function (resolve) {
-      cachedRequest({url: url, ttl: TIME_TO_RESET_CACHE},
+      cachedRequest({url: url},
         async (err, request, body) => {
           let data = {};
           try {
