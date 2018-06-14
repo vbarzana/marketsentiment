@@ -21,38 +21,72 @@ module.exports = {
     return emoji;
   },
 
-  getTrendingSymbolsCache: async function () {
-    setTimeout(() => {
-      delete this.trendingSymbols;
-    }, 60000 * 5); // after a few minutes remove it
-
-    this.trendingSymbols = this.trendingSymbols || await StockTwitsService.getTrendingSymbols();
-    return this.trendingSymbols;
-  },
-
   getMoreStockDetails: async function (ticker) {
-    let result = '';
     try {
       let searchResults = await StockTwitsService.search(ticker);
       let mentioned = await StockTwitsService.getSymbolData(ticker);
-      let trending = await this.getTrendingSymbolsCache();
+      let trending = await StockTwitsService.getTrendingSymbols();
       let foundInTrendingList = _.size(_.filter(_.get(trending, 'symbols'), function (item) {
         return _.get(item, 'symbol') === ticker;
       })) > 0;
 
-      let stocktwitsCount = _.size(_.get(searchResults, 'results'));
-      let markdownTable = this.generateMarkdownTable(`
-      | StockTwits API ${foundInTrendingList ? UtilService.getFires(5, '📢') : ''} | Details |\n
-          | ------------------------- | ----------------|\n
-          | Found in                   | ${stocktwitsCount} search results  |\n
-          | Watchlists   | ${_.get(mentioned, 'symbol.watchlist_count') || 0} matches  |\n
-          | Trending among the top 30?| ${foundInTrendingList ? 'Yes' : 'No'} |\n`);
-      result += `\`\`\`${markdownTable}\`\`\``;
+      return {
+        searches: _.size(_.get(searchResults, 'results')),
+        watchlistCount: _.get(mentioned, 'symbol.watchlist_count') || 0,
+        trending: foundInTrendingList
+      };
     } catch (err) {
       console.log(err);
     }
-    return result;
+    return null;
   },
+
+  stockDetailsToTable: function (details) {
+    let markdownTable = this.generateMarkdownTable(
+      `| StockTwits API ${details.trending ? UtilService.getFires(5, '📢') : ''} | Details |\n
+       | ------------------------- | ----------------|\n
+       | Found in                   | ${details.searches} search results  |\n
+       | Watchlists   | ${details.watchlistCount} matches  |\n
+       | Trending among the top 30?| ${details.trending ? 'Yes' : 'No'} |\n`);
+
+    return `\`\`\`${markdownTable}\`\`\``;
+  },
+
+  sortBySentiment: function (ticker1, ticker2) {
+    return this.calculateSentimentIndex(ticker1) > this.calculateSentimentIndex(ticker2) ? 1 : -1;
+  },
+
+  calculateSentimentIndex: function (ticker) {
+    return _.get(ticker, 'sentiment.searches') || 0
+    + _.get(ticker, 'sentiment.watchlistCount') || 0
+    + _.get(ticker, 'sentiment.trending') ? 10000 : 0
+      + _.size(_.get(ticker, 'news')) * 100
+
+      + this.getGuruIndex(_.get(ticker, 'sentiment.tweets'));
+  },
+
+  getGuruIndex: function (tweets) {
+    // find the guru name here
+    let gurus = [{
+      name: 'timothysykes',
+      rank: 50
+    }, {
+      name: 'InvestorsLive',
+      rank: 100
+    }, {
+      name: 'DekmarTrades',
+      rank: 40
+    }, {
+      name: 'jane_yul',
+      rank: 40
+    }, {
+      name: 'kroyrunner89',
+      rank: 40
+    }];
+
+    return 0;
+  },
+
   generateMarkdownTable: function (tableContent) {
     let newTable = '';
     let cellSizes = [];

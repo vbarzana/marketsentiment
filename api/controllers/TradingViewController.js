@@ -8,7 +8,7 @@ const moment = require('moment');
 module.exports = {
   startAutoSync: async function () {
     this.autoSyncNasdaq();
-    this.autoSyncOtc();
+    // this.autoSyncOtc();
     this.autoSyncPremarket();
   },
 
@@ -140,6 +140,8 @@ module.exports = {
       promises.push(this.getPremarketData(symbol.s, symbol.news, symbol.d));
     });
     let toNotify = await Promise.all(promises);
+    toNotify.sort(UtilService.sortBySentiment);
+
     await DiscordService.clearPremarketChannel();
 
     _.forEach(toNotify, async function (item) {
@@ -169,23 +171,28 @@ module.exports = {
     var cleanSymbol = _.trim(_.last(symbolAndExchange));
 
     let body = '';
+    let sentiment;
+    try {
+      sentiment = await UtilService.getMoreStockDetails(cleanSymbol);
+      body += UtilService.stockDetailsToTable(sentiment);
+    } catch (err) {
+      console.log('Could not pull more details for ticker ' + cleanSymbol, err.message);
+    }
+
     try {
       if (!_.isEmpty(newsArray)) {
         body += '**NEWS in the last 4 days:** \n' + newsArray.join('\n\n');
-        try {
-          body += await UtilService.getMoreStockDetails(cleanSymbol);
-        } catch (err) {
-          console.log('Could not pull more details for ticker ' + cleanSymbol, err.message);
-        }
       }
     } catch (err) {
       console.log(err);
     }
+
     let size = _.size(newsArray);
     let emoji = size > 1 ? UtilService.getFires(size) : '';
 
     return {
       symbol: cleanSymbol,
+      sentiment: sentiment,
       title: `${cleanSymbol} ${TickerService.getDetailsString(details)} - UP Premarket: **${Math.round(_.get(details, 'pre_change'))}% ** ${emoji}`,
       body: body,
       chart: `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`

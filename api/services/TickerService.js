@@ -71,18 +71,23 @@ module.exports = {
     });
     var responses = _.compact(await Promise.all(promises));
     _.forEach(responses, async function (response) {
+      try {
+        response.body = response.body || '';
+        response.sentiment = await UtilService.getMoreStockDetails(response.symbol);
+        response.body += UtilService.stockDetailsToTable(response.sentiment);
+      } catch (err) {
+        console.log('Could not pull more details for ticker ' + response.symbol, err.message);
+      }
+    });
+
+    responses.sort(UtilService.sortBySentiment);
+
+    _.forEach(responses, async function (response) {
       if (!response || _.isEmpty(response.fields)) {
         return true; // continue
       }
       let size = _.size(response.fields);
       let emoji = size > 1 ? UtilService.getFires(size) : '';
-
-      try {
-        response.body = response.body || '';
-        response.body += await UtilService.getMoreStockDetails(response.symbol);
-      } catch (err) {
-        console.log('Could not pull more details for ticker ' + response.symbol, err.message);
-      }
 
       if (response.exchange === 'otc') {
         DiscordService.notifyOtc(response.title + emoji, response.body || '', response.highlight, null, null, response.fields);
