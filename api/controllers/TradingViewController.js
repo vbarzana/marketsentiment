@@ -140,7 +140,7 @@ module.exports = {
       promises.push(this.getPremarketData(symbol.s, symbol.news, symbol.d));
     });
     let toNotify = await Promise.all(promises);
-    toNotify.sort(UtilService.calculateSentimentIndexPremarket);
+    toNotify.sort(UtilService.sortBySentimentPremarket);
 
     await DiscordService.clearPremarketChannel();
 
