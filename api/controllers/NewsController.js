@@ -16,7 +16,7 @@ async function loadCompanyNews(symbols, startDate, endDate) {
   endDate = endDate || END_DATE;
 
   let promises = [];
-  let yahooFailedTickers = [];
+  let yahooFailedTickers = {};
 
   _.forEach(symbols, function (symbol) {
     promises.push(
@@ -25,7 +25,10 @@ async function loadCompanyNews(symbols, startDate, endDate) {
         YahooFinanceService.loadNewsForTicker(symbol, startDate, endDate)
           .then(resolve)
           .catch(function (err) {
-            yahooFailedTickers.push(symbol + ' => ' + err.message);
+            var msg = _.trim(err.message).substr(0, 100);
+
+            yahooFailedTickers[msg] = yahooFailedTickers[msg] || [];
+            yahooFailedTickers[msg].push(symbol);
             return IextradingService.loadNewsForTicker(symbol, startDate, endDate);
           })
           .then(resolve)
@@ -38,7 +41,10 @@ async function loadCompanyNews(symbols, startDate, endDate) {
   });
   let response = await Promise.all(promises);
   if (!_.isEmpty(yahooFailedTickers)) {
-    console.log('Yahoo Finance news pull failed for the following symbols: ' + yahooFailedTickers.join(', '));
+    var msg = _.reduce(yahooFailedTickers, function (coll, val, key) {
+      return coll += key + ': ' + val.join(',');
+    }, '');
+    console.log('Yahoo Finance news pull failed: ' + msg);
   }
   return transformDataNewsOutput(response);
 }
