@@ -1188,7 +1188,7 @@ esprima@^2.6.0:
 
 "esprima@https://github.com/ariya/esprima/tarball/master":
   version "4.0.0-dev"
-  resolved "https://github.com/ariya/esprima/tarball/master#e8be95821093be87006b781c8ac7f23989d91b6d"
+  resolved "https://github.com/ariya/esprima/tarball/master#1e95040775a204f8b1c2a9ba39f990a9ab3c9ac2"
 
 "esprima@~ 1.0.2":
   version "1.0.4"
