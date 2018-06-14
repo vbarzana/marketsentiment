@@ -172,6 +172,11 @@ module.exports = {
     try {
       if (!_.isEmpty(newsArray)) {
         body += '**NEWS in the last 4 days:** \n' + newsArray.join('\n\n');
+        try {
+          body += await UtilService.getMoreStockDetails(cleanSymbol);
+        } catch (err) {
+          console.log('Could not pull more details for ticker ' + cleanSymbol, err.message);
+        }
       }
     } catch (err) {
       console.log(err);
@@ -180,6 +185,7 @@ module.exports = {
     let emoji = size > 1 ? UtilService.getFires(size) : '';
 
     return {
+      symbol: cleanSymbol,
       title: `${cleanSymbol} ${TickerService.getDetailsString(details)} - UP Premarket: **${Math.round(_.get(details, 'pre_change'))}% ** ${emoji}`,
       body: body,
       chart: `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`

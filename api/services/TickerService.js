@@ -69,13 +69,19 @@ module.exports = {
     _.forEach(tickers, function (symbol) {
       promises.push(getNewsFromToday(symbol.s, symbol.news, symbol.d));
     });
-    var responses = await Promise.all(promises);
-    _.forEach(responses, function (response) {
+    var responses = _.compact(await Promise.all(promises));
+    _.forEach(responses, async function (response) {
       if (!response || _.isEmpty(response.fields)) {
         return true; // continue
       }
       let size = _.size(response.fields);
       let emoji = size > 1 ? UtilService.getFires(size) : '';
+
+      try {
+        response.body += await UtilService.getMoreStockDetails(response.symbol);
+      } catch (err) {
+        console.log('Could not pull more details for ticker ' + response.symbol, err.message);
+      }
 
       if (response.exchange === 'otc') {
         DiscordService.notifyOtc(response.title + emoji, response.body || '', response.highlight, null, null, response.fields);
@@ -163,6 +169,7 @@ async function getNewsFromToday(symbol, news, details) {
   var cleanSymbol = _.trim(_.last(symbolAndExchange));
 
   let result = {
+    symbol: cleanSymbol,
     exchange: _.toLower(_.first(symbolAndExchange)),
     highlight: '',
     title: `${cleanSymbol} ${getDetailsString(details)}`,
