@@ -500,9 +500,9 @@ bytes@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
 
-cached-request@^1.1.4:
+"cached-request@https://github.com/vbarzana/cached-request.git":
   version "1.1.4"
-  resolved "https://registry.yarnpkg.com/cached-request/-/cached-request-1.1.4.tgz#66b20e1e9a31192adb03a04c59ec0275b450808b"
+  resolved "https://github.com/vbarzana/cached-request.git#8de6a314cb2463b5fcd47d2c621400725b67f019"
   dependencies:
     graceful-fs "^4.0.0"
     mkdirp "^0.5.1"
