@@ -22,15 +22,17 @@ async function loadCompanyNews(symbols, startDate, endDate) {
     promises.push(
       new Promise(function (resolve) {
         // Try loading the news for this ticker with Yahoo finance, otherwise fallback to IextradingService
-        YahooFinanceService.loadNewsForTicker(symbol, startDate, endDate)
-          .then(resolve)
-          .catch(function (err) {
-            var msg = _.trim(err.message).substr(0, 100);
-
-            yahooFailedTickers[msg] = yahooFailedTickers[msg] || [];
-            yahooFailedTickers[msg].push(symbol);
-            return IextradingService.loadNewsForTicker(symbol, startDate, endDate);
-          })
+        // YahooFinanceService.loadNewsForTicker(symbol, startDate, endDate)
+        //   .then(resolve)
+        //   .catch(function (err) {
+        //     var msg = _.trim(err.message).substr(0, 100);
+				//
+        //     yahooFailedTickers[msg] = yahooFailedTickers[msg] || [];
+        //     yahooFailedTickers[msg].push(symbol);
+        //
+        //     return IextradingService.loadNewsForTicker(symbol, startDate, endDate);
+        //   })
+        IextradingService.loadNewsForTicker(symbol, startDate, endDate)
           .then(resolve)
           .catch(function (err) {
             console.log('Could not load iextrading news for symbol: ', symbol, err.message);
