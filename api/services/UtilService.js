@@ -48,7 +48,6 @@ module.exports = {
           | Watchlists   | ${_.get(mentioned, 'symbol.watchlist_count') || 0} matches  |\n
           | Trending among the top 30?| ${foundInTrendingList ? 'Yes' : 'No'} |\n`);
       result += `\`\`\`${markdownTable}\`\`\``;
-      console.log(result);
     } catch (err) {
       console.log(err);
     }

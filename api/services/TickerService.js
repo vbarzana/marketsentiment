@@ -78,6 +78,7 @@ module.exports = {
       let emoji = size > 1 ? UtilService.getFires(size) : '';
 
       try {
+        response.body = response.body || '';
         response.body += await UtilService.getMoreStockDetails(response.symbol);
       } catch (err) {
         console.log('Could not pull more details for ticker ' + response.symbol, err.message);
