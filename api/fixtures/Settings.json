@@ -83,7 +83,7 @@
     "tradingViewScreenerOptions": {
       "lang": "en"
     },
-    "magicWords": [{"name": "FDA", "rank": "5", "highlight": 3447003}, {"name": "Phase", "rank": "5", "highlight": 16711680}],
+    "magicWords": [{"name": "FDA", "rank": "5", "highlight": 3447003}, {"name": "Phase", "rank": "5", "highlight": 16711680}, {"name": "new ceo", "rank": "5", "highlight": 16776960}],
     "timezone": "America/New_York",
     "autoSyncOnStartup": true,
     "autoSyncInterval": 180000,
