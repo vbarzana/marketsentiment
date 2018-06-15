@@ -10,8 +10,14 @@ var client = new Twitter({
   access_token_secret: sails.config.twitter.accessTokenSecret
 });
 
+let gurusToFollow = _.reduce(UtilService.GURUS, (list, guru) => {
+  list += ',' + guru.name;
+  return list;
+}, "");
+
 // You can also get the stream in a callback if you prefer.
-client.stream('statuses/filter', {track: 'javascript'}, function (stream) {
+client.stream('statuses/filter', {follow: gurusToFollow}, function (stream) {
+  console.log('Connected to Twitter API to listen for real-time tweets from the following follows: ' + gurusToFollow);
   stream.on('data', onRealTimeDataFromTwitter);
 
   stream.on('error', function (error) {
@@ -38,9 +44,11 @@ function onRealTimeDataFromTwitter(event) {
   let screenName = _.get(event, 'user.screen_name');
 
   let guru = UtilService.findGuruByScreenName(screenName);
+
   if (_.isEmpty(guru)) {
     return;
   }
+  console.log('New tweet received from guru: ' + guru.name);
 
   // first get the picture from twitter profile
   request.get(`https://twitter.com/${screenName}/profile_image`, function (error, response) {
