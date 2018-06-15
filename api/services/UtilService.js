@@ -143,7 +143,7 @@ module.exports = {
       + (_.get(ticker, 'sentiment.trending') ? STOCK_TRENDING_WEIGHT : 0)
       + _.size(_.get(ticker, 'news')) + NEWS_WEIGHT
       + _.size(_.get(ticker, 'sentiment.twitter.tweets')) + TWEETS_WEIGHT
-      + _.size(_.get(ticker, 'sentiment.sentiment.bullish'))
+      + _.get(ticker, 'sentiment.sentiment.bullish')
       + this.getGuruIndex(_.get(ticker, 'sentiment.twitter.tweets'));
   },
 
