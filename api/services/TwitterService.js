@@ -1,9 +1,9 @@
-const moment = require('moment-timezone');
 const _ = require('lodash');
 const request = require('request');
-var Twitter = require('twitter');
+const Twitter = require('twitter');
+const UtilService = require('./UtilService');
 
-var client = new Twitter({
+let client = new Twitter({
   consumer_key: sails.config.twitter.consumerKey,
   consumer_secret: sails.config.twitter.consumerSecret,
   access_token_key: sails.config.twitter.accessToken,
