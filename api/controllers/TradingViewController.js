@@ -147,7 +147,10 @@ module.exports = {
     _.forEach(toNotify, async function (item, idx) {
       var fires = idx <= 3 ? 5 : idx < 7 ? 3 : idx < 10 ? 2 : 0;
       var emoji = fires > 0 ? UtilService.getFires(fires) : '';
-
+      if (_.isEmpty(item.news)) {
+        item.body = item.body || '';
+        item.body += '\n**No news found for this stock**'
+      }
       await DiscordService.notifyPremarket(item.title + emoji, item.body, 65280, item.chart, null, item.news);
     });
   },
