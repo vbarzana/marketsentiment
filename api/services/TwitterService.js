@@ -11,17 +11,26 @@ let client = new Twitter({
 });
 
 let gurusToFollow = _.reduce(UtilService.GURUS, (list, guru) => {
-  list += list ? (',' + guru.name) : guru.name;
-  return list;
-}, "");
+  let guruName = _.get(guru, 'name');
+  if (!guruName) return list;
+  return list += list ? (',' + guruName) : guruName;
+}, '');
 
-// You can also get the stream in a callback if you prefer.
-client.stream('statuses/filter', {follow: gurusToFollow}, function (stream) {
-  console.log('Connected to Twitter API to listen for real-time tweets from the following follows: ' + gurusToFollow);
-  stream.on('data', onRealTimeDataFromTwitter);
+client.get('users/lookup', {screen_name: gurusToFollow}, function (error, users) {
+  let idsToFollow = _.reduce(users, (list, user) => {
+    let id = _.get(user, 'id');
+    if (!id) return list;
+    return list += list ? (',' + id) : id;
+  }, '');
 
-  stream.on('error', function (error) {
-    throw error;
+  // You can also get the stream in a callback if you prefer.
+  client.stream('statuses/filter', {follow: idsToFollow}, function (stream) {
+    console.log('Connected to Twitter API to listen for real-time tweets from the following follows: ' + gurusToFollow);
+    stream.on('data', onRealTimeDataFromTwitter);
+
+    stream.on('error', function (error) {
+      throw error;
+    });
   });
 });
 
