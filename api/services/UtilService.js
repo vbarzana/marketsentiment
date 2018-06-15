@@ -26,6 +26,9 @@ module.exports = {
     name: 'DekmarTrades',
     rank: 40
   }, {
+    name: 'ilikebbstocks',
+    rank: 40
+  }, {
     name: 'jane_yul',
     rank: 40
   }, {
