@@ -112,23 +112,29 @@ module.exports = {
   },
 
   stockDetailsToTable: function (details) {
+    let users = _.get(details, 'twitter.users');
+    let gurus = _.reduce(users, (array, user) => {
+      if (this.userIsGuru(user)) {
+        array.push(user);
+      }
+      return array;
+    }, []);
+
     let markdownTable = this.generateMarkdownTable(
-      `| StockTwits API ${details.trending ? UtilService.getFires(5, '📢') : ''} | Details |\n
+      `| Social Media | Details |\n
        | ------------------------- | ----------------|\n
-       | Found in                   | ${details.searches} search results  |\n
-       | Watchlists   | ${details.watchlistCount} matches  |\n
-       | Bullish   | ${_.get(details, 'sentiment.bullish')}%  |\n
-       | Bearish   | ${_.get(details, 'sentiment.bearish')}%  |\n
-       | Trending among the top 30?| ${details.trending ? 'Yes' : 'No'} |\n`);
-
-    let twitterTable = this.generateMarkdownTable(
-      `| Twitter API | Details |\n
+       | ${_.size(details.twitter.tweets)} | 🐤 (tweets)  |\n
+       | ${gurus.join(',')} | 🐤 (gurus mentions)  |\n
+       | ------------------------- | ----------------| \n
+       | ${details.searches} | StockTwits searches |\n
+       | ${details.watchlistCount} | StockTwits Watchlists |\n
+       | ${_.get(details, 'sentiment.bullish')}% | StockTwits Bullish  |\n
+       | ${_.get(details, 'sentiment.bearish')}% | StockTwits Bearish  |\n
+       | ${details.trending ? 'Yes' : 'No'} | Stocktwits trending top 30?|\n
        | ------------------------- | ----------------|\n
-       | Tweets since yesterday 8 pm | ${_.size(details.twitter.tweets)} |\n
-       | People talking about it | `) + `${_.join(details.twitter.users, ',')} |`;
+       `);
 
-
-    return `\`\`\`${markdownTable}\`\`\`\n\`\`\`${twitterTable}\`\`\``;
+    return `\`\`\`${markdownTable}\`\`\`\n`;
   },
 
   sortBySentiment: function (ticker1, ticker2) {

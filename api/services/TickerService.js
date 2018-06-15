@@ -166,7 +166,7 @@ async function getNewsFromToday(symbol, news, details) {
     symbol: cleanSymbol,
     exchange: _.toLower(_.first(symbolAndExchange)),
     highlight: '',
-    title: `${cleanSymbol} ${getDetailsString(details)}`,
+    title: `${cleanSymbol} | ${getDetailsString(details)}`,
     chart: `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`
   };
   let promises = [];
@@ -224,7 +224,7 @@ function getDetailsString(details) {
   if (_.isEmpty(details)) {
     return '';
   }
-  return `${details.close} Close - ${parseFloat(details.change, 10).toFixed(2)}% - ${TickerService.formatNumber(details.volume)} Vol - ${TickerService.formatNumber(details.float_shares_outstanding)} Float`;
+  return `${details.close} Close | ${parseFloat(details.change, 10).toFixed(2)}% | ${TickerService.formatNumber(details.volume)} Vol | ${TickerService.formatNumber(details.float_shares_outstanding)} Float`;
 }
 
 async function loadTickersFromDb() {

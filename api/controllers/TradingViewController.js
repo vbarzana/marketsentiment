@@ -193,7 +193,7 @@ module.exports = {
       sentiment: sentiment,
       news: newsArray,
       d: details,
-      title: `${cleanSymbol} ${TickerService.getDetailsString(details)} - UP Premarket: **${Math.round(_.get(details, 'pre_change'))}% **`,
+      title: `${cleanSymbol} | ${TickerService.getDetailsString(details)} | UP Premarket: ${Math.round(_.get(details, 'pre_change'))}%`,
       body: body,
       chart: `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`
     };
