@@ -2,35 +2,18 @@
  * @class StockTwitsService
  */
 const _ = require('lodash');
-var request = require('request')
-  , cachedRequest = require('cached-request')(request)
-  , cacheDirectory = "/tmp/cache";
-
-cachedRequest.setCacheDirectory(cacheDirectory);
+const request = require('request');
+const cachedRequest = require('cached-request')(request);
+cachedRequest.setCacheDirectory("/tmp/cache");
 
 // reset the cache only after 20 minutes, so we avoid having 400 calls per hour
 cachedRequest.setValue('ttl', 60000 * 20);
 
+const API_DISABLED = false;
+
 module.exports = {
   search: async function (symbol) {
     return await this.query(`${sails.config.stocktwits.apiUrl}/search.json?access_token=${sails.config.stocktwits.accessToken}&q=${symbol}`);
-  },
-
-  searchSymbols: async function (symbols) {
-    return await this.query(`${sails.config.stocktwits.apiUrl}/search/symbols.json?access_token=${sails.config.stocktwits.accessToken}&q=${symbols}`);
-  },
-
-  addSentimentToTickers: async function (symbols) {
-    let symbolsString = _.reduce(symbols, function (result, symbol) {
-      return result.push(_.isString(symbol) ? symbol : (symbol.s || symbol.symbol));
-    }, []).join(',');
-    var search = await this.searchSymbols(symbolsString);
-    _.forEach(search, function(result){
-      let item = _.first(_.filter(symbols, {s: result.symbol}));
-      _.set(item, _.get(item, 'sentiment') || {});
-      item.sentiment.search = result;
-    });
-
   },
 
   getTrendingSymbols: async function () {
@@ -46,7 +29,16 @@ module.exports = {
   },
 
   query: async function (url) {
-    return new Promise(function (resolve) {
+    if (API_DISABLED) {
+      console.log('StockTwits API disabled intentionally, to enable it go to StocktwitsService and enable it again');
+      return null;
+    }
+    this.loadingUrl = this.loadingUrl || {};
+    if (this.loadingUrl[url]) {
+      return this.loadingUrl[url];
+    }
+
+    return this.loadingUrl[url] = new Promise((resolve) => {
       cachedRequest({url: url},
         async (err, request, body) => {
           let data = {};
@@ -56,6 +48,7 @@ module.exports = {
             // ignore
           }
           resolve(data);
+          delete this.loadingUrl[url];
         });
     });
   }

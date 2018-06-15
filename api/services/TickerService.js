@@ -70,29 +70,17 @@ module.exports = {
       promises.push(getNewsFromToday(symbol.s, symbol.news, symbol.d));
     });
     var responses = _.compact(await Promise.all(promises));
-    //@todo: disable this from here once we have less amount of requests
-    // _.forEach(responses, async function (response) {
-    //   try {
-    //     response.body = response.body || '';
-    // response.sentiment = await UtilService.getMoreStockDetails(response.symbol);
-    // response.body += UtilService.stockDetailsToTable(response.sentiment);
-    //   } catch (err) {
-    //     console.log('Could not pull more details for ticker ' + response.symbol, err.message);
-    //   }
-    // });
 
     responses.sort(UtilService.sortBySentiment);
     _.forEach(responses, (response, idx) => {
       if (!response || _.isEmpty(response.news)) {
         return true; // continue
       }
-      var fires = idx <= 3 ? 5 : idx < 7 ? 3 : idx < 10 ? 2 : 0;
-      var emoji = fires > 0 ? UtilService.getFires(fires) : '';
 
       if (response.exchange === 'otc') {
-        DiscordService.notifyOtc(response.title + emoji, response.body || '', response.highlight, null, null, response.news);
+        DiscordService.notifyOtc(response.title, response.body || '', response.highlight, null, null, response.news);
       } else {
-        DiscordService.notify(response.title + emoji, response.body || '', response.highlight, response.chart, null, response.news);
+        DiscordService.notify(response.title, response.body || '', response.highlight, response.chart, null, response.news);
       }
     })
   },

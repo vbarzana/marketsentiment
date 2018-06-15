@@ -192,7 +192,7 @@
         "left": "change",
         "operation": "nempty"
       },
-      {"left":"volume","operation":"egreater","right":100000},
+      {"left":"volume","operation":"egreater","right":50000},
       {
         "left": "pre_change",
         "operation": "egreater",

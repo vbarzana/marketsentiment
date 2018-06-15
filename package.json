@@ -29,7 +29,8 @@
     "sails": "~0.12.13",
     "sails-disk": "~0.10.9",
     "sails-hook-cron": "^2.2.2",
-    "sails-mongo": "^0.12.2"
+    "sails-mongo": "^0.12.2",
+    "twitter": "^1.7.1"
   },
   "devDependencies": {},
   "engines": {

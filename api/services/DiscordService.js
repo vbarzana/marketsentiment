@@ -16,7 +16,7 @@ module.exports = {
     return doNotify(await this.getOtcChannel(), title, msg, highlight, image, url, fields);
   },
 
-  clearPremarketChannel: async function(){
+  clearPremarketChannel: async function () {
     let channel = await this.getPremarketChannel();
     // Try to remove all messages in the channel
     try {
@@ -29,6 +29,11 @@ module.exports = {
     }
   },
 
+  notifyTwitter: async function (title, msg, highlight, image, url, fields, options) {
+    let channel = await this.getTwitterChannel();
+    return doNotify(channel, title, msg, highlight, image, url, fields, options);
+  },
+
   notifyPremarket: async function (title, msg, highlight, image, url, fields) {
     let channel = await this.getPremarketChannel();
     return doNotify(channel, title, msg, highlight, image, url, fields)
@@ -37,6 +42,11 @@ module.exports = {
   getChannel: async () => {
     await onBotReadyPromise.promise;
     return channel || await client.channels.get(sails.config.discord.nasdaqNewsChannelId);
+  },
+
+  getTwitterChannel: async () => {
+    await onBotReadyPromise.promise;
+    return await client.channels.get(sails.config.discord.twitterChannelId);
   },
 
   getOtcChannel: async () => {
@@ -74,7 +84,7 @@ module.exports = {
   }
 };
 
-async function doNotify(channel, title, msg, highlight, imageUrl, url, fields) {
+async function doNotify(channel, title, msg, highlight, imageUrl, url, fields, options) {
   try {
     let toEmbed = {
       title: title,
@@ -92,6 +102,10 @@ async function doNotify(channel, title, msg, highlight, imageUrl, url, fields) {
     if (fields) {
       toEmbed.fields = fields;
     }
+    if(options){
+      toEmbed = _.merge(toEmbed, options);
+    }
+
     channel.send({
       embed: toEmbed
     });
