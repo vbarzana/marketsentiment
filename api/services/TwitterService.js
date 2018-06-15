@@ -11,7 +11,7 @@ let client = new Twitter({
 });
 
 let gurusToFollow = _.reduce(UtilService.GURUS, (list, guru) => {
-  list += ',' + guru.name;
+  list += list ? (',' + guru.name) : guru.name;
   return list;
 }, "");
 
