@@ -70,10 +70,20 @@ module.exports = {
       return;
     }
     content = _.trim(_.replace(content, prefix, ''));
+    let split = _.split(content, ' ');
+
+    let command = split.shift();
+
     let response = "Nothing found here for your command...";
-    switch (content) {
+    switch (command) {
       case "gainers": {
         response = _.toString((await TickerService.findBiggestGainers() || []).join('\n')).substring(0, 500);
+        break;
+      }
+
+      case "sentiment": {
+        let ticker = _.first(split);
+        response = await UtilService.stockDetailsToTable(await UtilService.getMoreStockDetails(ticker));
         break;
       }
 
@@ -102,7 +112,7 @@ async function doNotify(channel, title, msg, highlight, imageUrl, url, fields, o
     if (fields) {
       toEmbed.fields = fields;
     }
-    if(options){
+    if (options) {
       toEmbed = _.merge(toEmbed, options);
     }
 

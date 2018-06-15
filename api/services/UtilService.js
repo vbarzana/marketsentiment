@@ -121,18 +121,19 @@ module.exports = {
     }, []);
 
     let markdownTable = this.generateMarkdownTable(
-      `| Social Media | Details |\n
-       | ------------------------- | ----------------|\n
-       | ${_.size(details.twitter.tweets)} | 🐤 (tweets)  |\n
-       | ${gurus.join(',')} | 🐤 (gurus mentions)  |\n
-       | ------------------------- | ----------------| \n
-       | ${details.searches} | StockTwits searches |\n
-       | ${details.watchlistCount} | StockTwits Watchlists |\n
-       | ${_.get(details, 'sentiment.bullish')}% | StockTwits Bullish  |\n
-       | ${_.get(details, 'sentiment.bearish')}% | StockTwits Bearish  |\n
-       | ${details.trending ? 'Yes' : 'No'} | Stocktwits trending top 30?|\n
-       | ------------------------- | ----------------|\n
-       `);
+      `| Social Media |\n
+       | ------------------------- |\n
+       | TWITTER |\n
+       | ${_.size(details.twitter.tweets)} (tweets)  |\n
+       | ${gurus.join(',') || 0} (gurus mentions)  |\n
+       | ----------------- |\n
+       | STOCKTWITS  |\n
+       | ${details.searches} (mentions) |\n
+       | ${details.watchlistCount} (watchlists) |\n
+       | ${_.get(details, 'sentiment.bullish') || '-'}% (bullish)  |\n
+       | ${_.get(details, 'sentiment.bearish') || '-'}% (bearish)  |\n
+       | ${details.trending ? 'Yes' : 'No'} (top 30?)|\n
+      `);
 
     return `\`\`\`${markdownTable}\`\`\`\n`;
   },
