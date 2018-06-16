@@ -65,6 +65,8 @@ function onRealTimeDataFromTwitter(event) {
     if (_.toLower(screenName) !== _.toLower(name)) {
       authorName = `${name} (@${screenName})`;
     }
+    let date = moment.tz(new Date(_.get(event, 'created_at')), "America/New_York").format('LLL');
+    text += `\nCreated at: ${date} (EDT)`;
     // then send out the tweet so everyone is alerted
     DiscordService.notifyTwitter(null, text, guru.highlightColor, null, null, null, {
       author: {
