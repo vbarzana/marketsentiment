@@ -90,7 +90,7 @@ module.exports = {
       default:
         break;
     }
-    client.reply('\n' + response);
+    client.reply(response);
   }
 };
 
