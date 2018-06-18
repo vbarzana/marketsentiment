@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 const request = require('request');
 const Twitter = require('twitter');
 const UtilService = require('./UtilService');
