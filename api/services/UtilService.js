@@ -14,6 +14,9 @@ const STOCK_TRENDING_WEIGHT = 500;
 module.exports = {
   // find the guru name here
   GURUS: [{
+    name: 'Steven1_994',
+    rank: 50
+  },{
     name: 'timothysykes',
     rank: 50
   }, {
