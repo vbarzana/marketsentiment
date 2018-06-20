@@ -20,6 +20,12 @@ Ext.define('Marketsentiment.view.TickerGridViewController', {
     this.getView().getStore().reload();
   },
 
+  deleteRecords: function () {
+    _.forEach(this.getView().getSelection(), function (ticker) {
+      ticker.erase();
+    });
+  },
+
   startStopAutoRefresh: function (checkbox) {
     var checked = checkbox ? checkbox.getValue() : false;
     var interval = 60000 * 3; // 3 minutes

@@ -16,6 +16,8 @@ Ext.define('Marketsentiment.view.TickerGrid', {
   cls: 'ticker-grid',
 
   plugins: ['gridfilters'],
+  reference: 'tickergrid',
+  publishes: 'selection',
 
   bbar: {
     xtype: 'pagingtoolbar',
@@ -29,13 +31,19 @@ Ext.define('Marketsentiment.view.TickerGrid', {
       items: [{
         reference: 'nasdaqButton',
         text: 'NASDAQ'
-      },{
+      }, {
         reference: 'otcButton',
         text: 'OTC'
       }],
       listeners: {
         toggle: 'filterByExchange'
       }
+    }, {
+      bind: {
+        disabled: '{!tickergrid.selection}'
+      },
+      handler: 'deleteRecords',
+      text: 'Delete'
     }, '->', {
       xtype: 'checkbox',
       checked: false,
