@@ -38,6 +38,9 @@ module.exports = {
     name: 'kroyrunner89',
     rank: 80
   }, {
+    name: 'AT09_Trader',
+    rank: 80
+  }, {
     name: 'CitronResearch',
     rank: 80
   }],
