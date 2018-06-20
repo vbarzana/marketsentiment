@@ -55,7 +55,7 @@ function onRealTimeDataFromTwitter(event) {
 
   let guru = UtilService.findGuruByScreenName(screenName);
 
-  if (_.isEmpty(guru)) {
+  if (_.isEmpty(guru) || text.indexOf('$') < 0) {
     return;
   }
   console.log('New tweet received from guru: ' + guru.name);
