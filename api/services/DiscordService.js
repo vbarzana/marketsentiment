@@ -5,15 +5,11 @@ const TradingViewController = require('../controllers/TradingViewController');
 
 const client = new Discord.Client();
 let channel;
-let otcChannel;
 let onBotReadyPromise = new Deferred();
 
 module.exports = {
   notify: async function (title, msg, highlight, image, url, fields) {
     return doNotify(channel || await this.getChannel(), title, msg, highlight, image, url, fields);
-  },
-  notifyOtc: async function (title, msg, highlight, image, url, fields) {
-    return doNotify(await this.getOtcChannel(), title, msg, highlight, image, url, fields);
   },
 
   clearPremarketChannel: async function () {
@@ -49,14 +45,9 @@ module.exports = {
     return await client.channels.get(sails.config.discord.twitterChannelId);
   },
 
-  getOtcChannel: async () => {
-    await onBotReadyPromise.promise;
-    return otcChannel || await client.channels.get(sails.config.discord.otcNewsChannelId);
-  },
-
   getPremarketChannel: async () => {
     await onBotReadyPromise.promise;
-    return otcChannel || await client.channels.get(sails.config.discord.premarketNewsChannelId);
+    return await client.channels.get(sails.config.discord.premarketNewsChannelId);
   },
 
   onBotReady: async () => {

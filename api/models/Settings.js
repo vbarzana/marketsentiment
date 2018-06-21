@@ -19,9 +19,6 @@ module.exports = {
       type: 'boolean'
     },
 
-    autoSyncInterval: {
-      type: 'integer'
-    },
     updateTickersInterval: {
       type: 'integer'
     },

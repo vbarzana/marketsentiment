@@ -16,7 +16,7 @@ module.exports = {
   GURUS: [{
     name: 'Steven1_994',
     rank: 50
-  },{
+  }, {
     name: 'timothysykes',
     rank: 50
   }, {
@@ -57,14 +57,6 @@ module.exports = {
     return _.first(_.filter(this.GURUS, (guru) => {
       return _.toLower(guru.name) === lowerCaseUsername;
     }));
-  },
-
-  isCrappyNews: function (text) {
-    text = _.toString(text);
-    return text.indexOf('Midday Gainers') >= 0
-      || text.indexOf('Premarket Gainers') >= 0
-      || text.indexOf('Premarket Losers') >= 0
-      || text.indexOf('Midday Losers') >= 0;
   },
 
   getFires: function (numberOfFires, emojiType) {
@@ -208,6 +200,28 @@ module.exports = {
       newTable += ' |\n';
     });
     return newTable;
+  },
+
+  formatNumber: function (num) {
+    num = parseInt(num, 10);
+    var isNegative = false, formattedNumber;
+    if (num < 0) {
+      isNegative = true
+    }
+    num = Math.abs(num);
+    if (num >= 1000000000) {
+      formattedNumber = (num / 1000000000).toFixed(1).replace(/\.0$/, '') + 'G';
+    } else if (num >= 1000000) {
+      formattedNumber = (num / 1000000).toFixed(1).replace(/\.0$/, '') + 'M';
+    } else if (num >= 1000) {
+      formattedNumber = (num / 1000).toFixed(1).replace(/\.0$/, '') + 'K';
+    } else {
+      formattedNumber = num;
+    }
+    if (isNegative) {
+      formattedNumber = '-' + formattedNumber
+    }
+    return formattedNumber;
   }
 };
 

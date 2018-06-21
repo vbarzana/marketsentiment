@@ -1,0 +1,7 @@
+/**
+ * @class DailyReportController
+ */
+
+module.exports = {
+
+};

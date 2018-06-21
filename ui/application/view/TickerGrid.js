@@ -26,19 +26,6 @@ Ext.define('Marketsentiment.view.TickerGrid', {
 
   tbar: {
     items: [{
-      xtype: 'segmentedbutton',
-      allowMultiple: true,
-      items: [{
-        reference: 'nasdaqButton',
-        text: 'NASDAQ'
-      }, {
-        reference: 'otcButton',
-        text: 'OTC'
-      }],
-      listeners: {
-        toggle: 'filterByExchange'
-      }
-    }, {
       bind: {
         disabled: '{!tickergrid.selection}'
       },
