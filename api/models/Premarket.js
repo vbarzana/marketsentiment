@@ -7,9 +7,6 @@ module.exports = {
   schema: false,
 
   attributes: {
-    date: {
-      type: 'date'
-    },
 
     watchlist: {
       type: 'json'

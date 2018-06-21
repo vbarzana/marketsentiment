@@ -30,7 +30,7 @@ client.get('users/lookup', {screen_name: gurusToFollow}, function (error, users)
     stream.on('data', onRealTimeDataFromTwitter);
 
     stream.on('error', function (error) {
-      throw error;
+      console.error(error.message);
     });
   });
 });

@@ -86,7 +86,7 @@
     "magicWords": [{"name": "FDA", "rank": "5", "highlight": 3447003}, {"name": "Phase", "rank": "5", "highlight": 16711680}, {"name": "new ceo", "rank": "5", "highlight": 16776960}],
     "timezone": "America/New_York",
     "autoSyncOnStartup": true,
-    "updateTickersInterval": 180000
+    "updateTickersInterval": 10000
   }, {
     "id": 2,
     "tradingViewColumns": [
@@ -153,6 +153,6 @@
     },
     "timezone": "America/New_York",
     "autoSyncOnStartup": true,
-    "updateTickersInterval": 180000
+    "updateTickersInterval": 30000
   }
 ]

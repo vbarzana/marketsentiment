@@ -8,7 +8,7 @@ const moment = require('moment');
 module.exports = {
 
   autoSyncPremarket: async function () {
-    if (!this.isPremarketTime()) {
+    if (!PremarketService.isPremarketTime()) {
       return;
     }
     let premarketSettings = await SettingsService.getPremarketSettings();
@@ -27,7 +27,7 @@ module.exports = {
   },
 
   loadPremarketTickers: async function (settings) {
-    if (!this.isPremarketTime()) return;
+    if (!PremarketService.isPremarketTime()) return;
     settings = settings || await SettingsService.getPremarketSettings();
     if (!settings) {
       console.error('Settings not provided or it could not read the settings from the database.');
@@ -41,8 +41,27 @@ module.exports = {
       "options": _.get(settings, 'tradingViewScreenerOptions'),
       "range": _.get(settings, 'tradingViewScreenerRange')
     };
+    let todaysWatchlist = await PremarketService.findTodaysWatchlist();
 
-    let tickers = await TradingViewService.loadTickersCrossSiteScripting(_.get(settings, 'tradingViewAjaxUrl'), filters);
+    let tickersFromTradingView = await TradingViewService.loadTickersCrossSiteScripting(_.get(settings, 'tradingViewAjaxUrl'), filters);
+    let tickersFromDb = _.get(todaysWatchlist, 'watchlist');
+    let tickers = [];
+    // add to the tickers object all tickers that are in the database or in tradingview
+    _.forEach(tickersFromDb, (dbTicker) => {
+      let trvTicker = _.first(_.filter(tickersFromTradingView, {s: dbTicker.s}));
+      if (!trvTicker) tickers.push(dbTicker);
+      else tickers.push(_.merge(dbTicker, trvTicker));
+    });
+
+    // look for newly found tradingview tickers
+    _.forEach(tickersFromTradingView, (trvTicker) => {
+      let addedTicker = _.first(_.filter(tickers, {s: trvTicker.s}));
+      if (!addedTicker) {
+        tickers.push(trvTicker);
+      }
+    });
+
+    // Now the premarket tickers should remain in the search for all day
     tickers = await NewsService.addNewsToTickers(tickers);
     tickers.sort(function (a, b) {
       return _.get(a, 'd.pre_change') >= _.get(b, 'd.pre_change') ? -1 : 1;
@@ -55,16 +74,15 @@ module.exports = {
     let toNotify = await Promise.all(promises);
     toNotify.sort(UtilService.sortBySentimentPremarket);
 
+    await PremarketService.saveTodaysWatchlist(todaysWatchlist, tickers);
     await DiscordService.clearPremarketChannel();
 
     _.forEach(toNotify, async function (item, idx) {
-      var fires = idx <= 3 ? 5 : idx < 7 ? 3 : idx < 10 ? 2 : 0;
-      var emoji = fires > 0 ? UtilService.getFires(fires) : '';
       if (_.isEmpty(item.news)) {
         item.body = item.body || '';
         item.body += '\n**No news found for this stock**'
       }
-      await DiscordService.notifyPremarket(item.title + emoji, item.body, 65280, item.chart, null, item.news);
+      await DiscordService.notifyPremarket(item.title, item.body, 65280, item.chart, null, item.news);
     });
   },
 
@@ -106,16 +124,9 @@ module.exports = {
       sentiment: sentiment,
       news: newsArray,
       d: details,
-      title: `${cleanSymbol} | ${TickerService.getTickerDetailsAsString(details)} | UP Premarket: ${Math.round(_.get(details, 'pre_change'))}%`,
+      title: `${cleanSymbol} | ${TickerService.getTickerDetailsAsString(details)} | change: ${Math.round(_.get(details, 'pre_change'))}%`,
       body: body,
       chart: `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`
     };
-  },
-
-
-  isPremarketTime: function () {
-    let currentTime = moment.tz(new Date(), "America/New_York");
-    let marketOpenTime = moment.tz(new Date(), "America/New_York").set('hours', '9').set('minutes', 30);
-    return currentTime.isBefore(marketOpenTime);
   }
 };
