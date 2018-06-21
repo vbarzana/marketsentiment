@@ -46,7 +46,7 @@ module.exports = {
   }],
 
   userIsGuru: function (username) {
-    !!this.findGuruByScreenName(username);
+    return !!this.findGuruByScreenName(username);
   },
 
   findGuruByScreenName: function (username) {
