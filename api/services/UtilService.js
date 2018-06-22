@@ -140,12 +140,23 @@ module.exports = {
     return this.calculateSentimentIndex(ticker1) > this.calculateSentimentIndex(ticker2) ? -1 : 1;
   },
 
-  sortBySentimentPremarket: function (ticker1, ticker2) {
+  sortByVolumePremarket: function (ticker1, ticker2) {
     return this.calculateSentimentIndexPremarket(ticker1) > this.calculateSentimentIndexPremarket(ticker2) ? -1 : 1;
   },
 
+  getVolumeFromString: function (volume) {
+    if (!_.isString(volume)) {
+      return volume;
+    }
+    let regExp = new RegExp('k', 'i');
+    if (volume.match(regExp)) {
+      return parseInt(volume.replace(regExp, ''), 10) * 1000;
+    }
+    return parseInt(volume, 10);
+  },
+
   calculateSentimentIndexPremarket: function (ticker) {
-    return this.calculateSentimentIndex(ticker) + ((_.get(ticker, 'd.pre_change') || 0) + 11);
+    return this.getVolumeFromString(_.toString(_.get(ticker, 'premarketDetails.premarketVolume')));
   },
 
   calculateSentimentIndex: function (ticker) {

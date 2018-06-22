@@ -3,10 +3,6 @@ const moment = require('moment');
 const request = require('request');
 
 module.exports = {
-  getTickerInfo: async function (ticker) {
-    // @todo: find the ticker details service in tradingview
-  },
-
   loadTickersCrossSiteScripting: async function (url, queryParams) {
     return new Promise(function (resolve, reject) {
       request.post({

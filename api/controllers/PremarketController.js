@@ -72,7 +72,7 @@ module.exports = {
       promises.push(this.getPremarketData(symbol.s, symbol.news, symbol.d));
     });
     let toNotify = await Promise.all(promises);
-    toNotify.sort(UtilService.sortBySentimentPremarket);
+    toNotify.sort(UtilService.sortByVolumePremarket);
 
     await PremarketService.saveTodaysWatchlist(todaysWatchlist, tickers);
     await DiscordService.clearPremarketChannel();
@@ -112,6 +112,7 @@ module.exports = {
 
     let body = '';
     let sentiment;
+    let premarketDetails = await QuoteMediaService.getTickerData(cleanSymbol);
     try {
       sentiment = await UtilService.getMoreStockDetails(cleanSymbol);
       body += UtilService.stockDetailsToTable(sentiment);
@@ -123,8 +124,9 @@ module.exports = {
       symbol: cleanSymbol,
       sentiment: sentiment,
       news: newsArray,
+      premarketDetails: premarketDetails,
       d: details,
-      title: `${cleanSymbol} | ${TickerService.getTickerDetailsAsString(details)} | change: ${Math.round(_.get(details, 'pre_change'))}%`,
+      title: `${cleanSymbol} | ${TickerService.getTickerDetailsAsString(details)} | Premarket: Chg: ${Math.round(_.get(details, 'pre_change'))}% - Vol: ${_.get(premarketDetails, 'premarketVolume')}`,
       body: body,
       chart: `https://www.stockscores.com/chart.asp?TickerSymbol=${cleanSymbol}&TimeRange=180&Interval=d&Volume=1&ChartType=CandleStick&Stockscores=1&ChartWidth=1100&ChartHeight=480&LogScale=&Band=&avgType1=&movAvg1=&avgType2=&movAvg2=&Indicator1=None&Indicator2=None&Indicator3=None&Indicator4=None&endDate=&CompareWith=&entryPrice=&stopLossPrice=&candles=redgreen`
     };

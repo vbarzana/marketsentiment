@@ -77,6 +77,7 @@ module.exports = {
   },
 
   isPremarketTime: function () {
+    return true;
     let currentTime = moment.tz(new Date(), "America/New_York");
     let premarketOpenTime = this.getPremarketOpenTime();
     let marketOpenTime = this.getMarketOpenTime();
