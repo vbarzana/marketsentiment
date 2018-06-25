@@ -39,9 +39,31 @@ client.get('users/lookup', {screen_name: gurusToFollow}, function (error, users)
  * @class TwitterService
  */
 module.exports = {
-  search: function (word) {
+  search: async function (word) {
+    let tweets;
+    let response = [];
+    let params = {q: word};
+    let yesterday = UtilService.getAfterHoursCloseTime();
+    let createdAt;
+    try {
+      // get all tweets since yesterday for the given stock
+      while (_.size(tweets = _.get(await this.doSearch(params), 'statuses')) >= 15
+      && (createdAt = _.get(_.first(tweets), 'created_at'))
+      && yesterday.isBefore(UtilService.getNewYorkTime(createdAt, 'eee MMM dd HH:mm:ss ZZZZ yyyy'))) {
+        let minId = _.get(_.minBy(tweets, 'id'), 'id');
+        params = _.merge(params, {max_id: minId});
+        response = _.concat(response, tweets);
+      }
+    } catch (err) {
+    }
+    response = _.uniqBy(tweets ? _.concat(response, tweets) : response, 'id');
+
+    return response;
+  },
+  doSearch: function (parameters) {
     return new Promise((resolve) => {
-      client.get('/search/tweets.json', {q: word}, function (error, tweets, response) {
+      client.get('/search/tweets.json', parameters, function (error, tweets, response) {
+        if (error) console.error(error);
         resolve(tweets || {});
       });
     });

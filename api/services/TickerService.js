@@ -21,7 +21,7 @@ module.exports = {
     let promises = [];
     _.forEach(tickers, function (ticker) {
       let fiveDaysAgo = moment().subtract(5, 'days');
-      if (fiveDaysAgo > moment(_.get(ticker, 'updatedAt'))) {
+      if (fiveDaysAgo > moment(_.get(ticker, 'updatedAt')) && ticker.remove) {
         promises.push(ticker.remove());
       }
     });

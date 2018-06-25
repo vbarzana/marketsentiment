@@ -69,18 +69,40 @@ module.exports = {
 
   getMoreStockDetails: async function (ticker) {
     try {
-      let searchResults = await StockTwitsService.search(ticker);
-      let mentioned = await StockTwitsService.getSymbolData(ticker);
-      let trending = await StockTwitsService.getTrendingSymbols();
-      let sentiment = await StockTwitsService.getBullishBearishSentiment(ticker);
+      let searchResults, mentioned, trending, sentiment, tweets;
+      try {
+        searchResults = await StockTwitsService.search(ticker);
+      } catch (err) {
+        console.error('Could not load stocktwits for ' + ticker, err.message);
+      }
+      try {
+        mentioned = await StockTwitsService.getSymbolData(ticker);
+      } catch (err) {
+        console.error('Could not load StockTwits Mentions for ' + ticker, err.message);
+      }
+      try {
+        trending = await StockTwitsService.getTrendingSymbols();
+      } catch (err) {
+        console.error('Could not load StockTwits Trending for ' + ticker, err.message);
+      }
+      try {
+        sentiment = await StockTwitsService.getBullishBearishSentiment(ticker);
+      } catch (err) {
+        console.error('Could not load StockTwits sentiment for ' + ticker, err.message);
+      }
 
-      let tweets = await TwitterService.search(`$${ticker}`);
+      try {
+        tweets = await TwitterService.search(`$${ticker}`);
+      } catch (err) {
+        console.error('Could not load Twitter search for ' + ticker, err.message);
+      }
 
-      let yesterdayEvening = moment.tz(new Date(), "America/New_York").set('hours', '20').set('minutes', '0').subtract(1, 'days');
+      let yesterdayEvening = UtilService.getAfterHoursCloseTime();
 
       let twitterUsers = [];
-      tweets = _.filter(tweets.statuses, (tweet) => {
-        if (moment.tz(new Date(tweet.created_at), "America/New_York").isAfter(yesterdayEvening)) {
+      tweets = _.filter(tweets, (tweet) => {
+        let createdAt = _.get(tweet, 'created_at');
+        if (createdAt && UtilService.getNewYorkTime(createdAt, 'eee MMM dd HH:mm:ss ZZZZ yyyy').isAfter(yesterdayEvening)) {
           twitterUsers.push(_.get(tweet, 'user.screen_name'));
           return true;
         }
@@ -109,6 +131,14 @@ module.exports = {
     return null;
   },
 
+  getAfterHoursCloseTime: function () {
+    return moment.tz(new Date(), "America/New_York").set('hours', '20').set('minutes', '0').subtract(1, 'days');
+  },
+
+  getNewYorkTime: function (date, format) {
+    return moment.tz(moment(date, format), "America/New_York");
+  },
+
   stockDetailsToTable: function (details) {
     let users = _.get(details, 'twitter.users');
     let gurus = _.reduce(users, (array, user) => {
@@ -122,8 +152,8 @@ module.exports = {
       `| Social Media |\n
        | ------------------------- |\n
        | TWITTER |\n
-       | ${_.size(details.twitter.tweets)} (tweets)  |\n
-       | ${gurus.join(',') || 0} (gurus mentions)  |\n
+       | ${_.size(details.twitter.tweets)} 💬  |\n
+       | ${gurus.join('/n') || '-'} (gurus mentions)  |\n
        | ----------------- |\n
        | STOCKTWITS  |\n
        | ${details.searches} (mentions) |\n
@@ -205,7 +235,7 @@ module.exports = {
 
     _.forEach(lines, (line) => {
       _.forEach(_.split(line, '|'), (cell, position) => {
-        let cellContent = _.trim(cell);
+        let cellContent = _.trim(cell).replace(new RegExp('/n', 'g'), '\n');
         newTable += `| ${cellContent}${this.getFires((_.get(cellSizes, position) || 150) - _.size(cellContent) - 2, cellContent.indexOf('-----') >= 0 ? '-' : ' ')}`;
       });
       newTable += ' |\n';
