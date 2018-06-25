@@ -9,7 +9,8 @@ module.exports = {
     return new Promise(async (resolve, reject) => {
       request.get(urlPremarket, function (error, response, data) {
         if (error) return reject(null);
-        resolve(parseData(data));
+        let parsedData = parseData(data);
+        resolve(parsedData);
       });
     });
   }
