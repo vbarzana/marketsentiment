@@ -15,11 +15,13 @@ module.exports = {
     } = premarketSettings;
 
     if (autoSyncOnStartup) {
-      // reload the settings in case that they change which is weird use case
-      await SettingsService.getPremarketSettings();
-
       await this.loadPremarketTickers(premarketSettings);
-      setInterval(() => this.loadPremarketTickers(premarketSettings), updateTickersInterval); // update tickers every 3 minutes
+      setInterval(async () => {
+        // reload the settings in case that they change which is weird use case
+        premarketSettings = await SettingsService.getPremarketSettings();
+
+        this.loadPremarketTickers(premarketSettings);
+      }, updateTickersInterval); // update tickers every 3 minutes
     }
   },
 
