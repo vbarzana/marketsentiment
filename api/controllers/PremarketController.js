@@ -8,9 +8,6 @@ const moment = require('moment');
 module.exports = {
 
   autoSyncPremarket: async function () {
-    if (!PremarketService.isPremarketTime()) {
-      return;
-    }
     let premarketSettings = await SettingsService.getPremarketSettings();
     let {
       autoSyncOnStartup,
