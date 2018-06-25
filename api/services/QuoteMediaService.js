@@ -1,6 +1,5 @@
 const _ = require('lodash');
 const request = require('request');
-const jsdom = require("jsdom");
 
 module.exports = {
   getTickerData: async function (symbol) {
