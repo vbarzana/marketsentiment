@@ -17,6 +17,9 @@ module.exports = {
     // Try to remove all messages in the channel
     try {
       let messages = await channel.fetchMessages();
+      let channelName = channel.name;
+      let newName = `${_.trim(_.first(_.toString(channelName).split('-▶')))}-▶${UtilService.getNewYorkTime().format('LLL').replace(':', ' ')}`;
+      await channel.setName(newName);
       if (messages) {
         await channel.bulkDelete(messages);
       }
@@ -32,6 +35,7 @@ module.exports = {
 
   notifyPremarket: async function (title, msg, highlight, image, url, fields) {
     let channel = await this.getPremarketChannel();
+
     return doNotify(channel, title, msg, highlight, image, url, fields)
   },
 
