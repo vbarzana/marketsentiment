@@ -236,9 +236,9 @@ module.exports = {
     _.forEach(lines, (line) => {
       _.forEach(_.split(line, '|'), (cell, position) => {
         let cellContent = _.trim(cell).replace(new RegExp('/n', 'g'), '\n');
-        newTable += `| ${cellContent}${this.getFires((_.get(cellSizes, position) || 150) - _.size(cellContent) - 2, cellContent.indexOf('-----') >= 0 ? '-' : ' ')}`;
+        newTable += `|${cellContent}${this.getFires((_.get(cellSizes, position) || 150) - _.size(cellContent) - 2, cellContent.indexOf('-----') >= 0 ? '-' : ' ')}`;
       });
-      newTable += ' |\n';
+      newTable += '|\n';
     });
     return newTable;
   },

@@ -76,6 +76,21 @@ module.exports = {
     await PremarketService.saveTodaysWatchlist(todaysWatchlist, tickers);
     await DiscordService.clearPremarketChannel();
 
+    var titles = _.reduce(toNotify, function (string, item, idx) {
+      if (!item || idx > 10) {
+        return string;
+      }
+      var details = item.d || {};
+
+      return string += `| ${item.symbol} | ${details.close} | ${UtilService.formatNumber(details.volume)} | ${UtilService.formatNumber(details.float_shares_outstanding)} | ${Math.round(_.get(details, 'pre_change'))}% | ${_.get(item.premarketDetails, 'premarketVolume')} |\n`;
+    }, '| Symbol | Close | Vol | Float | Chg-Pre | Vol-Pre |\n');
+
+
+    await DiscordService.notifyPremarket('10 TOP MOVERS', '', 65280, null, null, [{
+      name: '------------ Sorted by premarket volume (15 mins delayed) ------------',
+      value: '```' + UtilService.generateMarkdownTable(`${titles}`) + '```'
+    }]);
+
     _.forEach(toNotify, async function (item, idx) {
       if (_.isEmpty(item.news)) {
         item.body = item.body || '';
