@@ -71,6 +71,9 @@ module.exports = {
       promises.push(this.getPremarketData(symbol.s, symbol.news, symbol.d));
     });
     let toNotify = await Promise.all(promises);
+    if (_.isEmpty(toNotify)) {
+      return;
+    }
     toNotify.sort(UtilService.sortByVolumePremarket);
 
     await PremarketService.saveTodaysWatchlist(todaysWatchlist, tickers);
