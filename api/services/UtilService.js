@@ -22,6 +22,9 @@ module.exports = {
   }, {
     name: 'modern_rock',
     rank: 50
+  },{
+    name: 'sspencer_smb',
+    rank: 50
   }, {
     name: 'InvestorsLive',
     rank: 100
