@@ -22,7 +22,7 @@ module.exports = {
   }, {
     name: 'modern_rock',
     rank: 50
-  },{
+  }, {
     name: 'sspencer_smb',
     rank: 50
   }, {
@@ -182,8 +182,11 @@ module.exports = {
       return volume;
     }
     let regExp = new RegExp('k', 'i');
+    let millionRegExp = new RegExp('m', 'i');
     if (volume.match(regExp)) {
       return parseInt(volume.replace(regExp, ''), 10) * 1000;
+    } else if (volume.match(millionRegExp)) {
+      return parseInt(volume.replace(millionRegExp, ''), 10) * 1000000;
     }
     return parseInt(volume, 10);
   },
