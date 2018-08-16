@@ -94,13 +94,20 @@ module.exports = {
       value: '```' + UtilService.generateMarkdownTable(`${titles}`) + '```'
     }]);
 
-    _.forEach(toNotify, async function (item, idx) {
+    let item;
+    for(let i =0; i< _.size(toNotify); i++){
+      item = toNotify[i];
       if (_.isEmpty(item.news)) {
         item.body = item.body || '';
         item.body += '\n**No news found for this stock**'
       }
       await DiscordService.notifyPremarket(item.title, item.body, 65280, item.chart, null, item.news);
-    });
+    }
+    // post the same table at the bottom again, so we can se it from top to bottom and from bottom to top
+    await DiscordService.notifyPremarket('10 TOP MOVERS', '', 65280, null, null, [{
+      name: '------------ Sorted by premarket volume (15 mins delayed) ------------',
+      value: '```' + UtilService.generateMarkdownTable(`${titles}`) + '```'
+    }]);
   },
 
   getPremarketData: async function (symbol, news, details) {
