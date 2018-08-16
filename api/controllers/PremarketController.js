@@ -85,7 +85,7 @@ module.exports = {
       }
       var details = item.d || {};
 
-      return string += `| ${item.symbol} | ${details.close} | ${UtilService.formatNumber(details.volume)} | ${UtilService.formatNumber(details.float_shares_outstanding)} | ${Math.round(_.get(details, 'pre_change'))}% | ${_.get(item.premarketDetails, 'premarketVolume')} |\n`;
+      return string += `| ${item.symbol} | ${parseFloat(details.close).toFixed(2)} | ${UtilService.formatNumber(details.volume)} | ${UtilService.formatNumber(details.float_shares_outstanding)} | ${Math.round(_.get(details, 'pre_change'))}% | ${_.get(item.premarketDetails, 'premarketVolume')} |\n`;
     }, '| Symbol | Close | Vol | Float | Chg-Pre | Vol-Pre |\n');
 
 
