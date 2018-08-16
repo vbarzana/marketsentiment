@@ -14,10 +14,11 @@ const STOCK_TRENDING_WEIGHT = 500;
 module.exports = {
   // find the guru name here
   GURUS: [{
-    name: 'Steven1_994',
+    name: 'Steven1_994', // dux
     rank: 50
   }, {
     name: 'timothysykes',
+    spam: ['school', 'travel', '$FB $TWTR', 'you need to know', 'my success', 'new trader', 'lesson', 'successful trader', 'hater', 'benefit you', /g(0)+d morning/g],
     rank: 50
   }, {
     name: 'modern_rock',
@@ -46,6 +47,9 @@ module.exports = {
   }, {
     name: 'CitronResearch',
     rank: 80
+  }, {
+    name: 'RolandWolf86',
+    rank: 90
   }],
 
   userIsGuru: function (username) {

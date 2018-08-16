@@ -80,6 +80,13 @@ function onRealTimeDataFromTwitter(event) {
   if (_.isEmpty(guru) || text.indexOf('$') < 0) {
     return;
   }
+  // filter out all spam from tim sykes he speaks too much crap
+  if (_.reduce(_.concat([/g(o)+d morning/gi], guru.spam), function (result, spamWord) {
+    if (spamWord && (spamWord.test ? spamWord.test(text) : text.indexOf(spamWord) >= 0)) result = true;
+    return result;
+  }, false)) {
+    return;
+  }
   console.log('New tweet received from guru: ' + guru.name);
 
   // first get the picture from twitter profile
