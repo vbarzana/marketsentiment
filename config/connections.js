@@ -62,7 +62,8 @@ module.exports.connections = {
     port: process.env.MONGODB_PORT || 27017,
     database: process.env.MONGODB_DATABASE || 'marketsentiment',
     user: process.env.MONGODB_USER,
-    password: process.env.MONGODB_PASSWORD
+    password: process.env.MONGODB_PASSWORD,
+    uri: process.env.MONGODB_URI
   }
 
   /***************************************************************************
