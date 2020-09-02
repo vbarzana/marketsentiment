@@ -18,7 +18,6 @@
  * `node app.js --silent --port=80 --prod`
  */
 
-
 // Ensure we're in the project directory, so cwd-relative paths work as expected
 // no matter where we actually lift from.
 // > Note: This is not required in order to lift, but it is a convenient default.
@@ -59,10 +58,9 @@ try {
 
 // Start server
 sails.lift(rc('sails'), async function () {
-  // A few seconds after the server started, start the autosync process
-  setTimeout(function () {
-    const TradingViewController = require('./api/controllers/TradingViewController');
-    TradingViewController.startAutoSync();
-  }, 3000);
+  sails.after(['hook:orm:loaded'], async function () {
+    console.log('Initializing the auto-sync process to start pulling data first time');
+    require('./api/controllers/TradingViewController').startAutoSync();
+  });
 });
 

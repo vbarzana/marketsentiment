@@ -2,8 +2,6 @@
  * @class TradingViewController
  */
 const _ = require('lodash');
-const request = require('request');
-const moment = require('moment');
 const PremarketController = require('./PremarketController');
 
 module.exports = {
