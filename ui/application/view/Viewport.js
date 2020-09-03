@@ -184,12 +184,12 @@ Ext.define('Marketsentiment.view.Viewport', {
                 createNewOnEnter: true,
                 createNewOnBlur: true,
                 fieldLabel: 'Find news containing',
-                value: [{"text": "new product"}, {"text": "new investor"}, {"text": "funding"}, {"text": "contract"}, {"text": "fda"}, {"text": "nda"}, {"text": "drug approval"}, {"text": "blockchain"}, {"text": "Purchase Agreement"}, {"text": "Earnings Call"}, {"text": "fourth quarter"}, {"text": "Phase 2"}, {"text": "Phase 3"}, {"text": "letter to shareholders"}, {"text": "raised to buy"}, {"text": "beats on earnings"}, {"text": "8K"}, {"text": "to report earnings"}, {"text": "delisted"}, {"text": "topline results"}, {"text": "better than expected"}, {"text": "downgraded"}, {"text": "bankrupcy"}, {"text": "buyout"}, {"text": "patent"}, {"text": "merger"}, {"text": "split"}, {"text": "gold award"}],
+                value: ["new product","new investor","funding","contract","fda","nda","drug approval","blockchain","Purchase Agreement","Earnings Call","fourth quarter","Phase 2","Phase 3","letter to shareholders","raised to buy","beats on earnings","8K","to report earnings","delisted","topline results","better than expected","downgraded","bankrupcy","buyout","patent","merger","split","gold award"],
                 displayField: 'text',
                 valueField: 'text',
                 store: {
                   fields: ['text'],
-                  data: []
+                  data: [{ "text": "new product" }, { "text": "new investor" }, { "text": "funding" }, { "text": "contract" }, { "text": "fda" }, { "text": "nda" }, { "text": "drug approval" }, { "text": "blockchain" }, { "text": "Purchase Agreement" }, { "text": "Earnings Call" }, { "text": "fourth quarter" }, { "text": "Phase 2" }, { "text": "Phase 3" }, { "text": "letter to shareholders" }, { "text": "raised to buy" }, { "text": "beats on earnings" }, { "text": "8K" }, { "text": "to report earnings" }, { "text": "delisted" }, { "text": "topline results" }, { "text": "better than expected" }, { "text": "downgraded" }, { "text": "bankrupcy" }, { "text": "buyout" }, { "text": "patent" }, { "text": "merger" }, { "text": "split" }, { "text": "gold award" }]
                 },
                 forceSelection: false,
                 queryMode: 'local',

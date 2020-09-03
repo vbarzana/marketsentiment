@@ -63,7 +63,7 @@ module.exports.connections = {
     database: process.env.MONGODB_DATABASE || 'marketsentiment',
     user: process.env.MONGODB_USER,
     password: process.env.MONGODB_PASSWORD,
-    uri: process.env.MONGODB_URI
+    url: process.env.MONGODB_URI
   }
 
   /***************************************************************************
