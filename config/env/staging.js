@@ -13,6 +13,14 @@
 module.exports = {
   port: process.env.PORT || 80,
 
+  log: {
+    level: process.env.LOG_LEVEL || "debug"
+  },
+
+  orm: {
+    _hookTimeout: 120000
+  },
+
   views: {
     minify: {
       js: false,
