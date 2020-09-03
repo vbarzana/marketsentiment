@@ -8,13 +8,18 @@ const moment = require('moment');
 module.exports = {
 
   autoSyncPremarket: async function () {
-    let premarketSettings = await SettingsService.getPremarketSettings();
+    let premarketSettings;
+    try {
+      premarketSettings = await SettingsService.getPremarketSettings();
+    } catch (err) {
+      console.error(err);
+    }
     let {
       autoSyncOnStartup,
       updateTickersInterval
     } = premarketSettings;
 
-    if (autoSyncOnStartup) {
+    if (autoSyncOnStartup && premarketSettings) {
       await this.loadPremarketTickers(premarketSettings);
       setInterval(async () => {
         // reload the settings in case that they change which is weird use case
@@ -47,14 +52,14 @@ module.exports = {
     let tickers = [];
     // add to the tickers object all tickers that are in the database or in tradingview
     _.forEach(tickersFromDb, (dbTicker) => {
-      let trvTicker = _.first(_.filter(tickersFromTradingView, {s: dbTicker.s}));
+      let trvTicker = _.first(_.filter(tickersFromTradingView, { s: dbTicker.s }));
       if (!trvTicker) tickers.push(dbTicker);
       else tickers.push(_.merge(dbTicker, trvTicker));
     });
 
     // look for newly found tradingview tickers
     _.forEach(tickersFromTradingView, (trvTicker) => {
-      let addedTicker = _.first(_.filter(tickers, {s: trvTicker.s}));
+      let addedTicker = _.first(_.filter(tickers, { s: trvTicker.s }));
       if (!addedTicker) {
         tickers.push(trvTicker);
       }
@@ -88,14 +93,13 @@ module.exports = {
       return string += `| ${item.symbol} | ${parseFloat(details.close).toFixed(2)} | ${UtilService.formatNumber(details.volume)} | ${UtilService.formatNumber(details.float_shares_outstanding)} | ${Math.round(_.get(details, 'pre_change'))}% | ${_.get(item.premarketDetails, 'premarketVolume')} |\n`;
     }, '| Symbol | Close | Vol | Float | Chg-Pre | Vol-Pre |\n');
 
-
     await DiscordService.notifyPremarket('10 TOP MOVERS', '', 65280, null, null, [{
       name: '------------ Sorted by premarket volume (15 mins delayed) ------------',
       value: '```' + UtilService.generateMarkdownTable(`${titles}`) + '```'
     }]);
 
     let item;
-    for(let i =0; i< _.size(toNotify); i++){
+    for (let i = 0; i < _.size(toNotify); i++) {
       item = toNotify[i];
       if (_.isEmpty(item.news)) {
         item.body = item.body || '';
@@ -113,7 +117,7 @@ module.exports = {
   getPremarketData: async function (symbol, news, details) {
     var yesterday = moment().utc().subtract(4, 'days');
     let newsArray = [];
-    let {timezone} = await SettingsService.getPremarketSettings() || [];
+    let { timezone } = await SettingsService.getPremarketSettings() || [];
 
     _.forEach(news, async (item) => {
       if (!item || NewsService.isCrappyNews(item.title)) return true;
@@ -129,7 +133,6 @@ module.exports = {
         });
       }
     });
-
 
     var symbolAndExchange = _.split(symbol || item.symbol, ':');
     var cleanSymbol = _.trim(_.last(symbolAndExchange));
