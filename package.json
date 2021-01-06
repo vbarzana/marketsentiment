@@ -35,8 +35,8 @@
   },
   "devDependencies": {},
   "engines": {
-    "yarn": "1.5.1",
-    "node": "8.9.0"
+    "yarn": "1.17.3",
+    "node": "10.13.0"
   },
   "scripts": {
     "migrate": "./node_modules/.bin/mm --config=config/mm.js",
