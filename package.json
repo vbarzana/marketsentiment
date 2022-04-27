@@ -15,7 +15,7 @@
     "fatcow": "simonmilz/fatcow",
     "glob": "^7.1.2",
     "google-finance": "^0.1.11",
-    "grunt": "^1.0.3",
+    "grunt": "^1.5.2",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-cssmin": "^2.2.1",
     "grunt-contrib-uglify": "^3.3.0",
