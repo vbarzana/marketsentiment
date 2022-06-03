@@ -10,7 +10,7 @@ module.exports = {
   autoSyncPremarket: async function () {
     let premarketSettings;
     try {
-      premarketSettings = await SettingsService.getPremarketSettings();
+      premarketSettings = await SettingsService.getPremarketSettings() || {};
     } catch (err) {
       console.error(err);
     }
