@@ -11,8 +11,24 @@
  */
 
 module.exports = {
-  log: {
-    level: 'debug'
+
+  port: process.env.PORT || 1337,
+  skipFixtures: false,
+  liftTimeout: 12000,
+  tmpPath: '/app/.tmp',
+
+  orm: {
+    _hookTimeout: 50000
+  },
+
+  models: {
+    migrate: 'safe'
+  },
+
+  session: {
+    adapter: 'connect-mongo',
+    url: process.env.MONGODB_URI,
+    collection: 'sessions'
   },
 
   connections: {
@@ -20,7 +36,5 @@ module.exports = {
       adapter: 'sails-mongo',
       url: process.env.MONGODB_URI
     }
-  },
-
-  port: process.env.PORT || 1337
+  }
 };
