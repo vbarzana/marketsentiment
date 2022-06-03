@@ -1,8 +1,8 @@
 module.exports = {
   getSettings: async function () {
-    return await Settings.findOne({id: 1});
+    return (await Settings.findOne({id: 1})) || {};
   },
   getPremarketSettings: async function () {
-    return await Settings.findOne({id: 2});
+    return (await Settings.findOne({id: 2})) || {};
   }
 };
