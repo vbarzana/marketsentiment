@@ -605,6 +605,11 @@ bson@^1.1.1:
   resolved "https://registry.yarnpkg.com/bson/-/bson-1.1.5.tgz#2aaae98fcdf6750c0848b0cba1ddec3c73060a34"
   integrity sha512-kDuEzldR21lHciPQAIulLs1LZlCXdLziXI6Mb/TDkwXhb//UORJNPXgcRs2CuO4H0DcMkpfT3/ySsP3unoZjBg==
 
+bson@~0.4.20:
+  version "0.4.23"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-0.4.23.tgz#e65a2e3c7507ffade4109bc7575a76e50f8da915"
+  integrity sha512-xMUimhLm6y4t9BTW6BQGRHs9PODB9082EUX/Gkx6M9T2ktuJ5LvMxY/20ukuk0Uc+WPL37pbMIy731XF7eTxjg==
+
 bson@~1.0.4:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/bson/-/bson-1.0.9.tgz#12319f8323b1254739b7c6bef8d3e89ae05a2f57"
@@ -1020,6 +1025,16 @@ connect-flash@0.1.1:
   resolved "https://registry.yarnpkg.com/connect-flash/-/connect-flash-0.1.1.tgz#d8630f26d95a7f851f9956b1e8cc6732f3b6aa30"
   integrity sha1-2GMPJtlaf4UfmVax6MxnMvO2qjA=
 
+connect-mongo@0.8.x:
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/connect-mongo/-/connect-mongo-0.8.2.tgz#c92878eec0c5a5a6625b79a0c214f37f861fc6e0"
+  integrity sha512-FopiLj9x//nXLShwmkUXvjmK6sMwlMG9IbDF6k5Y6ipQExB0Wzx4waqXEdbsjeVoKpN0WHV05sKsw/n6Gu2vvQ==
+  dependencies:
+    debug ">= 0.7.0"
+    depd ">= 0.4.0"
+    lodash "*"
+    mongodb ">= 1.2.0 <2.1.0"
+
 connect-timeout@~1.6.2:
   version "1.6.2"
   resolved "https://registry.yarnpkg.com/connect-timeout/-/connect-timeout-1.6.2.tgz#de9a5ec61e33a12b6edaab7b5f062e98c599b88e"
@@ -1121,13 +1136,6 @@ crc@3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/crc/-/crc-3.4.1.tgz#65d5830b1a2569557cfb324c0e679998521473ee"
   integrity sha1-ZdWDCxolaVV8+zJMDmeZmFIUc+4=
-
-cron@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/cron/-/cron-1.3.0.tgz#7e459968eaf94e1a445be796ce402166c234659d"
-  integrity sha512-K/SF7JlgMmNjcThWxkKvsHhey2EDB4CeOEWJ9aXWj3fbQJppsvTPIeyLdHfNq5IbbsMUUjRW1nr5dSO95f2E4w==
-  dependencies:
-    moment-timezone "^0.5.x"
 
 cross-spawn-async@^2.1.6:
   version "2.2.5"
@@ -1250,6 +1258,13 @@ debug@3.1.0:
   dependencies:
     ms "2.0.0"
 
+"debug@>= 0.7.0":
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.4.tgz#1319f6579357f2338d3337d2cdd4914bb5dcc865"
+  integrity sha512-PRWFHuSU3eDtQJPvnNY7Jcket1j0t5OuOsFzPPzsekD52Zl8qUfFIPEiswXqIvHWGVHOgX+7G/vCNNhehwxfkQ==
+  dependencies:
+    ms "2.1.2"
+
 decamelize@^1.0.0, decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
@@ -1289,6 +1304,11 @@ deep-equal@*:
     which-boxed-primitive "^1.0.1"
     which-collection "^1.0.1"
     which-typed-array "^1.1.2"
+
+deep-extend@^0.4.1:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.4.2.tgz#48b699c27e334bf89f10892be432f6e4c7d34a7f"
+  integrity sha512-cQ0iXSEKi3JRNhjUsLWvQ+MVPxLVqpwCd0cFsWbJxlCim2TlCo1JvN5WaPdPvSpUdEnkJ/X+mPGcq5RJ68EK8g==
 
 deep-extend@^0.5.0:
   version "0.5.1"
@@ -1333,6 +1353,11 @@ delayed-stream@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
+
+"depd@>= 0.4.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/depd/-/depd-2.0.0.tgz#b696163cc757560d09cf22cc8fad1571b79e76df"
+  integrity sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==
 
 depd@~1.0.1:
   version "1.0.1"
@@ -1570,6 +1595,11 @@ es-to-primitive@^1.2.1:
     is-callable "^1.1.4"
     is-date-object "^1.0.1"
     is-symbol "^1.0.2"
+
+es6-promise@2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-2.1.1.tgz#03e8f3c7297928e5478d6ab1d0643251507bdedd"
+  integrity sha512-R/JdLj56a8CEfCYtt4HC1b0CWTy+XD9Ne3YgictYpB4JaFCdn/QZkaV2Mz4P7g3cpkpvMzz6O20+eqvDOWQc+w==
 
 es6-promise@3.2.1:
   version "3.2.1"
@@ -2824,9 +2854,9 @@ i18n@0.8.1:
     sprintf-js ">=1.0.3"
 
 i@0.3.x:
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/i/-/i-0.3.6.tgz#d96c92732076f072711b6b10fd7d4f65ad8ee23d"
-  integrity sha1-2WyScyB28HJxG2sQ/X1PZa2O4j0=
+  version "0.3.7"
+  resolved "https://registry.yarnpkg.com/i/-/i-0.3.7.tgz#2a7437a923d59c14b17243dc63a549af24d85799"
+  integrity sha512-FYz4wlXgkQwIPqhzC5TdNMLSE5+GS1IIDJZY/1ZiEPCT2S3COUVZeT5OW4BmW4r5LHLQuOosSwsvnroG9GR59Q==
 
 iconv-lite@0.4.11:
   version "0.4.11"
@@ -3428,6 +3458,11 @@ lodash.uniq@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.uniq/-/lodash.uniq-4.5.0.tgz#d0225373aeb652adc1bc82e4945339a842754773"
   integrity sha1-0CJTc662Uq3BvILklFM5qEJ1R3M=
 
+lodash@*:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
+
 lodash@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-2.4.1.tgz#5b7723034dda4d262e5a46fb2c58d7cc22f71420"
@@ -3467,6 +3502,11 @@ lodash@~3.9.0, lodash@~3.9.3:
   version "3.9.3"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.9.3.tgz#0159e86832feffc6d61d852b12a953b99496bd32"
   integrity sha1-AVnoaDL+/8bWHYUrEqlTuZSWvTI=
+
+lodash@~4.16.4:
+  version "4.16.6"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.16.6.tgz#d22c9ac660288f3843e16ba7d2b5d06cca27d777"
+  integrity sha512-QXrLkYI2gXjL0QoQ9j932ca+Oh/wCUBeZULjqsJy78KjntrohXawEoOfgA2fXwy4vKh7OTD00p757/pUROtv+w==
 
 lodash@~4.3.0:
   version "4.3.0"
@@ -3837,7 +3877,7 @@ mock-res@0.3.0:
   resolved "https://registry.yarnpkg.com/mock-res/-/mock-res-0.3.0.tgz#0c2034cc6336d0595a3af109f7448283ee9c47f5"
   integrity sha1-DCA0zGM20FlaOvEJ90SCg+6cR/U=
 
-moment-timezone@^0.5.14, moment-timezone@^0.5.x:
+moment-timezone@^0.5.14:
   version "0.5.31"
   resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.31.tgz#9c40d8c5026f0c7ab46eda3d63e49c155148de05"
   integrity sha512-+GgHNg8xRhMXfEbv81iDtrVeTcWt0kWmTEY1XQK14dICTXnWJnT0dxdlPspwqF3keKMVPXwayEsk1DI0AA/jdA==
@@ -3853,6 +3893,13 @@ moment@2.22.2:
   version "2.27.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.27.0.tgz#8bff4e3e26a236220dfe3e36de756b6ebaa0105d"
   integrity sha512-al0MUK7cpIcglMv3YF13qSgdAIqxHTO7brRtaz3DlSULbqfazqkc5kEjNrLDOM7fsjshoFIihnU8snrP7zUvhQ==
+
+mongodb-core@1.2.31:
+  version "1.2.31"
+  resolved "https://registry.yarnpkg.com/mongodb-core/-/mongodb-core-1.2.31.tgz#f1e6405f03d40846fdb838a702507affa3cb2c39"
+  integrity sha512-QL6dTsWRk+JCSSi9P6j92b5dp0f/OrnDWf5WR8zB1ECqKY1I5wkAtUdyvo/X591hmsxAHrLj8eTNmO9XgahvDw==
+  dependencies:
+    bson "~0.4.20"
 
 mongodb-core@2.1.20:
   version "2.1.20"
@@ -3901,6 +3948,15 @@ mongodb@2.2.22:
     mongodb-core "2.1.7"
     readable-stream "2.1.5"
 
+"mongodb@>= 1.2.0 <2.1.0":
+  version "2.0.55"
+  resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-2.0.55.tgz#a09dd77259f6bba69f7dd592a011c11aa5761097"
+  integrity sha512-fnomi7xL3z4EsA73g2X1jEQxGs5BzuYFJqvGmf7ZAlevhka+tJCkVpnfutVC9crDnJVGJgjG+jsBMHElTO1UEQ==
+  dependencies:
+    es6-promise "2.1.1"
+    mongodb-core "1.2.31"
+    readable-stream "1.0.31"
+
 mongodb@^2.2.1:
   version "2.2.36"
   resolved "https://registry.yarnpkg.com/mongodb/-/mongodb-2.2.36.tgz#1c573680b2849fb0f47acbba3dc5fa228de975f5"
@@ -3946,7 +4002,7 @@ ms@2.1.1:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.1.tgz#30a5864eb3ebb0a66f2ebe6d727af06a09d86e0a"
   integrity sha512-tgp+dl5cGk28utYktBsrFqA7HKgrhgPsg6Z/EfhWI4gl1Hwq8B/GmY/0oXZ6nF8hDVesS/FpnYaD/kOWhYQvyg==
 
-ms@^2.1.1:
+ms@2.1.2, ms@^2.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
@@ -4625,6 +4681,16 @@ read@1.0.x:
   dependencies:
     mute-stream "~0.0.4"
 
+readable-stream@1.0.31:
+  version "1.0.31"
+  resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-1.0.31.tgz#8f2502e0bc9e3b0da1b94520aabb4e2603ecafae"
+  integrity sha1-jyUC4LyeOw2huUUgqrtOJgPsr64=
+  dependencies:
+    core-util-is "~1.0.0"
+    inherits "~2.0.1"
+    isarray "0.0.1"
+    string_decoder "~0.10.x"
+
 readable-stream@2.1.5:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.1.5.tgz#66fa8b720e1438b364681f2ad1a63c618448c9d0"
@@ -5115,12 +5181,17 @@ sails-generate@~0.13.0:
     sails-generate-views "~0.10.5"
     sails-generate-views-jade "~0.10.3"
 
-sails-hook-cron@^2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/sails-hook-cron/-/sails-hook-cron-2.2.2.tgz#96dd31dffb4842643665e9a21cb3ac626edca080"
-  integrity sha512-VXG5uh/K26vdTvEDei+xIvQIG3Woik2ifabgNe9X6K2Ab0GPgYtikJH+EhmLtvOllsooAHTnrQ4YFrs/mWctLw==
+sails-hook-events@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/sails-hook-events/-/sails-hook-events-1.0.1.tgz#224bca9e21dfee5271d0f5bffaf5decc03feffd7"
+  integrity sha1-IkvKniHf7lJx0PW/+vXezAP+/9c=
+
+"sails-hook-mixins@github:typischtouristik/sails-hook-mixins":
+  version "0.0.2"
+  uid "4f7c247f5c8258f320209fff01a362302b347dec"
+  resolved "https://codeload.github.com/typischtouristik/sails-hook-mixins/tar.gz/4f7c247f5c8258f320209fff01a362302b347dec"
   dependencies:
-    cron "1.3.0"
+    deep-extend "^0.4.1"
 
 sails-hook-orm@~1.0.9:
   version "1.0.9"
@@ -5144,6 +5215,13 @@ sails-hook-sockets@^0.13.9:
     semver "^4.3.4"
     socket.io "1.7.3"
     uid2 "0.0.3"
+
+sails-hook-update-or-create@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/sails-hook-update-or-create/-/sails-hook-update-or-create-0.1.4.tgz#74151568435d7b72921ee7e0294a25fa0facfc6d"
+  integrity sha1-dBUVaENde3KSHufgKUol+g+s/G0=
+  dependencies:
+    lodash "~4.16.4"
 
 sails-mongo@^0.12.2:
   version "0.12.3"
@@ -5187,7 +5265,7 @@ sails.io.js-dist@^0.14.0:
   resolved "https://registry.yarnpkg.com/sails.io.js-dist/-/sails.io.js-dist-0.14.0.tgz#d026d3ee14b549d73f6ec21aad8a6f0210037011"
   integrity sha1-0CbT7hS1Sdc/bsIarYpvAhADcBE=
 
-sails@~0.12.13:
+sails@^0.12.12-1:
   version "0.12.14"
   resolved "https://registry.yarnpkg.com/sails/-/sails-0.12.14.tgz#4ad8be98cfcf456e7d1c85f6e7731f31af332397"
   integrity sha1-Sti+mM/PRW59HIX253MfMa8zI5c=
