@@ -12,14 +12,17 @@
 
 module.exports = {
 
+  orm: {
+    _hookTimeout: 50000
+  },
+
   /***************************************************************************
    * Set the default database connection for models in the production        *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
-
-  // models: {
-  //   connection: 'someMysqlServer'
-  // },
+  models: {
+    migrate: 'safe'
+  },
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *
@@ -30,9 +33,17 @@ module.exports = {
   /***************************************************************************
    * Set the log level in production environment to "silent"                 *
    ***************************************************************************/
+  session: {
+    adapter: 'connect-mongo',
+    url: process.env.MONGODB_URI,
+    collection: 'sessions'
+  },
 
-  // log: {
-  //   level: "silent"
-  // }
+  connections: {
+    mongodb: {
+      adapter: 'sails-mongo',
+      url: process.env.MONGODB_URI
+    }
+  }
 
 };
