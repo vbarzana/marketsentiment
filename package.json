@@ -12,7 +12,7 @@
   "dependencies": {
     "cached-request": "https://github.com/vbarzana/cached-request.git",
     "compression": "^1.6.1",
-    "connect-mongo": "1.x",
+    "connect-mongo": "^4.6.0",
     "discord.js": "^11.3.2",
     "ejs": "3.1.7",
     "express": "^4.14.0",
