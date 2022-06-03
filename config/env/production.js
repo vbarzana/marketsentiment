@@ -25,6 +25,13 @@ module.exports = {
     migrate: 'safe'
   },
 
+  sockets: {
+    _hookTimeout: 50000,
+    adapter: 'memory',
+    pingInterval: 25000,
+    transports: ['websocket']
+  },
+
   session: {
     adapter: 'connect-mongo',
     url: process.env.MONGODB_URI,
