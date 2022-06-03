@@ -13,6 +13,7 @@ const glob = require('glob');
 
 module.exports.bootstrap = function (cb) {
   sails.after('hook:orm:loaded', function () {
+    console.log('initializing fixtures');
     initializeFixtures();
   });
   // It's very important to trigger this callback method when you are finished
@@ -31,7 +32,7 @@ function initializeFixtures() {
         let Model = sails.models[name];
         if (!Model) return;
         try {
-          var record = await  Model.findOne({id: item.id});
+          var record = await Model.findOne({id: item.id});
 
           if (!record) {
             await Model.create(item);
