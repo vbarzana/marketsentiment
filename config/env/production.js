@@ -16,6 +16,10 @@ module.exports = {
     _hookTimeout: 50000
   },
 
+  log: {
+    level: 'debug'
+  },
+
   /***************************************************************************
    * Set the default database connection for models in the production        *
    * environment (see config/connections.js and config/models.js )           *
@@ -29,15 +33,6 @@ module.exports = {
    ***************************************************************************/
 
   port: process.env.PORT || 80,
-
-  /***************************************************************************
-   * Set the log level in production environment to "silent"                 *
-   ***************************************************************************/
-  session: {
-    adapter: 'connect-mongo',
-    url: process.env.MONGODB_URI,
-    collection: 'sessions'
-  },
 
   connections: {
     mongodb: {

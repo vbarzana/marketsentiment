@@ -15,45 +15,45 @@
 module.exports.session = {
 
   /***************************************************************************
-  *                                                                          *
-  * Session secret is automatically generated when your new app is created   *
-  * Replace at your own risk in production-- you will invalidate the cookies *
-  * of your users, forcing them to log in again.                             *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * Session secret is automatically generated when your new app is created   *
+   * Replace at your own risk in production-- you will invalidate the cookies *
+   * of your users, forcing them to log in again.                             *
+   *                                                                          *
+   ***************************************************************************/
   secret: '0f6e5b16306e7bb5cb40c5b61239cdfa',
 
 
   /***************************************************************************
-  *                                                                          *
-  * Set the session cookie expire time The maxAge is set by milliseconds,    *
-  * the example below is for 24 hours                                        *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * Set the session cookie expire time The maxAge is set by milliseconds,    *
+   * the example below is for 24 hours                                        *
+   *                                                                          *
+   ***************************************************************************/
 
   // cookie: {
   //   maxAge: 24 * 60 * 60 * 1000
   // },
 
   /***************************************************************************
-  *                                                                          *
-  * Uncomment the following lines to set up a Redis session store that can   *
-  * be shared across multiple Sails.js servers.                              *
-  *                                                                          *
-  * Requires connect-redis (https://www.npmjs.com/package/connect-redis)     *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * Uncomment the following lines to set up a Redis session store that can   *
+   * be shared across multiple Sails.js servers.                              *
+   *                                                                          *
+   * Requires connect-redis (https://www.npmjs.com/package/connect-redis)     *
+   *                                                                          *
+   ***************************************************************************/
 
   // adapter: 'redis',
 
   /***************************************************************************
-  *                                                                          *
-  * The following values are optional, if no options are set a redis         *
-  * instance running on localhost is expected. Read more about options at:   *
-  *                                                                          *
-  * https://github.com/visionmedia/connect-redis                             *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * The following values are optional, if no options are set a redis         *
+   * instance running on localhost is expected. Read more about options at:   *
+   *                                                                          *
+   * https://github.com/visionmedia/connect-redis                             *
+   *                                                                          *
+   ***************************************************************************/
 
   // host: 'localhost',
   // port: 6379,
@@ -64,30 +64,31 @@ module.exports.session = {
 
 
   /***************************************************************************
-  *                                                                          *
-  * Uncomment the following lines to set up a MongoDB session store that can *
-  * be shared across multiple Sails.js servers.                              *
-  *                                                                          *
-  * Requires connect-mongo (https://www.npmjs.com/package/connect-mongo)     *
-  * Use version 0.8.2 with Node version <= 0.12                              *
-  * Use the latest version with Node >= 4.0                                  *
-  *                                                                          *
-  ***************************************************************************/
-
+   *                                                                          *
+   * Uncomment the following lines to set up a MongoDB session store that can *
+   * be shared across multiple Sails.js servers.                              *
+   *                                                                          *
+   * Requires connect-mongo (https://www.npmjs.com/package/connect-mongo)     *
+   * Use version 0.8.2 with Node version <= 0.12                              *
+   * Use the latest version with Node >= 4.0                                  *
+   *                                                                          *
+   ***************************************************************************/
+  adapter: 'mongo',
+  url: process.env.MONGODB_URI,
   // adapter: 'mongo',
   // url: 'mongodb://user:password@localhost:27017/dbname', // user, password and port optional
 
   /***************************************************************************
-  *                                                                          *
-  * Optional Values:                                                         *
-  *                                                                          *
-  * See https://github.com/kcbanner/connect-mongo for more                   *
-  * information about connect-mongo options.                                 *
-  *                                                                          *
-  * See http://bit.ly/mongooptions for more information about options        *
-  * available in `mongoOptions`                                              *
-  *                                                                          *
-  ***************************************************************************/
+   *                                                                          *
+   * Optional Values:                                                         *
+   *                                                                          *
+   * See https://github.com/kcbanner/connect-mongo for more                   *
+   * information about connect-mongo options.                                 *
+   *                                                                          *
+   * See http://bit.ly/mongooptions for more information about options        *
+   * available in `mongoOptions`                                              *
+   *                                                                          *
+   ***************************************************************************/
 
   // collection: 'sessions',
   // stringify: true,
