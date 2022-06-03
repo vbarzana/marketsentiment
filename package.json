@@ -7,6 +7,7 @@
   "dependencies": {
     "cached-request": "https://github.com/vbarzana/cached-request.git",
     "compression": "^1.7.2",
+    "connect-mongo": "0.8.x",
     "discord.js": "^11.3.2",
     "ejs": "2.5.5",
     "express": "^4.16.2",
@@ -27,16 +28,18 @@
     "mongodb-migrations": "^0.8.5",
     "request": "^2.85.0",
     "rss-parser": "^3.1.2",
-    "sails": "~0.12.13",
+    "sails": "^0.12.12-1",
     "sails-disk": "~0.10.9",
-    "sails-hook-cron": "^2.2.2",
+    "sails-hook-events": "^1.0.1",
+    "sails-hook-mixins": "github:typischtouristik/sails-hook-mixins",
+    "sails-hook-update-or-create": "^0.1.4",
     "sails-mongo": "^0.12.2",
     "twitter": "^1.7.1"
   },
   "devDependencies": {},
   "engines": {
-    "yarn": "1.17.3",
-    "node": "10.13.0"
+    "yarn": "1.22.17",
+    "node": "14.19.1"
   },
   "scripts": {
     "migrate": "./node_modules/.bin/mm --config=config/mm.js",
