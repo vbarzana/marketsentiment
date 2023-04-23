@@ -27,7 +27,7 @@
     "grunt-contrib-uglify": "^3.3.0",
     "grunt-extjs-dependencies": "https://github.com/simonmilz/grunt-extjs-dependencies.git",
     "lodash": "^4.17.21",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "moment-timezone": "^0.5.14",
     "mongodb-migrations": "^0.8.5",
     "passport": "^0.3.2",
